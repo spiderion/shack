@@ -4,7 +4,7 @@ import 'package:flutter_grid/screens/Chat/Matches.dart';
 import 'package:flutter_grid/screens/Chat/recent_chats.dart';
 
 class HomeScreen extends StatefulWidget {
-  final AppUser currentUser;
+  final AppUser? currentUser;
   final List<AppUser> matches;
   final List<AppUser> newmatches;
   HomeScreen(this.currentUser, this.matches, this.newmatches);
@@ -19,9 +19,9 @@ class _HomeScreenState extends State<HomeScreen> {
     Future.delayed(Duration(milliseconds: 500), () {
       if (widget.matches.length > 0 && widget.matches[0].lastmsg != null) {
         widget.matches.sort((a, b) {
-          var adate = a.lastmsg; //before -> var adate = a.expiry;
+          var adate = a.lastmsg!; //before -> var adate = a.expiry;
           var bdate = b.lastmsg; //before -> var bdate = b.expiry;
-          return bdate?.compareTo(
+          return bdate!.compareTo(
               adate); //to get the order other way just switch `adate & bdate`
         });
         setState(() {});

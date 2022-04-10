@@ -14,7 +14,7 @@ import 'package:video_compress/video_compress.dart';
 import 'package:video_player/video_player.dart';
 
 class MakeVideo extends StatefulWidget {
-  final AppUser currentUser;
+  final AppUser? currentUser;
 
   MakeVideo(this.currentUser);
 
@@ -25,8 +25,8 @@ class MakeVideo extends StatefulWidget {
 class MakeVideoState extends State<MakeVideo> {
   final _cameraKey = GlobalKey<CameraScreenState>();
   bool checkvideo = false;
-  String videopath;
-  VideoPlayerController _controller;
+  late String videopath;
+  VideoPlayerController? _controller;
 
   @override
   void initState() {
@@ -83,12 +83,11 @@ class MakeVideoState extends State<MakeVideo> {
                   padding: EdgeInsets.all(8),
                   textColor: Theme.of(context).primaryColor,
                   onPressed: () {
-                    pushNewScreenWithRouteSettings(
-                      context,
-                      screen: CameraScreen(key: _cameraKey, make: this),
-                      withNavBar: false,
-                      pageTransitionAnimation: PageTransitionAnimation.cupertino,
-                    );
+                    pushNewScreenWithRouteSettings(context,
+                        screen: CameraScreen(key: _cameraKey, make: this),
+                        withNavBar: false,
+                        pageTransitionAnimation: PageTransitionAnimation.cupertino,
+                        settings: RouteSettings());
                   },
                   child: Container(
                     alignment: Alignment.center,
@@ -115,7 +114,7 @@ class MakeVideoState extends State<MakeVideo> {
                               showDialog(
                                   context: context,
                                   builder: (context) {
-                                    uploadFile(File(videopath), widget.currentUser);
+                                    uploadFile(File(videopath), widget.currentUser!);
                                     return Center(
                                         child: CircularProgressIndicator(
                                       strokeWidth: 2,
@@ -144,24 +143,24 @@ class MakeVideoState extends State<MakeVideo> {
 
   Future uploadFile(File image, AppUser currentUser) async {
     await VideoCompress.deleteAllCache();
-    final info = await VideoCompress.compressVideo(
+    final info = await (VideoCompress.compressVideo(
       image.path,
       quality: VideoQuality.HighestQuality,
       deleteOrigin: false,
       includeAudio: true,
-    );
+    ));
     Reference storageReference = FirebaseStorage.instance.ref().child('users/${currentUser.id}/profile.mp4');
     UploadTask uploadTask =
-        storageReference.putFile(File(info.path), SettableMetadata(contentType: 'video/mp4'));
+        storageReference.putFile(File(info!.path!), SettableMetadata(contentType: 'video/mp4'));
     //if (uploadTask.isInProgress == true) {}
     uploadTask.whenComplete(() {
       storageReference.getDownloadURL().then((fileURL) async {
         if (mounted)
           setState(() {
             if (currentUser.imageUrl == null) {
-              currentUser.imageUrl = List();
+              currentUser.imageUrl = [];
             }
-            currentUser.imageUrl.add(fileURL);
+            currentUser.imageUrl!.add(fileURL);
           });
         Map<String, dynamic> updateObject = {
           'video': fileURL,

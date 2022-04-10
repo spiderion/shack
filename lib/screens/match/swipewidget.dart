@@ -65,7 +65,7 @@ class _SwipeWidget extends State<SwipeWidget> {
                             color: _theme.backgroundColor, fontSize: 20, fontWeight: FontWeight.w900),
                       ),
                       Text(
-                        "${widget.user.editInfo['DistanceVisible'] != null ? widget.user.editInfo['DistanceVisible'] ? 'Less than ${widget.user.distanceBW} KM away' : 'Distance not visible' : 'Less than ${widget.user.distanceBW} KM away'}",
+                        "${widget.user.editInfo!['DistanceVisible'] != null ? widget.user.editInfo!['DistanceVisible'] ? 'Less than ${widget.user.distanceBW} KM away' : 'Distance not visible' : 'Less than ${widget.user.distanceBW} KM away'}",
                         style: TextStyle(color: primaryColor, fontSize: 15, fontWeight: FontWeight.w500),
                       ),
                     ],
@@ -123,7 +123,7 @@ class _SwipeWidget extends State<SwipeWidget> {
                   child: Container(
                     alignment: Alignment.center,
                     child: Text(
-                      (check_follow ? 'UNFOLLOW ' : 'FOLLOW ') + widget.user.name,
+                      (check_follow ? 'UNFOLLOW ' : 'FOLLOW ') + widget.user.name!,
                       style: TextStyle(fontWeight: FontWeight.w900, fontSize: 15),
                       textAlign: TextAlign.center,
                     ),
@@ -133,8 +133,8 @@ class _SwipeWidget extends State<SwipeWidget> {
               length: 3,
               child: Builder(
                 builder: (BuildContext context) {
-                  final TabController tabController = DefaultTabController.of(context);
-                  tabindex = DefaultTabController.of(context).index;
+                  final TabController tabController = DefaultTabController.of(context)!;
+                  tabindex = DefaultTabController.of(context)!.index;
                   tabController.addListener(() {
                     if (!tabController.indexIsChanging) {
                       setState(() {});
@@ -197,7 +197,7 @@ class _SwipeWidget extends State<SwipeWidget> {
               child: ClipRRect(
                 borderRadius: BorderRadius.circular(10),
                 child: Container(
-                  decoration: widget.user.imageUrl.length > index
+                  decoration: widget.user.imageUrl!.length > index
                       ? BoxDecoration(
                           borderRadius: BorderRadius.circular(10),
                           // image: DecorationImage(
@@ -212,11 +212,11 @@ class _SwipeWidget extends State<SwipeWidget> {
                               style: BorderStyle.solid, width: 1, color: Theme.of(context).backgroundColor)),
                   child: Stack(
                     children: <Widget>[
-                      widget.user.imageUrl.length > index
+                      widget.user.imageUrl!.length > index
                           ? CachedNetworkImage(
                               height: MediaQuery.of(context).size.height * .2,
                               fit: BoxFit.cover,
-                              imageUrl: widget.user.imageUrl[index],
+                              imageUrl: widget.user.imageUrl![index],
                               placeholder: (context, url) => Center(
                                 child: CupertinoActivityIndicator(
                                   radius: 10,
@@ -267,9 +267,9 @@ class _SwipeWidget extends State<SwipeWidget> {
             mainAxisAlignment: MainAxisAlignment.start,
             crossAxisAlignment: CrossAxisAlignment.start,
             children: <Widget>[
-              widget.user.editInfo['about'] != null
+              widget.user.editInfo!['about'] != null
                   ? Text(
-                      "${widget.user.editInfo['about']}",
+                      "${widget.user.editInfo!['about']}",
                       style: TextStyle(color: Colors.black, fontSize: 16, fontWeight: FontWeight.w500),
                       textAlign: TextAlign.start,
                     )
@@ -295,7 +295,7 @@ class _SwipeWidget extends State<SwipeWidget> {
                           ),
                         ),
                       ),
-                      Text(temp[i].title)
+                      Text(temp[i].title!)
                     ],
                   ),
                 )
@@ -320,9 +320,9 @@ class _SwipeWidget extends State<SwipeWidget> {
             mainAxisAlignment: MainAxisAlignment.start,
             crossAxisAlignment: CrossAxisAlignment.start,
             children: <Widget>[
-              widget.user.editInfo['about'] != null
+              widget.user.editInfo!['about'] != null
                   ? Text(
-                      "${widget.user.editInfo['about']}",
+                      "${widget.user.editInfo!['about']}",
                       style: TextStyle(color: Colors.black, fontSize: 16, fontWeight: FontWeight.w500),
                       textAlign: TextAlign.start,
                     )
@@ -348,7 +348,7 @@ class _SwipeWidget extends State<SwipeWidget> {
                           ),
                         ),
                       ),
-                      Text(temp[i].title)
+                      Text(temp[i].title!)
                     ],
                   ),
                 )

@@ -7,11 +7,11 @@ import 'package:flutter_grid/models/user_model.dart';
 import 'package:flutter_grid/screens/Calling/call.dart';
 
 class DialCall extends StatefulWidget {
-  final String channelName;
-  final AppUser receiver;
-  final String callType;
+  final String? channelName;
+  final AppUser? receiver;
+  final String? callType;
 
-  const DialCall({@required this.channelName, this.receiver, this.callType});
+  const DialCall({required this.channelName, this.receiver, this.callType});
 
   @override
   _DialCallState createState() => _DialCallState();
@@ -64,7 +64,7 @@ class _DialCallState extends State<DialCall> {
                   return Container();
                 } else
                   try {
-                    switch (snapshot.data.docs[0]['response']) {
+                    switch (snapshot.data!.docs[0]['response']) {
                       case "Awaiting":
                         {
                           return Column(
@@ -80,7 +80,7 @@ class _DialCallState extends State<DialCall> {
                                       60,
                                     ),
                                     child: CachedNetworkImage(
-                                      imageUrl: widget.receiver.imageUrl[0],
+                                      imageUrl: widget.receiver!.imageUrl![0],
                                       useOldImageOnUrlChange: true,
                                       placeholder: (context, url) => CupertinoActivityIndicator(
                                         radius: 15,
@@ -105,7 +105,7 @@ class _DialCallState extends State<DialCall> {
                                   ),
                                 ),
                               ),
-                              Text("Calling to ${widget.receiver.name}...",
+                              Text("Calling to ${widget.receiver!.name}...",
                                   style: TextStyle(fontSize: 25, fontWeight: FontWeight.bold)),
                               RaisedButton.icon(
                                   color: Theme.of(context).backgroundColor,
@@ -142,7 +142,7 @@ class _DialCallState extends State<DialCall> {
                             mainAxisAlignment: MainAxisAlignment.spaceAround,
                             crossAxisAlignment: CrossAxisAlignment.center,
                             children: <Widget>[
-                              Text("${widget.receiver.name} is Busy",
+                              Text("${widget.receiver!.name} is Busy",
                                   style: TextStyle(fontSize: 25, fontWeight: FontWeight.bold)),
                               RaisedButton.icon(
                                   color: Theme.of(context).backgroundColor,
@@ -167,7 +167,7 @@ class _DialCallState extends State<DialCall> {
                             mainAxisAlignment: MainAxisAlignment.spaceAround,
                             crossAxisAlignment: CrossAxisAlignment.center,
                             children: <Widget>[
-                              Text("${widget.receiver.name} is Not-answering",
+                              Text("${widget.receiver!.name} is Not-answering",
                                   style: TextStyle(fontSize: 25, fontWeight: FontWeight.bold)),
                               RaisedButton.icon(
                                   color: Theme.of(context).backgroundColor,

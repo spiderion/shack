@@ -9,8 +9,8 @@ import 'package:path/path.dart' as path;
 import 'package:path_provider/path_provider.dart';
 
 class CameraScreen extends StatefulWidget {
-  final MakeVideoState make;
-  const CameraScreen({Key key, this.make}) : super(key: key);
+  final MakeVideoState? make;
+  const CameraScreen({Key? key, this.make}) : super(key: key);
 
   @override
   CameraScreenState createState() => CameraScreenState();
@@ -18,8 +18,8 @@ class CameraScreen extends StatefulWidget {
 
 class CameraScreenState extends State<CameraScreen>
     with AutomaticKeepAliveClientMixin {
-  CameraController _controller;
-  List<CameraDescription> _cameras;
+  CameraController? _controller;
+  late List<CameraDescription> _cameras;
   final GlobalKey<ScaffoldState> _scaffoldKey = GlobalKey<ScaffoldState>();
   bool _isRecording = false;
   final _timerKey = GlobalKey<VideoTimerState>();
@@ -33,7 +33,7 @@ class CameraScreenState extends State<CameraScreen>
   Future<void> _initCamera() async {
     _cameras = await availableCameras();
     _controller = CameraController(_cameras[0], ResolutionPreset.high);
-    _controller.initialize().then((_) {
+    _controller!.initialize().then((_) {
       if (!mounted) {
         return;
       }
@@ -51,7 +51,7 @@ class CameraScreenState extends State<CameraScreen>
   Widget build(BuildContext context) {
     super.build(context);
     if (_controller != null) {
-      if (!_controller.value.isInitialized) {
+      if (!_controller!.value.isInitialized) {
         return Container();
       }
     } else {
@@ -64,7 +64,7 @@ class CameraScreenState extends State<CameraScreen>
       );
     }
 
-    if (!_controller.value.isInitialized) {
+    if (!_controller!.value.isInitialized) {
       return Container();
     }
     return Scaffold(
@@ -118,11 +118,11 @@ class CameraScreenState extends State<CameraScreen>
 
       child: Container(
         child: Transform.scale(
-          scale: _controller.value.aspectRatio / size.aspectRatio,
+          scale: _controller!.value.aspectRatio / size.aspectRatio,
           child: Center(
             child: AspectRatio(
-              aspectRatio: _controller.value.aspectRatio,
-              child: CameraPreview(_controller),
+              aspectRatio: _controller!.value.aspectRatio,
+              child: CameraPreview(_controller!),
             ),
           ),
         ),
@@ -163,20 +163,20 @@ class CameraScreenState extends State<CameraScreen>
 
   Future<void> _onCameraSwitch() async {
     final CameraDescription cameraDescription =
-    (_controller.description == _cameras[0]) ? _cameras[1] : _cameras[0];
+    (_controller!.description == _cameras[0]) ? _cameras[1] : _cameras[0];
     if (_controller != null) {
-      await _controller.dispose();
+      await _controller!.dispose();
     }
     _controller = CameraController(cameraDescription, ResolutionPreset.medium);
-    _controller.addListener(() {
+    _controller!.addListener(() {
       if (mounted) setState(() {});
-      if (_controller.value.hasError) {
-        showInSnackBar('Camera error ${_controller.value.errorDescription}');
+      if (_controller!.value.hasError) {
+        showInSnackBar('Camera error ${_controller!.value.errorDescription}');
       }
     });
 
     try {
-      await _controller.initialize();
+      await _controller!.initialize();
     } on CameraException catch (e) {
       _showCameraException(e);
     }
@@ -187,15 +187,15 @@ class CameraScreenState extends State<CameraScreen>
   }
 
 
-  Future<String> startVideoRecording() async {
+  Future<String?> startVideoRecording() async {
     print('startVideoRecording');
-    if (!_controller.value.isInitialized) {
+    if (!_controller!.value.isInitialized) {
       return null;
     }
     setState(() {
       _isRecording = true;
     });
-    _timerKey.currentState.startTimer();
+    _timerKey.currentState!.startTimer();
 
     final Directory extDir = await getTemporaryDirectory();
     final String dirPath = '${extDir.path}/media';
@@ -206,14 +206,14 @@ class CameraScreenState extends State<CameraScreen>
       await File(filePath).delete();
     }
 
-    if (_controller.value.isRecordingVideo) {
+    if (_controller!.value.isRecordingVideo) {
       // A recording is already started, do nothing.
       return null;
     }
 
     try {
 //      videoPath = filePath;
-      await _controller.startVideoRecording(/*filePath*/);
+      await _controller!.startVideoRecording(/*filePath*/);
     } on CameraException catch (e) {
       _showCameraException(e);
       return null;
@@ -222,21 +222,21 @@ class CameraScreenState extends State<CameraScreen>
   }
 
   Future<void> stopVideoRecording() async {
-    if (!_controller.value.isRecordingVideo) {
+    if (!_controller!.value.isRecordingVideo) {
       return null;
     }
-    _timerKey.currentState.stopTimer();
+    _timerKey.currentState!.stopTimer();
     setState(() {
       _isRecording = false;
     });
 
     try {
-      await _controller.stopVideoRecording();
+      await _controller!.stopVideoRecording();
     } on CameraException catch (e) {
       _showCameraException(e);
       return null;
     }
-    widget.make.checkvideofile();
+    widget.make!.checkvideofile();
     Navigator.of(context).pop();
   }
 
@@ -248,10 +248,10 @@ class CameraScreenState extends State<CameraScreen>
   }
 
   void showInSnackBar(String message) {
-    _scaffoldKey.currentState.showSnackBar(SnackBar(content: Text(message)));
+    _scaffoldKey.currentState!.showSnackBar(SnackBar(content: Text(message)));
   }
 
-  void logError(String code, String message) =>
+  void logError(String code, String? message) =>
       print('Error: $code\nError Message: $message');
 
   @override

@@ -25,7 +25,7 @@ class _SexualOrientationState extends State<SexualOrientation> {
     {'name': 'Demisexual', 'ontap': false},
   ];
   List selected = [];
-  bool select = false;
+  bool? select = false;
   final _scaffoldKey = GlobalKey<ScaffoldState>();
   @override
   void initState() {
@@ -130,7 +130,7 @@ class _SexualOrientationState extends State<SexualOrientation> {
                       leading: Checkbox(
                         activeColor: _theme.backgroundColor,
                         value: select,
-                        onChanged: (bool newValue) {
+                        onChanged: (bool? newValue) {
                           setState(() {
                             select = newValue;
                           });

@@ -12,7 +12,7 @@ import 'package:image_picker/image_picker.dart';
 import 'package:path_provider/path_provider.dart';
 
 class EditProfile extends StatefulWidget {
-  final AppUser currentUser;
+  final AppUser? currentUser;
 
   EditProfile(this.currentUser);
 
@@ -35,15 +35,15 @@ class EditProfileState extends State<EditProfile> {
   @override
   void initState() {
     super.initState();
-    aboutCtlr.text = widget.currentUser.editInfo['about'];
-    companyCtlr.text = widget.currentUser.editInfo['company'];
-    livingCtlr.text = widget.currentUser.editInfo['living_in'];
-    universityCtlr.text = widget.currentUser.editInfo['university'];
-    jobCtlr.text = widget.currentUser.editInfo['job_title'];
+    aboutCtlr.text = widget.currentUser!.editInfo!['about'];
+    companyCtlr.text = widget.currentUser!.editInfo!['company'];
+    livingCtlr.text = widget.currentUser!.editInfo!['living_in'];
+    universityCtlr.text = widget.currentUser!.editInfo!['university'];
+    jobCtlr.text = widget.currentUser!.editInfo!['job_title'];
     setState(() {
-      showMe = widget.currentUser.editInfo['userGender'];
-      visibleAge = widget.currentUser.editInfo['showMyAge'] ?? false;
-      visibleDistance = widget.currentUser.editInfo['DistanceVisible'] ?? true;
+      showMe = widget.currentUser!.editInfo!['userGender'];
+      visibleAge = widget.currentUser!.editInfo!['showMyAge'] ?? false;
+      visibleDistance = widget.currentUser!.editInfo!['DistanceVisible'] ?? true;
     });
   }
 
@@ -59,8 +59,8 @@ class EditProfileState extends State<EditProfile> {
   Future updateData() async {
     FirebaseFirestore.instance
         .collection("Users")
-        .doc(widget.currentUser.id)
-        .set({'editInfo': editInfo, 'age': widget.currentUser.age}, SetOptions(merge: true));
+        .doc(widget.currentUser!.id)
+        .set({'editInfo': editInfo, 'age': widget.currentUser!.age}, SetOptions(merge: true));
   }
 
   Future source(BuildContext context, currentUser, bool isProfilePicture) async {
@@ -161,9 +161,9 @@ class EditProfileState extends State<EditProfile> {
   }
 
   Future getImage(ImageSource imageSource, context, currentUser, isProfilePicture) async {
-    XFile image = await ImagePicker().pickImage(source: imageSource);
+    XFile? image = await ImagePicker().pickImage(source: imageSource);
     if (image != null) {
-      File croppedFile = await ImageCropper().cropImage(
+      File? croppedFile = await ImageCropper().cropImage(
           sourcePath: image.path,
           aspectRatioPresets: [CropAspectRatioPreset.square],
           androidUiSettings: AndroidUiSettings(
@@ -176,7 +176,7 @@ class EditProfileState extends State<EditProfile> {
             minimumAspectRatio: 1.0,
           ));
       if (croppedFile != null) {
-        await uploadFile(await compressimage(croppedFile), currentUser, isProfilePicture);
+        await uploadFile(await (compressimage(croppedFile)), currentUser, isProfilePicture);
       }
     }
     Navigator.pop(context);
@@ -196,7 +196,7 @@ class EditProfileState extends State<EditProfile> {
         try {
           if (isProfilePicture) {
             //currentUser.imageUrl.removeAt(0);
-            currentUser.imageUrl.insert(0, fileURL);
+            currentUser.imageUrl!.insert(0, fileURL);
             print("object");
             await FirebaseFirestore.instance
                 .collection("Users")
@@ -207,7 +207,7 @@ class EditProfileState extends State<EditProfile> {
                 .collection("Users")
                 .doc(currentUser.id)
                 .set(updateObject, SetOptions(merge: true));
-            widget.currentUser.imageUrl.add(fileURL);
+            widget.currentUser!.imageUrl!.add(fileURL);
           }
           if (mounted) setState(() {});
         } catch (err) {
@@ -220,7 +220,7 @@ class EditProfileState extends State<EditProfile> {
   Future compressimage(File image) async {
     final tempdir = await getTemporaryDirectory();
     final path = tempdir.path;
-    i.Image imagefile = i.decodeImage(image.readAsBytesSync());
+    i.Image imagefile = i.decodeImage(image.readAsBytesSync())!;
     final compressedImagefile = File('$path.jpg')..writeAsBytesSync(i.encodeJpg(imagefile, quality: 80));
     // setState(() {
     return compressedImagefile;
@@ -274,7 +274,7 @@ class EditProfileState extends State<EditProfile> {
                             child: ClipRRect(
                               borderRadius: BorderRadius.circular(10),
                               child: Container(
-                                decoration: widget.currentUser.imageUrl.length > index
+                                decoration: widget.currentUser!.imageUrl!.length > index
                                     ? BoxDecoration(
                                         borderRadius: BorderRadius.circular(10),
                                         // image: DecorationImage(
@@ -291,11 +291,11 @@ class EditProfileState extends State<EditProfile> {
                                             color: Theme.of(context).backgroundColor)),
                                 child: Stack(
                                   children: <Widget>[
-                                    widget.currentUser.imageUrl.length > index
+                                    widget.currentUser!.imageUrl!.length > index
                                         ? CachedNetworkImage(
                                             height: MediaQuery.of(context).size.height * .2,
                                             fit: BoxFit.cover,
-                                            imageUrl: widget.currentUser.imageUrl[index],
+                                            imageUrl: widget.currentUser!.imageUrl![index],
                                             placeholder: (context, url) => Center(
                                               child: CupertinoActivityIndicator(
                                                 radius: 10,
@@ -336,11 +336,11 @@ class EditProfileState extends State<EditProfile> {
                                           // height: 16,
                                           decoration: BoxDecoration(
                                             shape: BoxShape.circle,
-                                            color: widget.currentUser.imageUrl.length > index
+                                            color: widget.currentUser!.imageUrl!.length > index
                                                 ? Colors.white
                                                 : Theme.of(context).primaryColor,
                                           ),
-                                          child: widget.currentUser.imageUrl.length > index
+                                          child: widget.currentUser!.imageUrl!.length > index
                                               ? InkWell(
                                                   child: Icon(
                                                     Icons.cancel,
@@ -348,15 +348,15 @@ class EditProfileState extends State<EditProfile> {
                                                     size: 22,
                                                   ),
                                                   onTap: () async {
-                                                    if (widget.currentUser.imageUrl.length > 1) {
+                                                    if (widget.currentUser!.imageUrl!.length > 1) {
                                                       setState(() {
-                                                        widget.currentUser.imageUrl.removeAt(index);
+                                                        widget.currentUser!.imageUrl!.removeAt(index);
                                                       });
                                                       var temp = [];
-                                                      temp.add(widget.currentUser.imageUrl);
+                                                      temp.add(widget.currentUser!.imageUrl);
                                                       await FirebaseFirestore.instance
                                                           .collection("Users")
-                                                          .doc("${widget.currentUser.id}")
+                                                          .doc("${widget.currentUser!.id}")
                                                           .set(
                                                               {"Pictures": temp[0]}, SetOptions(merge: true));
                                                     } else {
@@ -417,7 +417,7 @@ class EditProfileState extends State<EditProfile> {
                       children: <Widget>[
                         ListTile(
                           title: Text(
-                            "About ${widget.currentUser.name}",
+                            "About ${widget.currentUser!.name}",
                             style:
                                 TextStyle(fontWeight: FontWeight.w500, fontSize: 16, color: Colors.black87),
                           ),
@@ -517,7 +517,7 @@ class EditProfileState extends State<EditProfile> {
                                 DropdownMenuItem(child: Text("Woman"), value: "woman"),
                                 DropdownMenuItem(child: Text("Other"), value: "other"),
                               ],
-                              onChanged: (val) {
+                              onChanged: (dynamic val) {
                                 editInfo.addAll({'userGender': val});
                                 setState(() {
                                   showMe = val;

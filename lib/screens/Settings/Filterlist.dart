@@ -15,9 +15,9 @@ class Filterlist extends StatefulWidget {
 
 class FilterlistState extends State<Filterlist> {
   Map<String, dynamic> changeValues = {};
-  RangeValues ageRange;
+  RangeValues? ageRange;
   var _showMe;
-  int distance;
+  int? distance;
   final FirebaseAuth _auth = FirebaseAuth.instance;
   bool checkedValue = false;
   bool isSwitched = true;

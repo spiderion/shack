@@ -3,21 +3,20 @@ import 'dart:io';
 import 'dart:math';
 
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:collection/collection.dart' show IterableExtension;
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_grid/models/user_model.dart';
 import 'package:flutter_grid/screens/util/CustomSnackbar.dart';
 import 'package:flutter_grid/screens/util/color.dart';
-import 'package:flutter_swiper/flutter_swiper.dart';
 import 'package:in_app_purchase/in_app_purchase.dart';
 import 'package:rflutter_alert/rflutter_alert.dart';
 
-import '../Profile/profile.dart';
 import '../Tab.dart';
 
 class Subscription extends StatefulWidget {
-  final bool isPaymentSuccess;
-  final AppUser currentUser;
+  final bool? isPaymentSuccess;
+  final AppUser? currentUser;
   final Map items;
 
   Subscription(this.currentUser, this.isPaymentSuccess, this.items);
@@ -28,21 +27,21 @@ class Subscription extends StatefulWidget {
 
 class _SubscriptionState extends State<Subscription> {
   /// if the api is available or not.
-  bool isAvailable = true;
+  bool? isAvailable = true;
 
   /// products for sale
-  List<ProductDetails> products = [];
+  List<ProductDetails?> products = [];
 
   /// Past purchases
-  List<PurchaseDetails> purchases = [];
+  List<PurchaseDetails>? purchases = [];
 
   /// Update to purchases
-  StreamSubscription _streamSubscription;
-  ProductDetails selectedPlan;
-  ProductDetails selectedProduct;
+  StreamSubscription? _streamSubscription;
+  ProductDetails? selectedPlan;
+  ProductDetails? selectedProduct;
   var response;
   bool _isLoading = true;
-  var _iap = null; //InAppPurchaseConnection.instance;
+  dynamic _iap = null; //InAppPurchaseConnection.instance;
   final GlobalKey<ScaffoldState> _scaffoldKey = new GlobalKey<ScaffoldState>();
 
   @override
@@ -50,8 +49,8 @@ class _SubscriptionState extends State<Subscription> {
     super.initState();
     _initialize();
     // Show payment failure alert.
-    if (widget.isPaymentSuccess != null && !widget.isPaymentSuccess) {
-      WidgetsBinding.instance.addPostFrameCallback((_) async {
+    if (widget.isPaymentSuccess != null && !widget.isPaymentSuccess!) {
+      WidgetsBinding.instance!.addPostFrameCallback((_) async {
         await Alert(
           context: context,
           type: AlertType.error,
@@ -74,12 +73,12 @@ class _SubscriptionState extends State<Subscription> {
 
   @override
   void dispose() {
-    _streamSubscription.cancel();
+    _streamSubscription!.cancel();
     super.dispose();
   }
 
-  Future<List<String>> _fetchPackageIds() async {
-    List<String> packageId = [];
+  Future<List<String?>> _fetchPackageIds() async {
+    List<String?> packageId = [];
 
     await FirebaseFirestore.instance
         .collection("Packages")
@@ -94,13 +93,13 @@ class _SubscriptionState extends State<Subscription> {
 
   void _initialize() async {
     isAvailable = await _iap.isAvailable();
-    if (isAvailable) {
+    if (isAvailable!) {
       List<Future> futures = [_getProducts(await _fetchPackageIds()), _getpastPurchases()];
       await Future.wait(futures);
 
       /// removing all the pending puchases.
       if (Platform.isIOS) {
-        var paymentWrapper = null; // SKPaymentQueueWrapper();
+        dynamic paymentWrapper = null; // SKPaymentQueueWrapper();
         var transactions = await paymentWrapper.transactions();
         transactions.forEach((transaction) async {
           print(transaction.transactionState);
@@ -113,9 +112,9 @@ class _SubscriptionState extends State<Subscription> {
       _streamSubscription = _iap.purchaseUpdatedStream.listen((data) {
         setState(
           () {
-            purchases.addAll(data);
+            purchases!.addAll(data);
 
-            purchases.forEach(
+            purchases!.forEach(
               (purchase) async {
                 await _verifyPuchase(purchase.productID);
               },
@@ -123,9 +122,9 @@ class _SubscriptionState extends State<Subscription> {
           },
         );
       });
-      _streamSubscription.onError(
+      _streamSubscription!.onError(
         (error) {
-          _scaffoldKey.currentState.showSnackBar(
+          _scaffoldKey.currentState!.showSnackBar(
             SnackBar(
               content: error != null ? Text('$error') : Text("Oops !! something went wrong. Try Again"),
             ),
@@ -213,7 +212,9 @@ class _SubscriptionState extends State<Subscription> {
                         width: MediaQuery.of(context).size.width * .85,
                         child: ClipRRect(
                           borderRadius: BorderRadius.circular(10),
-                          child: Swiper(
+                          child: Container(
+                            child: Text('Swiper'),
+                          ) /*Swiper(
                             key: UniqueKey(),
                             curve: Curves.linear,
                             autoplay: true,
@@ -255,7 +256,8 @@ class _SubscriptionState extends State<Subscription> {
                               disableColor: secondryColor,
                             ),
                             loop: false,
-                          ),
+                          )*/
+                          ,
                         ),
                       ),
                     ),
@@ -311,7 +313,7 @@ class _SubscriptionState extends State<Subscription> {
                                                             ? "product.skProduct.subscriptionPeriod.numberOfUnits.toString()"
                                                             : "product.skuDetail.subscriptionPeriod.split("
                                                                 ")[1]",
-                                                        price: product.price,
+                                                        price: product!.price,
                                                       ),
                                                     ],
                                                   ),
@@ -326,11 +328,11 @@ class _SubscriptionState extends State<Subscription> {
                                     ? Center(
                                         child: ListTile(
                                           title: Text(
-                                            selectedProduct.title,
+                                            selectedProduct!.title,
                                             textAlign: TextAlign.center,
                                           ),
                                           subtitle: Text(
-                                            selectedProduct.description,
+                                            selectedProduct!.description,
                                             textAlign: TextAlign.center,
                                           ),
                                           trailing: Text(
@@ -375,7 +377,7 @@ class _SubscriptionState extends State<Subscription> {
                     ))),
                 onTap: () async {
                   if (selectedProduct != null)
-                    _buyProduct(selectedProduct);
+                    _buyProduct(selectedProduct!);
                   else {
                     CustomSnackbar.snackbar("You must choose a subscription to continue.", _scaffoldKey);
                   }
@@ -390,12 +392,12 @@ class _SubscriptionState extends State<Subscription> {
   }
 
   Widget productList({
-    BuildContext context,
-    String intervalCount,
-    String interval,
-    Function onTap,
-    ProductDetails product,
-    String price,
+    required BuildContext context,
+    required String intervalCount,
+    required String interval,
+    Function? onTap,
+    ProductDetails? product,
+    required String price,
   }) {
     return AnimatedContainer(
       curve: Curves.easeIn,
@@ -444,14 +446,14 @@ class _SubscriptionState extends State<Subscription> {
   }
 
   ///fetch products
-  Future<void> _getProducts(List<String> _productIds) async {
+  Future<void> _getProducts(List<String?> _productIds) async {
     print(_productIds.length);
     if (_productIds.length > 0) {
       Set<String> ids = Set.from(_productIds);
       print(ids);
-      ProductDetailsResponse response = await _iap.queryProductDetails(ids);
+      ProductDetailsResponse? response = await _iap.queryProductDetails(ids);
       setState(() {
-        products = response.productDetails;
+        products = response!.productDetails;
         print(products.length);
       });
 
@@ -473,19 +475,19 @@ class _SubscriptionState extends State<Subscription> {
     setState(() {
       purchases = response.pastPurchases;
     });
-    purchases.forEach((purchase) async {
+    purchases!.forEach((purchase) async {
       await _verifyPuchase(purchase.productID);
     });
   }
 
   /// check if user has pruchased
-  PurchaseDetails _hasPurchased(String productId) {
-    return purchases.firstWhere((purchase) => purchase.productID == productId, orElse: () => null);
+  PurchaseDetails? _hasPurchased(String productId) {
+    return purchases!.firstWhereOrNull((purchase) => purchase.productID == productId);
   }
 
   ///verifying opurhcase of user
   Future<void> _verifyPuchase(String id) async {
-    PurchaseDetails purchase = _hasPurchased(id);
+    PurchaseDetails? purchase = _hasPurchased(id);
     if (purchase != null && purchase.status == PurchaseStatus.purchased) {
       print(purchase.productID);
 
@@ -516,8 +518,8 @@ class _SubscriptionState extends State<Subscription> {
     await _iap.buyNonConsumable(purchaseParam: purchaseParam);
   }
 
-  String getInterval(ProductDetails product) {
-    var periodUnit = null; // product.skProduct.subscriptionPeriod.unit;
+  String getInterval(ProductDetails? product) {
+    dynamic periodUnit = null; // product.skProduct.subscriptionPeriod.unit;
     return "check error in app";
     /*  if (SKSubscriptionPeriodUnit.month == periodUnit) {
       return "Month(s)";
@@ -528,7 +530,7 @@ class _SubscriptionState extends State<Subscription> {
     }*/
   }
 
-  String getIntervalAndroid(ProductDetails product) {
+  String getIntervalAndroid(ProductDetails? product) {
     String durCode = ''; //product.skuDetail.subscriptionPeriod.split("")[2];
     if (durCode == "M") {
       return "Month(s)";

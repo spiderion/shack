@@ -22,12 +22,12 @@ class Settings extends StatefulWidget {
 
 class _SettingsState extends State<Settings> {
   Map<String, dynamic> changeValues = {};
-  RangeValues ageRange;
+  late RangeValues ageRange;
   var _showMe;
-  int distance;
+  late int distance;
   final FirebaseAuth _auth = FirebaseAuth.instance;
   bool checkedValue = false;
-  bool isSwitched = true;
+  bool? isSwitched = true;
 
   @override
   void dispose() {
@@ -46,8 +46,8 @@ class _SettingsState extends State<Settings> {
     // print('ewew$lastVisible');
   }
 
-  int freeR;
-  int paidR;
+  late int freeR;
+  late int paidR;
 
   @override
   void initState() {
@@ -55,17 +55,17 @@ class _SettingsState extends State<Settings> {
     freeR = widget.items['free_radius'] != null ? int.parse(widget.items['free_radius']) : 400;
     paidR = widget.items['paid_radius'] != null ? int.parse(widget.items['paid_radius']) : 400;
     setState(() {
-      if (!widget.isPurchased && widget.currentUser.maxDistance > freeR) {
+      if (!widget.isPurchased && widget.currentUser.maxDistance! > freeR) {
         widget.currentUser.maxDistance = freeR.round();
         changeValues.addAll({'maximum_distance': freeR.round()});
-      } else if (widget.isPurchased && widget.currentUser.maxDistance >= paidR) {
+      } else if (widget.isPurchased && widget.currentUser.maxDistance! >= paidR) {
         widget.currentUser.maxDistance = paidR.round();
         changeValues.addAll({'maximum_distance': paidR.round()});
       }
       _showMe = widget.currentUser.showGender;
-      distance = widget.currentUser.maxDistance.round();
-      ageRange = RangeValues(double.parse(widget.currentUser.ageRange['min']),
-          (double.parse(widget.currentUser.ageRange['max'])));
+      distance = widget.currentUser.maxDistance!.round();
+      ageRange = RangeValues(double.parse(widget.currentUser.ageRange!['min']),
+          (double.parse(widget.currentUser.ageRange!['max'])));
       isSwitched = widget.currentUser.isActive;
     });
   }
@@ -109,14 +109,14 @@ class _SettingsState extends State<Settings> {
                         Text("On Grid / Off Grid"),
                         Container(
                           child: Switch(
-                            value: isSwitched,
+                            value: isSwitched!,
                             onChanged: (value) async {
                               setState(() {
                                 isSwitched = value;
                               });
                               Map<String, dynamic> userData = {};
                               userData.addAll({'isActive': isSwitched});
-                              final user = FirebaseAuth.instance.currentUser;
+                              final user = FirebaseAuth.instance.currentUser!;
                               await FirebaseFirestore.instance
                                   .collection("Users")
                                   .doc(user.uid)
@@ -164,12 +164,11 @@ class _SettingsState extends State<Settings> {
                           ],
                         ),
                         onTap: () {
-                          pushNewScreenWithRouteSettings(
-                            context,
-                            screen: UpdateNumber(widget.currentUser),
-                            withNavBar: false,
-                            pageTransitionAnimation: PageTransitionAnimation.cupertino,
-                          );
+                          pushNewScreenWithRouteSettings(context,
+                              screen: UpdateNumber(widget.currentUser),
+                              withNavBar: false,
+                              pageTransitionAnimation: PageTransitionAnimation.cupertino,
+                              settings: RouteSettings());
                         }),
                   )),
                   subtitle: Text("Verify a phone number to secure your account"),
@@ -193,7 +192,7 @@ class _SettingsState extends State<Settings> {
                         ),
                       ),
                       title: Text(
-                        widget.currentUser.address,
+                        widget.currentUser.address!,
                         style: TextStyle(
                           color: Colors.blue,
                           fontSize: 14,
@@ -373,7 +372,7 @@ class _SettingsState extends State<Settings> {
                                 DropdownMenuItem(child: Text("Woman"), value: "woman"),
                                 DropdownMenuItem(child: Text("Everyone"), value: "everyone"),
                               ],
-                              onChanged: (val) {
+                              onChanged: (dynamic val) {
                                 changeValues.addAll({
                                   'showGender': val,
                                 });
@@ -578,7 +577,7 @@ class _SettingsState extends State<Settings> {
                               ),
                               FlatButton(
                                 onPressed: () async {
-                                  final user = _auth.currentUser;
+                                  final user = _auth.currentUser!;
                                   await _deleteUser(user).then((_) async {
                                     await _auth.signOut().whenComplete(() {
                                       Navigator.pushReplacement(

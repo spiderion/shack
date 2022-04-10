@@ -19,8 +19,8 @@ class OTP extends StatefulWidget {
 class _OTPState extends State<OTP> {
   final _scaffoldKey = GlobalKey<ScaffoldState>();
   bool cont = false;
-  String _smsVerificationCode;
-  String countryCode = '+44';
+  String? _smsVerificationCode;
+  String? countryCode = '+44';
   TextEditingController phoneNumController = new TextEditingController();
   Welcome _login = new Welcome();
 
@@ -32,7 +32,7 @@ class _OTPState extends State<OTP> {
 
   /// method to verify phone number and handle phone auth
   Future _verifyPhoneNumber(String phoneNumber) async {
-    phoneNumber = countryCode + phoneNumber.toString();
+    phoneNumber = countryCode! + phoneNumber.toString();
     print(phoneNumber);
     final FirebaseAuth _auth = FirebaseAuth.instance;
     await _auth.verifyPhoneNumber(
@@ -47,7 +47,7 @@ class _OTPState extends State<OTP> {
 
   Future updatePhoneNumber() async {
     print("here");
-    User user = FirebaseAuth.instance.currentUser;
+    User user = FirebaseAuth.instance.currentUser!;
     await FirebaseFirestore.instance
         .collection("Users")
         .doc(user.uid)
@@ -90,13 +90,16 @@ class _OTPState extends State<OTP> {
   /// will get an AuthCredential object that will help with logging into Firebase.
   _verificationComplete(AuthCredential authCredential, BuildContext context) async {
     if (widget.updateNumber) {
-      User user = FirebaseAuth.instance.currentUser;
-      user.updatePhoneNumber(authCredential).then((_) => updatePhoneNumber()).catchError((e) {
+      User user = FirebaseAuth.instance.currentUser!;
+      user
+          .updatePhoneNumber(authCredential as PhoneAuthCredential)
+          .then((_) => updatePhoneNumber())
+          .catchError((e) {
         CustomSnackbar.snackbar("$e", _scaffoldKey);
       });
     } else {
       FirebaseAuth.instance.signInWithCredential(authCredential).then((authResult) async {
-        print(authResult.user.uid);
+        print(authResult.user!.uid);
         //snackbar("Success!!! UUID is: " + authResult.user.uid);
         showDialog(
             barrierDismissible: false,
@@ -104,7 +107,7 @@ class _OTPState extends State<OTP> {
             builder: (_) {
               Future.delayed(Duration(seconds: 2), () async {
                 Navigator.pop(context);
-                await _login.navigationCheck(authResult.user, context);
+                await _login.navigationCheck(authResult.user!, context);
               });
               return Center(
                   child: Container(
@@ -127,18 +130,18 @@ class _OTPState extends State<OTP> {
             });
         await FirebaseFirestore.instance
             .collection('Users')
-            .where('userId', isEqualTo: authResult.user.uid)
+            .where('userId', isEqualTo: authResult.user!.uid)
             .get()
             .then((QuerySnapshot snapshot) async {
           if (snapshot.docs.length <= 0) {
-            await setDataUser(authResult.user);
+            await setDataUser(authResult.user!);
           }
         });
       });
     }
   }
 
-  _smsCodeSent(String verificationId, List<int> code) async {
+  _smsCodeSent(String verificationId, List<int?> code) async {
     // set the verification code so that we can use it to log the user in
     _smsVerificationCode = verificationId;
     final ThemeData _theme = Theme.of(context);
@@ -152,7 +155,7 @@ class _OTPState extends State<OTP> {
                 context,
                 CupertinoPageRoute(
                     builder: (context) => Verification(
-                        countryCode + phoneNumController.text, _smsVerificationCode, widget.updateNumber)));
+                        countryCode! + phoneNumController.text, _smsVerificationCode, widget.updateNumber)));
           });
           return Center(
 
@@ -242,7 +245,7 @@ rates may apply.""",
                           },
                           // Initial selection and favorite can be one of code ('IT') OR dial_code('+39')
                           initialSelection: 'GB',
-                          favorite: [countryCode, 'GB'],
+                          favorite: [countryCode!, 'GB'],
                           // optional. Shows only country name and flag
                           showCountryOnly: false,
                           // optional. Shows only country name and flag when popup is closed.
@@ -327,6 +330,9 @@ rates may apply.""",
                           color: _theme.backgroundColor.withOpacity(0.5),
                           padding: EdgeInsets.all(8),
                           textColor: _theme.primaryColor.withOpacity(0.5),
+                          onPressed: () {
+                            print('on pressed newely added');
+                          },
                           child: Container(
                             alignment: Alignment.center,
                             child: Text(

@@ -17,9 +17,9 @@ import 'package:intl/intl.dart';
 import 'package:permission_handler/permission_handler.dart';
 
 class ChatPage extends StatefulWidget {
-  final AppUser sender;
-  final String chatId;
-  final AppUser second;
+  final AppUser? sender;
+  final String? chatId;
+  final AppUser? second;
 
   ChatPage({this.sender, this.chatId, this.second});
 
@@ -30,7 +30,7 @@ class ChatPage extends StatefulWidget {
 class _ChatPageState extends State<ChatPage> {
   bool isBlocked = false;
   final db = FirebaseFirestore.instance;
-  CollectionReference chatReference;
+  late CollectionReference chatReference;
   final TextEditingController _textController = new TextEditingController();
   bool _isWritting = false;
   final _scaffoldKey = GlobalKey<ScaffoldState>();
@@ -221,7 +221,7 @@ class _ChatPageState extends State<ChatPage> {
               child: ClipRRect(
                 borderRadius: BorderRadius.circular(90),
                 child: CachedNetworkImage(
-                  imageUrl: widget.second.imageUrl[0],
+                  imageUrl: widget.second!.imageUrl![0],
                   useOldImageOnUrlChange: true,
                   placeholder: (context, url) => CupertinoActivityIndicator(
                     radius: 15,
@@ -359,7 +359,7 @@ class _ChatPageState extends State<ChatPage> {
   }
 
   generateMessages(AsyncSnapshot<QuerySnapshot> snapshot) {
-    return snapshot.data.docs
+    return snapshot.data!.docs
         .map<Widget>((doc) => Container(
               margin: const EdgeInsets.symmetric(vertical: 10.0),
               child: new Row(
@@ -372,10 +372,10 @@ class _ChatPageState extends State<ChatPage> {
                                       .add_jm()
                                       .format((doc.data() as Map<String, dynamic>)["time"].toDate())
                                       .toString() +
-                                  " by ${(doc.data() as Map<String, dynamic>)['sender_id'] == widget.sender.id ? "You" : "${widget.second.name}"}"
+                                  " by ${(doc.data() as Map<String, dynamic>)['sender_id'] == widget.sender!.id ? "You" : "${widget.second!.name}"}"
                               : "")
                         ]
-                      : (doc.data() as Map<String, dynamic>)['sender_id'] != widget.sender.id
+                      : (doc.data() as Map<String, dynamic>)['sender_id'] != widget.sender!.id
                           ? generateReceiverLayout(
                               doc,
                             )
@@ -394,7 +394,7 @@ class _ChatPageState extends State<ChatPage> {
           centerTitle: true,
           elevation: 0,
           backgroundColor: _theme.backgroundColor,
-          title: Text(widget.second.name),
+          title: Text(widget.second!.name!),
           leading: IconButton(
             icon: Icon(Icons.arrow_back_ios),
             color: Colors.white,
@@ -422,7 +422,7 @@ class _ChatPageState extends State<ChatPage> {
                           return AlertDialog(
                             title: Text(isBlocked ? 'Unblock' : 'Block'),
                             content: Text(
-                                'Do you want to ${isBlocked ? 'Unblock' : 'Block'} ${widget.second.name}?'),
+                                'Do you want to ${isBlocked ? 'Unblock' : 'Block'} ${widget.second!.name}?'),
                             actions: <Widget>[
                               FlatButton(
                                 onPressed: () => Navigator.of(context).pop(false),
@@ -431,15 +431,15 @@ class _ChatPageState extends State<ChatPage> {
                               FlatButton(
                                 onPressed: () async {
                                   Navigator.pop(ctx);
-                                  if (isBlocked && blockedBy == widget.sender.id) {
+                                  if (isBlocked && blockedBy == widget.sender!.id) {
                                     chatReference.doc('blocked').set({
                                       'isBlocked': !isBlocked,
-                                      'blockedBy': widget.sender.id,
+                                      'blockedBy': widget.sender!.id,
                                     });
                                   } else if (!isBlocked) {
                                     chatReference.doc('blocked').set({
                                       'isBlocked': !isBlocked,
-                                      'blockedBy': widget.sender.id,
+                                      'blockedBy': widget.sender!.id,
                                     });
                                   } else
                                     print("You can't unblock");
@@ -542,7 +542,7 @@ class _ChatPageState extends State<ChatPage> {
                       color: _theme.backgroundColor,
                     ),
                     onPressed: () async {
-                      XFile imageFile = await ImagePicker().pickImage(source: ImageSource.gallery);
+                      XFile imageFile = (await ImagePicker().pickImage(source: ImageSource.gallery))!;
                       int timestamp = new DateTime.now().millisecondsSinceEpoch;
                       final storageReference = FirebaseStorage.instance
                           .ref()
@@ -586,8 +586,8 @@ class _ChatPageState extends State<ChatPage> {
     chatReference.add({
       'type': 'Msg',
       'text': text,
-      'sender_id': widget.sender.id,
-      'receiver_id': widget.second.id,
+      'sender_id': widget.sender!.id,
+      'receiver_id': widget.second!.id,
       'isRead': false,
       'image_url': '',
       'time': FieldValue.serverTimestamp(),
@@ -598,12 +598,12 @@ class _ChatPageState extends State<ChatPage> {
     }).catchError((e) {});
   }
 
-  void _sendImage({String messageText, String imageUrl}) {
+  void _sendImage({String? messageText, String? imageUrl}) {
     chatReference.add({
       'type': 'Image',
       'text': messageText,
-      'sender_id': widget.sender.id,
-      'receiver_id': widget.second.id,
+      'sender_id': widget.sender!.id,
+      'receiver_id': widget.second!.id,
       'isRead': false,
       'image_url': imageUrl,
       'time': FieldValue.serverTimestamp(),
@@ -618,8 +618,8 @@ class _ChatPageState extends State<ChatPage> {
       await chatReference.add({
         'type': 'Call',
         'text': callType,
-        'sender_id': widget.sender.id,
-        'receiver_id': widget.second.id,
+        'sender_id': widget.sender!.id,
+        'receiver_id': widget.second!.id,
         'isRead': false,
         'image_url': "",
         'time': FieldValue.serverTimestamp(),

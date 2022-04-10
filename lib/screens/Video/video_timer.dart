@@ -4,14 +4,14 @@ import 'package:flutter/material.dart';
 import 'package:flutter_grid/screens/Video/camera_screen.dart';
 
 class VideoTimer extends StatefulWidget {
-  final CameraScreenState that;
-  const VideoTimer({Key key,this.that}) : super(key: key);
+  final CameraScreenState? that;
+  const VideoTimer({Key? key,this.that}) : super(key: key);
   @override
   VideoTimerState createState() => VideoTimerState();
 }
 
 class VideoTimerState extends State<VideoTimer> {
-  Timer _timer;
+  Timer? _timer;
   int _start = 0;
 
   void startTimer() {
@@ -22,7 +22,7 @@ class VideoTimerState extends State<VideoTimer> {
             () {
           _start = _start + 1;
           if(_start > 15){
-            widget.that.stopVideoRecording();
+            widget.that!.stopVideoRecording();
           }
         },
       ),

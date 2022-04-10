@@ -1,4 +1,3 @@
-import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_grid/models/user_model.dart';
@@ -6,20 +5,18 @@ import 'package:flutter_grid/screens/Chat/Matches.dart';
 import 'package:flutter_grid/screens/Chat/chatPage.dart';
 import 'package:flutter_grid/screens/Profile/EditProfile.dart';
 import 'package:flutter_grid/screens/util/color.dart';
-import 'package:flutter_swiper/flutter_swiper.dart';
-import 'package:swipe_stack/swipe_stack.dart';
-
 
 class Infos extends StatelessWidget {
   final AppUser currentUser;
   final AppUser user;
 
-  final GlobalKey<SwipeStackState> swipeKey;
+  final GlobalKey swipeKey;
+
   Infos(
-      this.user,
-      this.currentUser,
-      this.swipeKey,
-      );
+    this.user,
+    this.currentUser,
+    this.swipeKey,
+  );
 
   @override
   Widget build(BuildContext context) {
@@ -35,8 +32,7 @@ class Infos extends StatelessWidget {
       backgroundColor: Colors.white,
       body: Container(
         decoration: BoxDecoration(
-            borderRadius: BorderRadius.only(
-                topLeft: Radius.circular(50), topRight: Radius.circular(50)),
+            borderRadius: BorderRadius.only(topLeft: Radius.circular(50), topRight: Radius.circular(50)),
             color: Colors.white),
         child: Stack(
           children: <Widget>[
@@ -46,7 +42,8 @@ class Infos extends StatelessWidget {
                   Container(
                     height: 500,
                     width: MediaQuery.of(context).size.width,
-                    child: Swiper(
+                    child: Text(
+                        'Swiper') /*Swiper(
                       key: UniqueKey(),
                       physics: ScrollPhysics(),
                       itemBuilder: (BuildContext context, int index2) {
@@ -79,7 +76,8 @@ class Infos extends StatelessWidget {
                         disableColor: secondryColor,
                       ),
                       loop: false,
-                    ),
+                    )*/
+                    ,
                   ),
                   Align(
                     alignment: Alignment.bottomCenter,
@@ -90,11 +88,9 @@ class Infos extends StatelessWidget {
                           ListTile(
                             subtitle: Text("${user.address}"),
                             title: Text(
-                              "${user.name}, ${user.editInfo['showMyAge'] != null ? !user.editInfo['showMyAge'] ? user.age : "" : user.age}",
-                              style: TextStyle(
-                                  color: Colors.black,
-                                  fontSize: 25,
-                                  fontWeight: FontWeight.bold),
+                              "${user.name}, ${user.editInfo!['showMyAge'] != null ? !user.editInfo!['showMyAge'] ? user.age : "" : user.age}",
+                              style:
+                                  TextStyle(color: Colors.black, fontSize: 25, fontWeight: FontWeight.bold),
                             ),
                             trailing: FloatingActionButton(
                                 backgroundColor: Colors.white,
@@ -106,63 +102,52 @@ class Infos extends StatelessWidget {
                                   color: primaryColor,
                                 )),
                           ),
-                          user.editInfo['job_title'] != null
+                          user.editInfo!['job_title'] != null
                               ? ListTile(
-                            dense: true,
-                            leading:
-                            Icon(Icons.work, color: primaryColor),
-                            title: Text(
-                              "${user.editInfo['job_title']}${user.editInfo['company'] != null ? ' at ${user.editInfo['company']}' : ''}",
-                              style: TextStyle(
-                                  color: secondryColor,
-                                  fontSize: 16,
-                                  fontWeight: FontWeight.w500),
-                            ),
-                          )
+                                  dense: true,
+                                  leading: Icon(Icons.work, color: primaryColor),
+                                  title: Text(
+                                    "${user.editInfo!['job_title']}${user.editInfo!['company'] != null ? ' at ${user.editInfo!['company']}' : ''}",
+                                    style: TextStyle(
+                                        color: secondryColor, fontSize: 16, fontWeight: FontWeight.w500),
+                                  ),
+                                )
                               : Container(),
-                          user.editInfo['university'] != null
+                          user.editInfo!['university'] != null
                               ? ListTile(
-                            dense: true,
-                            leading:
-                            Icon(Icons.stars, color: primaryColor),
-                            title: Text(
-                              "${user.editInfo['university']}",
-                              style: TextStyle(
-                                  color: secondryColor,
-                                  fontSize: 16,
-                                  fontWeight: FontWeight.w500),
-                            ),
-                          )
+                                  dense: true,
+                                  leading: Icon(Icons.stars, color: primaryColor),
+                                  title: Text(
+                                    "${user.editInfo!['university']}",
+                                    style: TextStyle(
+                                        color: secondryColor, fontSize: 16, fontWeight: FontWeight.w500),
+                                  ),
+                                )
                               : Container(),
-                          user.editInfo['living_in'] != null
+                          user.editInfo!['living_in'] != null
                               ? ListTile(
-                            dense: true,
-                            leading:
-                            Icon(Icons.home, color: primaryColor),
-                            title: Text(
-                              "Living in ${user.editInfo['living_in']}",
-                              style: TextStyle(
-                                  color: secondryColor,
-                                  fontSize: 16,
-                                  fontWeight: FontWeight.w500),
-                            ),
-                          )
+                                  dense: true,
+                                  leading: Icon(Icons.home, color: primaryColor),
+                                  title: Text(
+                                    "Living in ${user.editInfo!['living_in']}",
+                                    style: TextStyle(
+                                        color: secondryColor, fontSize: 16, fontWeight: FontWeight.w500),
+                                  ),
+                                )
                               : Container(),
                           !isMe
                               ? ListTile(
-                            dense: true,
-                            leading: Icon(
-                              Icons.location_on,
-                              color: primaryColor,
-                            ),
-                            title: Text(
-                              "${user.editInfo['DistanceVisible'] != null ? user.editInfo['DistanceVisible'] ? 'Less than ${user.distanceBW} KM away' : 'Distance not visible' : 'Less than ${user.distanceBW} KM away'}",
-                              style: TextStyle(
-                                  color: secondryColor,
-                                  fontSize: 16,
-                                  fontWeight: FontWeight.w500),
-                            ),
-                          )
+                                  dense: true,
+                                  leading: Icon(
+                                    Icons.location_on,
+                                    color: primaryColor,
+                                  ),
+                                  title: Text(
+                                    "${user.editInfo!['DistanceVisible'] != null ? user.editInfo!['DistanceVisible'] ? 'Less than ${user.distanceBW} KM away' : 'Distance not visible' : 'Less than ${user.distanceBW} KM away'}",
+                                    style: TextStyle(
+                                        color: secondryColor, fontSize: 16, fontWeight: FontWeight.w500),
+                                  ),
+                                )
                               : Container(),
                           Divider(),
                         ],
@@ -172,14 +157,11 @@ class Infos extends StatelessWidget {
                   SizedBox(
                     height: 20,
                   ),
-                  user.editInfo['about'] != null
+                  user.editInfo!['about'] != null
                       ? Text(
-                    "${user.editInfo['about']}",
-                    style: TextStyle(
-                        color: secondryColor,
-                        fontSize: 16,
-                        fontWeight: FontWeight.w500),
-                  )
+                          "${user.editInfo!['about']}",
+                          style: TextStyle(color: secondryColor, fontSize: 16, fontWeight: FontWeight.w500),
+                        )
                       : Container(),
                   SizedBox(
                     height: 100,
@@ -189,77 +171,74 @@ class Infos extends StatelessWidget {
             ),
             !isMatched
                 ? Padding(
-              padding: const EdgeInsets.all(25.0),
-              child: Align(
-                alignment: Alignment.bottomCenter,
-                child: Row(
-                  mainAxisAlignment: MainAxisAlignment.spaceAround,
-                  crossAxisAlignment: CrossAxisAlignment.end,
-                  children: <Widget>[
-                    FloatingActionButton(
-                        heroTag: UniqueKey(),
-                        backgroundColor: Colors.white,
-                        child: Icon(
-                          Icons.clear,
-                          color: Colors.red,
-                          size: 30,
-                        ),
-                        onPressed: () {
-                          Navigator.pop(context);
-                          swipeKey.currentState.swipeLeft();
-                        }),
-                    FloatingActionButton(
-                        heroTag: UniqueKey(),
-                        backgroundColor: Colors.white,
-                        child: Icon(
-                          Icons.favorite,
-                          color: Colors.lightBlueAccent,
-                          size: 30,
-                        ),
-                        onPressed: () {
-                          Navigator.pop(context);
-                          swipeKey.currentState.swipeRight();
-                        }),
-                  ],
-                ),
-              ),
-            )
+                    padding: const EdgeInsets.all(25.0),
+                    child: Align(
+                      alignment: Alignment.bottomCenter,
+                      child: Row(
+                        mainAxisAlignment: MainAxisAlignment.spaceAround,
+                        crossAxisAlignment: CrossAxisAlignment.end,
+                        children: <Widget>[
+                          FloatingActionButton(
+                              heroTag: UniqueKey(),
+                              backgroundColor: Colors.white,
+                              child: Icon(
+                                Icons.clear,
+                                color: Colors.red,
+                                size: 30,
+                              ),
+                              onPressed: () {
+                                Navigator.pop(context);
+                                // swipeKey.currentState.swipeLeft();
+                              }),
+                          FloatingActionButton(
+                              heroTag: UniqueKey(),
+                              backgroundColor: Colors.white,
+                              child: Icon(
+                                Icons.favorite,
+                                color: Colors.lightBlueAccent,
+                                size: 30,
+                              ),
+                              onPressed: () {
+                                Navigator.pop(context);
+                               // swipeKey.currentState.swipeRight();
+                              }),
+                        ],
+                      ),
+                    ),
+                  )
                 : isMe
-                ? Padding(
-              padding: const EdgeInsets.all(18.0),
-              child: Align(
-                  alignment: Alignment.bottomRight,
-                  child: FloatingActionButton(
-                      backgroundColor: Colors.white,
-                      child: Icon(
-                        Icons.edit,
-                        color: primaryColor,
-                      ),
-                      onPressed: () => Navigator.push(
-                          context,
-                          CupertinoPageRoute(
-                              builder: (context) =>
-                                  EditProfile(user))))),
-            )
-                : Padding(
-              padding: const EdgeInsets.all(18.0),
-              child: Align(
-                  alignment: Alignment.bottomRight,
-                  child: FloatingActionButton(
-                      backgroundColor: Colors.white,
-                      child: Icon(
-                        Icons.message,
-                        color: primaryColor,
-                      ),
-                      onPressed: () => Navigator.push(
-                          context,
-                          CupertinoPageRoute(
-                              builder: (context) => ChatPage(
-                                sender: currentUser,
-                                second: user,
-                                chatId: chatId(user, currentUser),
-                              ))))),
-            )
+                    ? Padding(
+                        padding: const EdgeInsets.all(18.0),
+                        child: Align(
+                            alignment: Alignment.bottomRight,
+                            child: FloatingActionButton(
+                                backgroundColor: Colors.white,
+                                child: Icon(
+                                  Icons.edit,
+                                  color: primaryColor,
+                                ),
+                                onPressed: () => Navigator.push(
+                                    context, CupertinoPageRoute(builder: (context) => EditProfile(user))))),
+                      )
+                    : Padding(
+                        padding: const EdgeInsets.all(18.0),
+                        child: Align(
+                            alignment: Alignment.bottomRight,
+                            child: FloatingActionButton(
+                                backgroundColor: Colors.white,
+                                child: Icon(
+                                  Icons.message,
+                                  color: primaryColor,
+                                ),
+                                onPressed: () => Navigator.push(
+                                    context,
+                                    CupertinoPageRoute(
+                                        builder: (context) => ChatPage(
+                                              sender: currentUser,
+                                              second: user,
+                                              chatId: chatId(user, currentUser),
+                                            ))))),
+                      )
           ],
         ),
       ),

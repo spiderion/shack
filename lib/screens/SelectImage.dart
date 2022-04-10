@@ -21,9 +21,9 @@ class SelectImage extends StatefulWidget {
 
 class _SelectImageState extends State<SelectImage> {
   final _scaffoldKey = GlobalKey<ScaffoldState>();
-  String code;
+  String? code;
   CollectionReference docRef = FirebaseFirestore.instance.collection('Users');
-  AppUser currentUser;
+  AppUser? currentUser;
 
   @override
   void initState() {
@@ -182,7 +182,7 @@ class _SelectImageState extends State<SelectImage> {
     ThemeData _theme = Theme.of(context);
     var image = await ImagePicker().pickImage(source: imageSource);
     if (image != null) {
-      File croppedFile = await ImageCropper().cropImage(
+      File? croppedFile = await ImageCropper().cropImage(
           sourcePath: image.path,
           aspectRatioPresets: [CropAspectRatioPreset.square],
           androidUiSettings: AndroidUiSettings(
@@ -195,7 +195,7 @@ class _SelectImageState extends State<SelectImage> {
             minimumAspectRatio: 1.0,
           ));
       if (croppedFile != null) {
-        await uploadFile(await compressimage(croppedFile), currentUser);
+        await uploadFile(await (compressimage(croppedFile)), currentUser);
       }
     }
     Navigator.pop(context);
@@ -211,9 +211,9 @@ class _SelectImageState extends State<SelectImage> {
         if (mounted)
           setState(() {
             if (currentUser.imageUrl == null) {
-              currentUser.imageUrl = List();
+              currentUser.imageUrl = [];
             }
-            currentUser.imageUrl.add(fileURL);
+            currentUser.imageUrl!.add(fileURL);
           });
         Map<String, dynamic> updateObject = {
           'userId': currentUser.id,
@@ -234,7 +234,7 @@ class _SelectImageState extends State<SelectImage> {
   Future compressimage(File image) async {
     final tempdir = await getTemporaryDirectory();
     final path = tempdir.path;
-    i.Image imagefile = i.decodeImage(image.readAsBytesSync());
+    i.Image imagefile = i.decodeImage(image.readAsBytesSync())!;
     final compressedImagefile = File('$path.jpg')..writeAsBytesSync(i.encodeJpg(imagefile, quality: 80));
     // setState(() {
     return compressedImagefile;

@@ -4,19 +4,17 @@ import 'dart:math';
 import 'dart:ui';
 
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:collection/collection.dart' show IterableExtension;
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_grid/models/answer_model.dart';
 import 'package:flutter_grid/models/question_model.dart';
 import 'package:flutter_grid/models/user_model.dart';
-import 'package:flutter_grid/screens/Calling/incomingCall.dart';
 import 'package:flutter_grid/screens/Home/Home.dart';
 import 'package:flutter_grid/screens/HomeScreen.dart';
 import 'package:flutter_grid/screens/Near/Near.dart';
-import 'package:flutter_grid/screens/Profile/profile.dart';
 import 'package:flutter_grid/screens/Settings/setting.dart';
-import 'package:flutter_grid/screens/Settings/settings.dart';
 import 'package:flutter_grid/screens/Video/MakeVideo.dart';
 import 'package:flutter_grid/screens/match/Home.dart';
 import 'package:flutter_grid/themes/gridapp_icons.dart';
@@ -27,13 +25,13 @@ import 'package:rflutter_alert/rflutter_alert.dart';
 import 'package:video_player/video_player.dart';
 
 List likedByList = [];
-List<String> nearuser = [];
+List<String?> nearuser = [];
 List<Question_model> questions = [];
 List<Answer_model> answerlist = [];
 
 class TAB extends StatefulWidget {
-  final bool isPaymentSuccess;
-  final String plan;
+  final bool? isPaymentSuccess;
+  final String? plan;
 
   TAB(this.plan, this.isPaymentSuccess);
 
@@ -67,28 +65,28 @@ class _TABState extends State<TAB> with WidgetsBindingObserver {
 
   List<AppUser> matches = [];
   List<AppUser> newmatches = [];
-  AppUser currentUser;
+  AppUser? currentUser;
   List<AppUser> users = [];
   List<AppUser> allusers = [];
 
-  PersistentTabController _controller;
-  bool _hideNavBar;
+  PersistentTabController? _controller;
+  bool? _hideNavBar;
 
-  List<PurchaseDetails> purchases = [];
-  var _iap = null; // InAppPurchaseConnection.instance;
+  List<PurchaseDetails>? purchases = [];
+  dynamic _iap = null; // InAppPurchaseConnection.instance;
   bool isPuchased = false;
 
-  VideoPlayerController videocontroller;
+  VideoPlayerController? videocontroller;
 
-  AppLifecycleState _lastLifecycleState;
+  AppLifecycleState? _lastLifecycleState;
 
   @override
   initState() {
     super.initState();
-    WidgetsBinding.instance.addObserver(this);
+    WidgetsBinding.instance!.addObserver(this);
 
-    if (widget.isPaymentSuccess != null && widget.isPaymentSuccess) {
-      WidgetsBinding.instance.addPostFrameCallback((_) async {
+    if (widget.isPaymentSuccess != null && widget.isPaymentSuccess!) {
+      WidgetsBinding.instance!.addPostFrameCallback((_) async {
         await Alert(
           context: context,
           type: AlertType.success,
@@ -152,29 +150,29 @@ class _TABState extends State<TAB> with WidgetsBindingObserver {
 
   _getallUsers() async {
     allusers.clear();
-    User user = _firebaseAuth.currentUser;
+    User? user = _firebaseAuth.currentUser;
     QuerySnapshot querySnapshot = await docRef.get();
     for (int i = 0; i < querySnapshot.docs.length; i++) {
       AppUser temp = AppUser.fromDocument(querySnapshot.docs[i]);
-      if (temp.id != user.uid) allusers.add(temp);
+      if (temp.id != user!.uid) allusers.add(temp);
     }
   }
 
   _getCurrentUser() async {
-    User user = _firebaseAuth.currentUser;
+    User user = _firebaseAuth.currentUser!;
     return docRef.doc("${user.uid}").snapshots().listen((data) async {
       currentUser = AppUser.fromDocument(data);
-      videocontroller = VideoPlayerController.network(currentUser.video)
+      videocontroller = VideoPlayerController.network(currentUser!.video!)
         ..initialize().then((_) {
           // Ensure the first frame is shown after the video is initialized, even before the play button has been pressed.
           setState(() {});
-          videocontroller.play();
-          videocontroller.setLooping(true);
+          videocontroller!.play();
+          videocontroller!.setLooping(true);
         });
       if (mounted) setState(() {});
       answerlist = [];
       List<Answer_model> tempanswer = [];
-      FirebaseFirestore.instance.collection('/Users/${currentUser.id}/Questions').snapshots().listen((data) {
+      FirebaseFirestore.instance.collection('/Users/${currentUser!.id}/Questions').snapshots().listen((data) {
         data.docs.forEach((element) {
           Answer_model temp = Answer_model.fromDocument(element);
           tempanswer.add(temp);
@@ -207,15 +205,15 @@ class _TABState extends State<TAB> with WidgetsBindingObserver {
       docRef.snapshots().listen((QuerySnapshot event) {
         event.docChanges.forEach((element) async {
           AppUser temp = AppUser.fromDocument(element.doc);
-          if (temp.id != currentUser.id) {
+          if (temp.id != currentUser!.id) {
             var nearlength = nearuser.length;
 
             if (temp.isRunning == true && temp.isActive == true) {
               var distance = calculateDistance(
-                      currentUser.coordinates['latitude'],
-                      currentUser.coordinates['longitude'],
-                      temp.coordinates['latitude'],
-                      temp.coordinates['longitude']) *
+                      currentUser!.coordinates!['latitude'],
+                      currentUser!.coordinates!['longitude'],
+                      temp.coordinates!['latitude'],
+                      temp.coordinates!['longitude']) *
                   1000;
               if (distance.round() < 100) {
                 if (!nearuser.contains(temp.id)) nearuser.add(temp.id);
@@ -252,6 +250,7 @@ class _TABState extends State<TAB> with WidgetsBindingObserver {
                         screen: Near(currentUser, tempuser),
                         withNavBar: false,
                         pageTransitionAnimation: PageTransitionAnimation.cupertino,
+                        settings: RouteSettings(),
                       );
                     },
                     color: Color.fromRGBO(0, 179, 134, 1.0),
@@ -263,7 +262,7 @@ class _TABState extends State<TAB> with WidgetsBindingObserver {
           }
         });
       });
-      return currentUser;
+      return; // currentUser!;
     });
   }
 
@@ -271,7 +270,7 @@ class _TABState extends State<TAB> with WidgetsBindingObserver {
 
   _getSwipedcount() {
     FirebaseFirestore.instance
-        .collection('/Users/${currentUser.id}/CheckedUser')
+        .collection('/Users/${currentUser!.id}/CheckedUser')
         .where(
           'timestamp',
           isGreaterThan: Timestamp.now().toDate().subtract(Duration(days: 1)),
@@ -282,12 +281,12 @@ class _TABState extends State<TAB> with WidgetsBindingObserver {
       setState(() {
         swipecount = event.docs.length;
       });
-      return event.docs.length;
+      return; //event.docs.length;
     });
   }
 
   getLikedByList() {
-    docRef.doc(currentUser.id).collection("LikedBy").snapshots().listen((data) async {
+    docRef.doc(currentUser!.id).collection("LikedBy").snapshots().listen((data) async {
       likedByList.addAll(data.docs.map((f) => f['LikedBy']));
     });
   }
@@ -305,16 +304,16 @@ class _TABState extends State<TAB> with WidgetsBindingObserver {
       purchases = response.pastPurchases;
     });
     if (response.pastPurchases.length > 0) {
-      purchases.forEach((purchase) async {
+      purchases!.forEach((purchase) async {
         print('   ${purchase.productID}');
         await _verifyPuchase(purchase.productID);
       });
     }
   }
 
-  configurePushNotification(AppUser user) {
+  configurePushNotification(AppUser? user) {
     _firebaseMessaging.getToken().then((token) {
-      docRef.doc(user.id).update({
+      docRef.doc(user!.id).update({
         'pushToken': token,
       });
     });
@@ -352,19 +351,19 @@ class _TABState extends State<TAB> with WidgetsBindingObserver {
 
   _checkcallState(channelId) async {
     bool iscalling = await FirebaseFirestore.instance.collection("calls").doc(channelId).get().then((value) {
-      return (value.data())["calling"] ?? false;
+      return value.data()!["calling"] ?? false;
     });
     return iscalling;
   }
 
   /// check if user has pruchased
-  PurchaseDetails _hasPurchased(String productId) {
-    return purchases.firstWhere((purchase) => purchase.productID == productId, orElse: () => null);
+  PurchaseDetails? _hasPurchased(String productId) {
+    return purchases!.firstWhereOrNull((purchase) => purchase.productID == productId);
   }
 
   ///verifying pourchase of user
   Future<void> _verifyPuchase(String id) async {
-    PurchaseDetails purchase = _hasPurchased(id);
+    PurchaseDetails? purchase = _hasPurchased(id);
 
     if (purchase != null && purchase.status == PurchaseStatus.purchased) {
       print(purchase.productID);
@@ -381,7 +380,7 @@ class _TABState extends State<TAB> with WidgetsBindingObserver {
 
   Future getUserList() async {
     List checkedUser = [];
-    FirebaseFirestore.instance.collection('/Users/${currentUser.id}/CheckedUser').get().then((data) {
+    FirebaseFirestore.instance.collection('/Users/${currentUser!.id}/CheckedUser').get().then((data) {
       checkedUser.addAll(data.docs.map((f) => f['DislikedUser']));
       checkedUser.addAll(data.docs.map((f) => f['LikedUser']));
     }).then((_) {
@@ -395,19 +394,19 @@ class _TABState extends State<TAB> with WidgetsBindingObserver {
         for (var doc in data.documents) {
           AppUser temp = AppUser.fromDocument(doc);
           var distance = calculateDistance(
-              currentUser.coordinates['latitude'],
-              currentUser.coordinates['longitude'],
-              temp.coordinates['latitude'],
-              temp.coordinates['longitude']);
+              currentUser!.coordinates!['latitude'],
+              currentUser!.coordinates!['longitude'],
+              temp.coordinates!['latitude'],
+              temp.coordinates!['longitude']);
           temp.distanceBW = distance.round();
           if (checkedUser.any(
             (value) => value == temp.id,
           )) {
           } else {
-            if (distance <= currentUser.maxDistance &&
-                temp.id != currentUser.id &&
-                !temp.isBlocked &&
-                temp.isActive) {
+            if (distance <= currentUser!.maxDistance! &&
+                temp.id != currentUser!.id &&
+                !temp.isBlocked! &&
+                temp.isActive!) {
               users.add(temp);
             }
           }
@@ -418,22 +417,22 @@ class _TABState extends State<TAB> with WidgetsBindingObserver {
   }
 
   query() {
-    if (currentUser.showGender == 'everyone') {
+    if (currentUser!.showGender == 'everyone') {
       return docRef
           .where(
             'age',
-            isGreaterThanOrEqualTo: int.parse(currentUser.ageRange['min']),
+            isGreaterThanOrEqualTo: int.parse(currentUser!.ageRange!['min']),
           )
-          .where('age', isLessThanOrEqualTo: int.parse(currentUser.ageRange['max']))
+          .where('age', isLessThanOrEqualTo: int.parse(currentUser!.ageRange!['max']))
           .orderBy('age', descending: false);
     } else {
       return docRef
-          .where('editInfo.userGender', isEqualTo: currentUser.showGender)
+          .where('editInfo.userGender', isEqualTo: currentUser!.showGender)
           .where(
             'age',
-            isGreaterThanOrEqualTo: int.parse(currentUser.ageRange['min']),
+            isGreaterThanOrEqualTo: int.parse(currentUser!.ageRange!['min']),
           )
-          .where('age', isLessThanOrEqualTo: int.parse(currentUser.ageRange['max']))
+          .where('age', isLessThanOrEqualTo: int.parse(currentUser!.ageRange!['max']))
           //FOR FETCH USER WHO MATCH WITH USER SEXUAL ORIENTAION
           // .where('sexualOrientation.orientation',
           //     arrayContainsAny: currentUser.sexualOrientation)
@@ -442,7 +441,7 @@ class _TABState extends State<TAB> with WidgetsBindingObserver {
   }
 
   _getMatches() async {
-    User user = _firebaseAuth.currentUser;
+    User user = _firebaseAuth.currentUser!;
     return FirebaseFirestore.instance
         .collection('/Users/${user.uid}/Matches')
         .orderBy('timestamp', descending: true)
@@ -455,12 +454,12 @@ class _TABState extends State<TAB> with WidgetsBindingObserver {
           DocumentSnapshot doc = await docRef.doc(f.data()['Matches']).get();
           if (doc.exists) {
             AppUser tempuser = AppUser.fromDocument(doc);
-            if (tempuser.isActive) {
+            if (tempuser.isActive!) {
               tempuser.distanceBW = calculateDistance(
-                      currentUser.coordinates['latitude'],
-                      currentUser.coordinates['longitude'],
-                      tempuser.coordinates['latitude'],
-                      tempuser.coordinates['longitude'])
+                      currentUser!.coordinates!['latitude'],
+                      currentUser!.coordinates!['longitude'],
+                      tempuser.coordinates!['latitude'],
+                      tempuser.coordinates!['longitude'])
                   .round();
 
               matches.add(tempuser);
@@ -565,7 +564,7 @@ class _TABState extends State<TAB> with WidgetsBindingObserver {
 
   @override
   void dispose() {
-    WidgetsBinding.instance.removeObserver(this);
+    WidgetsBinding.instance!.removeObserver(this);
     print('hello');
     super.dispose();
   }
@@ -582,7 +581,7 @@ class _TABState extends State<TAB> with WidgetsBindingObserver {
   Future<void> _setRunning(bool bool) async {
     Map<String, dynamic> userData = {};
     userData.addAll({'isRunning': bool});
-    final user = FirebaseAuth.instance.currentUser;
+    final user = FirebaseAuth.instance.currentUser!;
     await FirebaseFirestore.instance.collection("Users").doc(user.uid).update(userData);
   }
 
@@ -601,14 +600,14 @@ class _TABState extends State<TAB> with WidgetsBindingObserver {
         },
       },
     );
-    final user = FirebaseAuth.instance.currentUser;
+    final user = FirebaseAuth.instance.currentUser!;
     await FirebaseFirestore.instance.collection("Users").doc(user.uid).update(userData);
   }
 }
 
 double calculateDistance(lat1, lon1, lat2, lon2) {
   var p = 0.017453292519943295;
-  var c = cos;
+  var c = cos as double Function(num?);
   var a = 0.5 - c((lat2 - lat1) * p) / 2 + c(lat1 * p) * c(lat2 * p) * (1 - c((lon2 - lon1) * p)) / 2;
   return 12742 * asin(sqrt(a));
 }

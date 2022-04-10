@@ -6,15 +6,13 @@ import 'package:flutter_grid/screens/Chat/Matches.dart';
 import 'package:flutter_grid/screens/Chat/chatPage.dart';
 import 'package:flutter_grid/screens/Profile/EditProfile.dart';
 import 'package:flutter_grid/screens/util/color.dart';
-import 'package:flutter_swiper/flutter_swiper.dart';
-import 'package:swipe_stack/swipe_stack.dart';
 
 
 class Info1 extends StatelessWidget {
   final AppUser currentUser;
   final AppUser user;
 
-  final GlobalKey<SwipeStackState> swipeKey;
+  final GlobalKey swipeKey;
   Info1(
     this.user,
     this.currentUser,
@@ -43,7 +41,7 @@ class Info1 extends StatelessWidget {
             Container(
               height: mediaQueryData.size.height / 2 + 40,
               width: MediaQuery.of(context).size.width,
-              child: Swiper(
+              child: Text('Swiper') /*Swiper(
                 key: UniqueKey(),
                 physics: ScrollPhysics(),
                 itemBuilder: (BuildContext context, int index2) {
@@ -77,7 +75,7 @@ class Info1 extends StatelessWidget {
                   disableColor: _theme.backgroundColor,
                 ),
                 loop: false,
-              ),
+              )*/,
             ),
             Positioned(
               bottom: 0,
@@ -118,7 +116,7 @@ class Info1 extends StatelessWidget {
                                   ListTile(
                                     subtitle: Text("${user.address}"),
                                     title: Text(
-                                      "${user.name}, ${user.editInfo['showMyAge'] != null ? !user.editInfo['showMyAge'] ? user.age : "" : user.age}",
+                                      "${user.name}, ${user.editInfo!['showMyAge'] != null ? !user.editInfo!['showMyAge'] ? user.age : "" : user.age}",
                                       style: TextStyle(
                                           color: Colors.black,
                                           fontSize: 25,
@@ -134,13 +132,13 @@ class Info1 extends StatelessWidget {
                                     //       color: primaryColor,
                                     //     )),
                                   ),
-                                  user.editInfo['job_title'] != null
+                                  user.editInfo!['job_title'] != null
                                       ? ListTile(
                                     dense: true,
                                     leading:
                                     Icon(Icons.work, color: primaryColor),
                                     title: Text(
-                                      "${user.editInfo['job_title']}${user.editInfo['company'] != null ? ' at ${user.editInfo['company']}' : ''}",
+                                      "${user.editInfo!['job_title']}${user.editInfo!['company'] != null ? ' at ${user.editInfo!['company']}' : ''}",
                                       style: TextStyle(
                                           color: secondryColor,
                                           fontSize: 16,
@@ -148,13 +146,13 @@ class Info1 extends StatelessWidget {
                                     ),
                                   )
                                       : Container(),
-                                  user.editInfo['university'] != null
+                                  user.editInfo!['university'] != null
                                       ? ListTile(
                                     dense: true,
                                     leading:
                                     Icon(Icons.stars, color: primaryColor),
                                     title: Text(
-                                      "${user.editInfo['university']}",
+                                      "${user.editInfo!['university']}",
                                       style: TextStyle(
                                           color: secondryColor,
                                           fontSize: 16,
@@ -162,13 +160,13 @@ class Info1 extends StatelessWidget {
                                     ),
                                   )
                                       : Container(),
-                                  user.editInfo['living_in'] != null
+                                  user.editInfo!['living_in'] != null
                                       ? ListTile(
                                     dense: true,
                                     leading:
                                     Icon(Icons.home, color: primaryColor),
                                     title: Text(
-                                      "Living in ${user.editInfo['living_in']}",
+                                      "Living in ${user.editInfo!['living_in']}",
                                       style: TextStyle(
                                           color: secondryColor,
                                           fontSize: 16,
@@ -184,7 +182,7 @@ class Info1 extends StatelessWidget {
                                       color: primaryColor,
                                     ),
                                     title: Text(
-                                      "${user.editInfo['DistanceVisible'] != null ? user.editInfo['DistanceVisible'] ? 'Less than ${user.distanceBW} KM away' : 'Distance not visible' : 'Less than ${user.distanceBW} KM away'}",
+                                      "${user.editInfo!['DistanceVisible'] != null ? user.editInfo!['DistanceVisible'] ? 'Less than ${user.distanceBW} KM away' : 'Distance not visible' : 'Less than ${user.distanceBW} KM away'}",
                                       style: TextStyle(
                                           color: secondryColor,
                                           fontSize: 16,
@@ -201,9 +199,9 @@ class Info1 extends StatelessWidget {
                         SizedBox(
                           height: 20,
                         ),
-                        user.editInfo['about'] != null
+                        user.editInfo!['about'] != null
                             ? Text(
-                          "${user.editInfo['about']}",
+                          "${user.editInfo!['about']}",
                           style: TextStyle(
                               color: secondryColor,
                               fontSize: 16,
@@ -250,7 +248,7 @@ class Info1 extends StatelessWidget {
                             borderRadius: BorderRadius.circular(10),
                             onTap: () {
                               Navigator.pop(context);
-                              swipeKey.currentState.swipeLeft();
+                            //  swipeKey.currentState.swipeLeft();
                             },
                             child: Container(
                               height: 50,
@@ -272,7 +270,7 @@ class Info1 extends StatelessWidget {
                             borderRadius: BorderRadius.circular(10),
                             onTap: () {
                               Navigator.pop(context);
-                              swipeKey.currentState.swipeRight();
+                              //swipeKey.currentState.swipeRight();
                             },
                             splashColor: Colors.blue,
                             highlightColor: Colors.blue,

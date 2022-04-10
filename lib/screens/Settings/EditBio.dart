@@ -13,7 +13,7 @@ import 'package:image_picker/image_picker.dart';
 import 'package:path_provider/path_provider.dart';
 
 class EditBio extends StatefulWidget {
-  final AppUser currentUser;
+  final AppUser? currentUser;
 
   EditBio(this.currentUser);
 
@@ -37,15 +37,15 @@ class EditBioState extends State<EditBio> {
   @override
   void initState() {
     super.initState();
-    aboutCtlr.text = widget.currentUser.editInfo['about'];
-    companyCtlr.text = widget.currentUser.editInfo['company'];
-    livingCtlr.text = widget.currentUser.editInfo['living_in'];
-    universityCtlr.text = widget.currentUser.editInfo['university'];
-    jobCtlr.text = widget.currentUser.editInfo['job_title'];
+    aboutCtlr.text = widget.currentUser!.editInfo!['about'];
+    companyCtlr.text = widget.currentUser!.editInfo!['company'];
+    livingCtlr.text = widget.currentUser!.editInfo!['living_in'];
+    universityCtlr.text = widget.currentUser!.editInfo!['university'];
+    jobCtlr.text = widget.currentUser!.editInfo!['job_title'];
     setState(() {
-      showMe = widget.currentUser.editInfo['userGender'];
-      visibleAge = widget.currentUser.editInfo['showMyAge'] ?? false;
-      visibleDistance = widget.currentUser.editInfo['DistanceVisible'] ?? true;
+      showMe = widget.currentUser!.editInfo!['userGender'];
+      visibleAge = widget.currentUser!.editInfo!['showMyAge'] ?? false;
+      visibleDistance = widget.currentUser!.editInfo!['DistanceVisible'] ?? true;
     });
   }
 
@@ -61,8 +61,8 @@ class EditBioState extends State<EditBio> {
   Future updateData() async {
     FirebaseFirestore.instance
         .collection("Users")
-        .doc(widget.currentUser.id)
-        .set({'editInfo': editInfo, 'age': widget.currentUser.age}, SetOptions(merge: true));
+        .doc(widget.currentUser!.id)
+        .set({'editInfo': editInfo, 'age': widget.currentUser!.age}, SetOptions(merge: true));
   }
 
   Future source(BuildContext context, currentUser, bool isProfilePicture) async {
@@ -165,7 +165,7 @@ class EditBioState extends State<EditBio> {
   Future getImage(ImageSource imageSource, context, currentUser, isProfilePicture) async {
     var image = await ImagePicker().pickImage(source: imageSource);
     if (image != null) {
-      File croppedFile = await ImageCropper().cropImage(
+      File? croppedFile = await ImageCropper().cropImage(
           sourcePath: image.path,
           aspectRatioPresets: [CropAspectRatioPreset.square],
           androidUiSettings: AndroidUiSettings(
@@ -178,7 +178,7 @@ class EditBioState extends State<EditBio> {
             minimumAspectRatio: 1.0,
           ));
       if (croppedFile != null) {
-        await uploadFile(await compressimage(croppedFile), currentUser, isProfilePicture);
+        await uploadFile(await (compressimage(croppedFile)), currentUser, isProfilePicture);
       }
     }
     Navigator.pop(context);
@@ -198,7 +198,7 @@ class EditBioState extends State<EditBio> {
         try {
           if (isProfilePicture) {
             //currentUser.imageUrl.removeAt(0);
-            currentUser.imageUrl.insert(0, fileURL);
+            currentUser.imageUrl!.insert(0, fileURL);
             print("object");
             await FirebaseFirestore.instance
                 .collection("Users")
@@ -209,7 +209,7 @@ class EditBioState extends State<EditBio> {
                 .collection("Users")
                 .doc(currentUser.id)
                 .set(updateObject, SetOptions(merge: true));
-            widget.currentUser.imageUrl.add(fileURL);
+            widget.currentUser!.imageUrl!.add(fileURL);
           }
           if (mounted) setState(() {});
         } catch (err) {
@@ -222,7 +222,7 @@ class EditBioState extends State<EditBio> {
   Future compressimage(File image) async {
     final tempdir = await getTemporaryDirectory();
     final path = tempdir.path;
-    i.Image imagefile = i.decodeImage(image.readAsBytesSync());
+    i.Image imagefile = i.decodeImage(image.readAsBytesSync())!;
     final compressedImagefile = File('$path.jpg')..writeAsBytesSync(i.encodeJpg(imagefile, quality: 80));
     // setState(() {
     return compressedImagefile;
@@ -266,7 +266,7 @@ class EditBioState extends State<EditBio> {
                       children: <Widget>[
                         ListTile(
                           title: Text(
-                            "About ${widget.currentUser.name}",
+                            "About ${widget.currentUser!.name}",
                             style:
                                 TextStyle(fontWeight: FontWeight.w500, fontSize: 16, color: Colors.black87),
                           ),
@@ -366,7 +366,7 @@ class EditBioState extends State<EditBio> {
                                 DropdownMenuItem(child: Text("Woman"), value: "woman"),
                                 DropdownMenuItem(child: Text("Other"), value: "other"),
                               ],
-                              onChanged: (val) {
+                              onChanged: (dynamic val) {
                                 editInfo.addAll({'userGender': val});
                                 setState(() {
                                   showMe = val;

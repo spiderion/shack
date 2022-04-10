@@ -5,18 +5,13 @@ import 'package:flutter_grid/models/user_model.dart';
 import 'package:flutter_grid/screens/Chat/Matches.dart';
 import 'package:flutter_grid/screens/Chat/chatPage.dart';
 import 'package:flutter_grid/screens/Profile/EditProfile.dart';
-import 'package:flutter_grid/screens/match/swipewidget.dart';
 import 'package:flutter_grid/screens/util/color.dart';
-import 'package:flutter_swiper/flutter_swiper.dart';
-import 'package:modal_bottom_sheet/modal_bottom_sheet.dart';
-import 'package:swipe_stack/swipe_stack.dart';
-import 'package:swipedetector/swipedetector.dart';
 
 class Info extends StatelessWidget {
-  final AppUser currentUser;
-  final AppUser user;
+  final AppUser? currentUser;
+  final AppUser? user;
 
-  final GlobalKey<SwipeStackState> swipeKey;
+  final GlobalKey? swipeKey;
 
   Info(
     this.user,
@@ -26,7 +21,7 @@ class Info extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    bool isMe = user.id == currentUser.id;
+    bool isMe = user!.id == currentUser!.id;
     bool isMatched = swipeKey == null;
     //  if()
 
@@ -45,7 +40,8 @@ class Info extends StatelessWidget {
             Container(
               height: mediaQueryData.size.height / 2 + 40,
               width: MediaQuery.of(context).size.width,
-              child: Swiper(
+              child: Text(
+                  "Swiper") /*Swiper(
                 key: UniqueKey(),
                 physics: ScrollPhysics(),
                 itemBuilder: (BuildContext context, int index2) {
@@ -75,7 +71,8 @@ class Info extends StatelessWidget {
                   disableColor: _theme.backgroundColor,
                 ),
                 loop: false,
-              ),
+              )*/
+              ,
             ),
             Positioned(
               bottom: 0,
@@ -101,7 +98,7 @@ class Info extends StatelessWidget {
                         Container(
                           padding: EdgeInsets.only(top: 10),
                           child: Text(
-                            "${user.name}, ${user.age}",
+                            "${user!.name}, ${user!.age}",
                             style: TextStyle(
                                 color: _theme.backgroundColor, fontSize: 35, fontWeight: FontWeight.w900),
                           ),
@@ -122,7 +119,7 @@ class Info extends StatelessWidget {
                                             color: primaryColor,
                                           ),
                                           title: Text(
-                                            "${user.editInfo['DistanceVisible'] != null ? user.editInfo['DistanceVisible'] ? 'Less than ${user.distanceBW} KM away' : 'Distance not visible' : 'Less than ${user.distanceBW} KM away'}",
+                                            "${user!.editInfo!['DistanceVisible'] != null ? user!.editInfo!['DistanceVisible'] ? 'Less than ${user!.distanceBW} KM away' : 'Distance not visible' : 'Less than ${user!.distanceBW} KM away'}",
                                             style: TextStyle(
                                                 color: primaryColor,
                                                 fontSize: 16,
@@ -145,7 +142,8 @@ class Info extends StatelessWidget {
                                 child: Column(
                                   crossAxisAlignment: CrossAxisAlignment.center,
                                   children: <Widget>[
-                                    SwipeDetector(
+                                    Text('SwipeDetector'),
+/*                                    SwipeDetector(
                                       child: Container(
                                         child: Column(
                                           children: <Widget>[
@@ -303,7 +301,7 @@ class Info extends StatelessWidget {
                                           horizontalSwipeMaxHeightThreshold: 50.0,
                                           horizontalSwipeMinDisplacement: 50.0,
                                           horizontalSwipeMinVelocity: 200.0),
-                                    ),
+                                    )*/
                                     GridView.count(
                                         physics: NeverScrollableScrollPhysics(),
                                         crossAxisCount: 3,
@@ -318,7 +316,7 @@ class Info extends StatelessWidget {
                                             child: ClipRRect(
                                               borderRadius: BorderRadius.circular(10),
                                               child: Container(
-                                                decoration: user.imageUrl.length > index
+                                                decoration: user!.imageUrl!.length > index
                                                     ? BoxDecoration()
                                                     : BoxDecoration(
                                                         borderRadius: BorderRadius.circular(10),
@@ -328,11 +326,11 @@ class Info extends StatelessWidget {
                                                             color: Theme.of(context).backgroundColor)),
                                                 child: Stack(
                                                   children: <Widget>[
-                                                    user.imageUrl.length > index
+                                                    user!.imageUrl!.length > index
                                                         ? CachedNetworkImage(
                                                             height: MediaQuery.of(context).size.height * .2,
                                                             fit: BoxFit.cover,
-                                                            imageUrl: user.imageUrl[index],
+                                                            imageUrl: user!.imageUrl![index],
                                                             placeholder: (context, url) => Center(
                                                               child: CupertinoActivityIndicator(
                                                                 radius: 10,
@@ -443,7 +441,7 @@ class Info extends StatelessWidget {
                                 borderRadius: BorderRadius.circular(10),
                                 onTap: () {
                                   Navigator.pop(context);
-                                  swipeKey.currentState.swipeRight();
+                                  // swipeKey.currentState.swipeRight();
                                 },
                                 splashColor: Colors.blue,
                                 highlightColor: Colors.blue,
@@ -470,7 +468,7 @@ class Info extends StatelessWidget {
                                 borderRadius: BorderRadius.circular(10),
                                 onTap: () {
                                   Navigator.pop(context);
-                                  swipeKey.currentState.swipeLeft();
+                                  // swipeKey.currentState.swipeLeft();
                                 },
                                 child: Container(
                                   height: 50,

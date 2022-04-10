@@ -6,7 +6,7 @@ import 'package:flutter_grid/models/user_model.dart';
 import 'package:flutter_grid/screens/util/color.dart';
 
 class Filters extends StatefulWidget {
-  final AppUser currentUser;
+  final AppUser? currentUser;
   Filters(this.currentUser);
 
   @override
@@ -15,12 +15,12 @@ class Filters extends StatefulWidget {
 
 class _FiltersState extends State<Filters> {
   Map<String, dynamic> changeValues = {};
-  RangeValues ageRange;
+  late RangeValues ageRange;
   var _showMe;
-  int distance;
+  late int distance;
   final FirebaseAuth _auth = FirebaseAuth.instance;
   bool checkedValue = false;
-  bool isSwitched = true;
+  bool? isSwitched = true;
 
   bool isPurchased = false;
 
@@ -35,14 +35,14 @@ class _FiltersState extends State<Filters> {
   Future updateData() async {
     FirebaseFirestore.instance
         .collection("Users")
-        .doc(widget.currentUser.id)
+        .doc(widget.currentUser!.id)
         .set(changeValues, SetOptions(merge: true));
     // lastVisible = null;
     // print('ewew$lastVisible');
   }
 
-  int freeR;
-  int paidR;
+  late int freeR;
+  late int paidR;
 
   @override
   void initState() {
@@ -50,19 +50,19 @@ class _FiltersState extends State<Filters> {
     setState(() {
       freeR = 400;
       paidR =  400;
-      if (!isPurchased && widget.currentUser.maxDistance > freeR) {
-        widget.currentUser.maxDistance = freeR.round();
+      if (!isPurchased && widget.currentUser!.maxDistance! > freeR) {
+        widget.currentUser!.maxDistance = freeR.round();
         changeValues.addAll({'maximum_distance': freeR.round()});
       } else if (isPurchased &&
-          widget.currentUser.maxDistance >= paidR) {
-        widget.currentUser.maxDistance = paidR.round();
+          widget.currentUser!.maxDistance! >= paidR) {
+        widget.currentUser!.maxDistance = paidR.round();
         changeValues.addAll({'maximum_distance': paidR.round()});
       }
-      _showMe = widget.currentUser.showGender;
-      distance = widget.currentUser.maxDistance.round();
-      ageRange = RangeValues(double.parse(widget.currentUser.ageRange['min']),
-          (double.parse(widget.currentUser.ageRange['max'])));
-      isSwitched = widget.currentUser.isActive;
+      _showMe = widget.currentUser!.showGender;
+      distance = widget.currentUser!.maxDistance!.round();
+      ageRange = RangeValues(double.parse(widget.currentUser!.ageRange!['min']),
+          (double.parse(widget.currentUser!.ageRange!['max'])));
+      isSwitched = widget.currentUser!.isActive;
     });
   }
 

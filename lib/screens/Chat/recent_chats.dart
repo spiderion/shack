@@ -10,7 +10,7 @@ import 'package:persistent_bottom_nav_bar/persistent-tab-view.dart';
 
 class RecentChats extends StatelessWidget {
   final db = FirebaseFirestore.instance;
-  final AppUser currentUser;
+  final AppUser? currentUser;
   final List<AppUser> matches;
 
   RecentChats(this.currentUser, this.matches);
@@ -37,16 +37,15 @@ class RecentChats extends StatelessWidget {
                   children: matches
                       .map((index) => GestureDetector(
                             onTap: () {
-                              pushNewScreenWithRouteSettings(
-                                context,
-                                screen: ChatPage(
-                                  chatId: chatId(currentUser, index),
-                                  sender: currentUser,
-                                  second: index,
-                                ),
-                                withNavBar: false,
-                                pageTransitionAnimation: PageTransitionAnimation.cupertino,
-                              );
+                              pushNewScreenWithRouteSettings(context,
+                                  screen: ChatPage(
+                                    chatId: chatId(currentUser, index),
+                                    sender: currentUser,
+                                    second: index,
+                                  ),
+                                  withNavBar: false,
+                                  pageTransitionAnimation: PageTransitionAnimation.cupertino,
+                                  settings: RouteSettings());
                             },
                             child: StreamBuilder(
                                 stream: db
@@ -55,7 +54,7 @@ class RecentChats extends StatelessWidget {
                                     .collection('messages')
                                     .orderBy('time', descending: true)
                                     .snapshots(),
-                                builder: (context, snapshot) {
+                                builder: (context,AsyncSnapshot snapshot) {
                                   if (!snapshot.hasData)
                                     return Container(
                                       child: Padding(
@@ -63,23 +62,16 @@ class RecentChats extends StatelessWidget {
                                         child: CupertinoActivityIndicator(),
                                       ),
                                     );
-                                  else if (snapshot.data.documents.length ==
-                                      0) {
+                                  else if (snapshot.data?.documents.length == 0) {
                                     return Container();
                                   }
-                                  index.lastmsg =
-                                      snapshot.data.documents[0]['time'];
+                                  index.lastmsg = snapshot.data.documents[0]['time'];
                                   return Container(
-                                    margin: EdgeInsets.only(
-                                        top: 5.0, bottom: 5.0, right: 20.0),
-                                    padding: EdgeInsets.symmetric(
-                                        horizontal: 20.0, vertical: 10.0),
+                                    margin: EdgeInsets.only(top: 5.0, bottom: 5.0, right: 20.0),
+                                    padding: EdgeInsets.symmetric(horizontal: 20.0, vertical: 10.0),
                                     decoration: BoxDecoration(
-                                      color: snapshot.data.documents[0]
-                                                      ['sender_id'] !=
-                                                  currentUser.id &&
-                                              !snapshot.data.documents[0]
-                                                  ['isRead']
+                                      color: snapshot.data.documents[0]['sender_id'] != currentUser!.id &&
+                                              !snapshot.data.documents[0]['isRead']
                                           ? _theme.primaryColor.withOpacity(.1)
                                           : _theme.backgroundColor.withOpacity(.2),
                                       borderRadius: BorderRadius.only(
@@ -92,23 +84,19 @@ class RecentChats extends StatelessWidget {
                                         backgroundColor: _theme.backgroundColor,
                                         radius: 30.0,
                                         child: ClipRRect(
-                                          borderRadius:
-                                              BorderRadius.circular(90),
+                                          borderRadius: BorderRadius.circular(90),
                                           child: CachedNetworkImage(
-                                            imageUrl: index.imageUrl[0],
+                                            imageUrl: index.imageUrl![0],
                                             useOldImageOnUrlChange: true,
-                                            placeholder: (context, url) =>
-                                                CupertinoActivityIndicator(
+                                            placeholder: (context, url) => CupertinoActivityIndicator(
                                               radius: 15,
                                             ),
-                                            errorWidget:
-                                                (context, url, error) =>
-                                                    Icon(Icons.error),
+                                            errorWidget: (context, url, error) => Icon(Icons.error),
                                           ),
                                         ),
                                       ),
                                       title: Text(
-                                        index.name,
+                                        index.name!,
                                         style: TextStyle(
                                           color: Colors.grey,
                                           fontSize: 16.0,
@@ -116,13 +104,9 @@ class RecentChats extends StatelessWidget {
                                         ),
                                       ),
                                       subtitle: Text(
-                                        snapshot.data.documents[0]['image_url']
-                                                    .toString()
-                                                    .length >
-                                                0
+                                        snapshot.data.documents[0]['image_url'].toString().length > 0
                                             ? "Photo"
-                                            : snapshot.data.documents[0]
-                                                ['text'],
+                                            : snapshot.data.documents[0]['text'],
                                         style: TextStyle(
                                           color: Colors.blueGrey,
                                           fontSize: 15.0,
@@ -131,20 +115,14 @@ class RecentChats extends StatelessWidget {
                                         overflow: TextOverflow.ellipsis,
                                       ),
                                       trailing: Column(
-                                        mainAxisAlignment:
-                                            MainAxisAlignment.spaceAround,
-                                        crossAxisAlignment:
-                                            CrossAxisAlignment.end,
+                                        mainAxisAlignment: MainAxisAlignment.spaceAround,
+                                        crossAxisAlignment: CrossAxisAlignment.end,
                                         children: <Widget>[
                                           Text(
-                                            snapshot.data.documents[0]
-                                                        ["time"] !=
-                                                    null
+                                            snapshot.data.documents[0]["time"] != null
                                                 ? DateFormat.MMMd()
                                                     .add_jm()
-                                                    .format(snapshot.data
-                                                        .documents[0]["time"]
-                                                        .toDate())
+                                                    .format(snapshot.data.documents[0]["time"].toDate())
                                                     .toString()
                                                 : "",
                                             style: TextStyle(
@@ -153,19 +131,14 @@ class RecentChats extends StatelessWidget {
                                               fontWeight: FontWeight.bold,
                                             ),
                                           ),
-                                          snapshot.data.documents[0]
-                                                          ['sender_id'] !=
-                                                      currentUser.id &&
-                                                  !snapshot.data.documents[0]
-                                                      ['isRead']
+                                          snapshot.data.documents[0]['sender_id'] != currentUser!.id &&
+                                                  !snapshot.data.documents[0]['isRead']
                                               ? Container(
                                                   width: 40.0,
                                                   height: 20.0,
                                                   decoration: BoxDecoration(
                                                     color: _theme.primaryColor,
-                                                    borderRadius:
-                                                        BorderRadius.circular(
-                                                            30.0),
+                                                    borderRadius: BorderRadius.circular(30.0),
                                                   ),
                                                   alignment: Alignment.center,
                                                   child: Text(
@@ -173,17 +146,13 @@ class RecentChats extends StatelessWidget {
                                                     style: TextStyle(
                                                       color: Colors.white,
                                                       fontSize: 12.0,
-                                                      fontWeight:
-                                                          FontWeight.bold,
+                                                      fontWeight: FontWeight.bold,
                                                     ),
                                                   ),
                                                 )
                                               : Text(""),
-                                          snapshot.data.documents[0]
-                                                      ['sender_id'] ==
-                                                  currentUser.id
-                                              ? !snapshot.data.documents[0]
-                                                      ['isRead']
+                                          snapshot.data.documents[0]['sender_id'] == currentUser!.id
+                                              ? !snapshot.data.documents[0]['isRead']
                                                   ? Icon(
                                                       Icons.done,
                                                       color: _theme.backgroundColor,

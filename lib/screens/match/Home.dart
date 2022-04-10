@@ -9,14 +9,12 @@ import 'package:flutter_grid/screens/Payment/subscriptions.dart';
 import 'package:flutter_grid/screens/Tab.dart';
 import 'package:flutter_grid/screens/match/Information.dart';
 import 'package:flutter_grid/screens/util/color.dart';
-import 'package:flutter_swiper/flutter_swiper.dart';
-import 'package:swipe_stack/swipe_stack.dart';
 
 List userRemoved = [];
 
 class CardPictures extends StatefulWidget {
   final List<AppUser> users;
-  final AppUser currentUser;
+  final AppUser? currentUser;
   final int swipedcount;
   final Map items;
 
@@ -29,7 +27,7 @@ class CardPictures extends StatefulWidget {
 class _CardPicturesState extends State<CardPictures> with AutomaticKeepAliveClientMixin<CardPictures> {
   // TabbarState state = TabbarState();
   bool onEnd = false;
-  GlobalKey<SwipeStackState> swipeKey = GlobalKey<SwipeStackState>();
+  GlobalKey swipeKey = GlobalKey();
 
   @override
   bool get wantKeepAlive => true;
@@ -85,10 +83,9 @@ class _CardPicturesState extends State<CardPictures> with AutomaticKeepAliveClie
                                     ],
                                   ),
                                 )
-                              : SwipeStack(
+                              : Text('swiper') /*SwipeStack(
                                   key: swipeKey,
                                   children: widget.users.map((index) {
-                                    // User user;
                                     return SwiperItem(builder: (SwiperPosition position, double progress) {
                                       return Material(
                                           elevation: 5,
@@ -350,7 +347,7 @@ class _CardPicturesState extends State<CardPictures> with AutomaticKeepAliveClie
                                     debugPrint("onRewind $index $position");
                                     print(widget.users[index].id);
                                   },
-                                ),
+                                )*/,
                     ),
                     Positioned(
                       right: 0,
@@ -377,7 +374,7 @@ class _CardPicturesState extends State<CardPictures> with AutomaticKeepAliveClie
                                       borderRadius: BorderRadius.circular(10),
                                       onTap: () {
                                         if (userRemoved.length > 0) {
-                                          swipeKey.currentState.rewind();
+                                          //swipeKey.currentState.rewind();
                                         }
                                       },
                                       splashColor: Colors.blue,
@@ -426,7 +423,7 @@ class _CardPicturesState extends State<CardPictures> with AutomaticKeepAliveClie
                                 borderRadius: BorderRadius.circular(10),
                                 onTap: () {
                                   if (widget.users.length > 0) {
-                                    swipeKey.currentState.swipeRight();
+                                    //swipeKey.currentState.swipeRight();
                                   }
                                 },
                                 splashColor: Colors.blue,
@@ -455,7 +452,7 @@ class _CardPicturesState extends State<CardPictures> with AutomaticKeepAliveClie
                                 onTap: () {
                                   if (widget.users.length > 0) {
                                     print("object");
-                                    swipeKey.currentState.swipeLeft();
+                                   // swipeKey.currentState.swipeLeft();
                                   }
                                 },
                                 child: Container(

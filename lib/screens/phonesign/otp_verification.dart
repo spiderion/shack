@@ -15,7 +15,7 @@ import 'package:pin_code_fields/pin_code_fields.dart';
 class Verification extends StatefulWidget {
   final bool updateNumber;
   final String phoneNumber;
-  final String smsVerificationCode;
+  final String? smsVerificationCode;
 
   Verification(this.phoneNumber, this.smsVerificationCode, this.updateNumber);
 
@@ -30,7 +30,7 @@ class _VerificationState extends State<Verification> {
   Welcome _login = new Welcome();
 
   Future updateNumber() async {
-    User user = FirebaseAuth.instance.currentUser;
+    User user = FirebaseAuth.instance.currentUser!;
     await FirebaseFirestore.instance
         .collection("Users")
         .doc(user.uid)
@@ -66,7 +66,7 @@ class _VerificationState extends State<Verification> {
     });
   }
 
-  String code;
+  late String code;
 
   @override
   void initState() {
@@ -210,10 +210,10 @@ class _VerificationState extends State<Verification> {
                           context: context,
                         );
                         AuthCredential _phoneAuth = PhoneAuthProvider.credential(
-                            verificationId: widget.smsVerificationCode, smsCode: code);
+                            verificationId: widget.smsVerificationCode!, smsCode: code);
                         if (widget.updateNumber) {
-                          User user = FirebaseAuth.instance.currentUser;
-                          user.updatePhoneNumber(_phoneAuth).then((_) => updateNumber()).catchError((e) {
+                          User user = FirebaseAuth.instance.currentUser!;
+                          user.updatePhoneNumber(_phoneAuth as PhoneAuthCredential).then((_) => updateNumber()).catchError((e) {
                             CustomSnackbar.snackbar("$e", _scaffoldKey);
                           });
                         } else {
@@ -225,7 +225,7 @@ class _VerificationState extends State<Verification> {
                                   builder: (_) {
                                     Future.delayed(Duration(seconds: 2), () async {
                                       Navigator.pop(context);
-                                      await _login.navigationCheck(authResult.user, context);
+                                      await _login.navigationCheck(authResult.user!, context);
                                     });
                                     return Center(
                                         child: Container(
@@ -254,11 +254,11 @@ class _VerificationState extends State<Verification> {
                                   });
                               FirebaseFirestore.instance
                                   .collection('Users')
-                                  .where('userId', isEqualTo: authResult.user.uid)
+                                  .where('userId', isEqualTo: authResult.user!.uid)
                                   .get()
                                   .then((QuerySnapshot snapshot) async {
                                 if (snapshot.docs.length <= 0) {
-                                  await setDataUser(authResult.user);
+                                  await setDataUser(authResult.user!);
                                   Navigator.push(
                                       context, CupertinoPageRoute(builder: (context) => SelectImage()));
                                 }

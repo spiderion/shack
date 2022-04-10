@@ -20,7 +20,7 @@ class _IncomingState extends State<Incoming> with TickerProviderStateMixin {
   CollectionReference callRef = FirebaseFirestore.instance.collection("calls");
 
   bool ispickup = false;
-  AnimationController _controller;
+  late AnimationController _controller;
 
   @override
   void initState() {
@@ -83,8 +83,8 @@ class _IncomingState extends State<Incoming> with TickerProviderStateMixin {
                 Container();
               } else
                 try {
-                  if (snapshot.data.docs[0]['calling'])
-                    switch (snapshot.data.docs[0]['response']) {
+                  if (snapshot.data!.docs[0]['calling'])
+                    switch (snapshot.data!.docs[0]['response']) {
                       //wait for pick the call
                       case "Awaiting":
                         {
@@ -93,7 +93,7 @@ class _IncomingState extends State<Incoming> with TickerProviderStateMixin {
                             crossAxisAlignment: CrossAxisAlignment.center,
                             children: <Widget>[
                               Text(
-                                snapshot.data.docs[0]['callType'] ==
+                                snapshot.data!.docs[0]['callType'] ==
                                         "VideoCall"
                                     ? "Incoming Video Call"
                                     : "Incoming Audio Call",
@@ -209,7 +209,7 @@ class _IncomingState extends State<Incoming> with TickerProviderStateMixin {
                                         heroTag: UniqueKey(),
                                         backgroundColor: Colors.green,
                                         child: Icon(
-                                          snapshot.data.docs[0]
+                                          snapshot.data!.docs[0]
                                                       ['callType'] ==
                                                   "VideoCall"
                                               ? Icons.video_call
@@ -218,7 +218,7 @@ class _IncomingState extends State<Incoming> with TickerProviderStateMixin {
                                         ),
                                         onPressed: () async {
                                           await handleCameraAndMic(snapshot
-                                              .data.docs[0]['callType']);
+                                              .data!.docs[0]['callType']);
                                           ispickup = true;
                                           await callRef
                                               .doc(
@@ -252,7 +252,7 @@ class _IncomingState extends State<Incoming> with TickerProviderStateMixin {
                           return CallPage(
                             channelName: widget.callInfo['channel_id'],
                             role: ClientRole.Broadcaster,
-                            callType: snapshot.data.docs[0]['callType'],
+                            callType: snapshot.data!.docs[0]['callType'],
                           );
                         }
                         break;

@@ -7,7 +7,7 @@ class CustomSnackbar {
       content: Text('$text '),
       duration: Duration(seconds: 3),
     );
-    _scaffoldKey.currentState.removeCurrentSnackBar();
-    _scaffoldKey.currentState.showSnackBar(snackBar);
+    _scaffoldKey.currentState!.removeCurrentSnackBar();
+    _scaffoldKey.currentState!.showSnackBar(snackBar);
   }
 }

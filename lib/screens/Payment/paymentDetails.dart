@@ -98,7 +98,7 @@ class PaymentDetails extends StatelessWidget {
                                                   ))),
                                               DataCell(Text(
                                                   DateTime.fromMillisecondsSinceEpoch(
-                                                          int.parse(index.transactionDate))
+                                                          int.parse(index.transactionDate!))
                                                       .toLocal()
                                                       .toString(),
                                                   style: TextStyle(

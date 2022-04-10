@@ -5,7 +5,6 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_grid/models/user_model.dart';
 import 'package:flutter_grid/screens/util/color.dart';
-import 'package:flutter_swiper/flutter_swiper.dart';
 import 'package:video_player/video_player.dart';
 
 class Home1 extends StatefulWidget {
@@ -81,9 +80,9 @@ class _Home1State extends State<Home1> {
                                         child: Container(
                                           decoration: BoxDecoration(
                                               borderRadius: BorderRadius.circular(10), color: Colors.white),
-                                          child: searchuser[index].imageUrl.length != null
+                                          child: searchuser[index].imageUrl!.length != null
                                               ? CachedNetworkImage(
-                                                  imageUrl: searchuser[index].imageUrl[0],
+                                                  imageUrl: searchuser[index].imageUrl![0],
                                                   fit: BoxFit.cover,
                                                   imageBuilder: (context, imageProvider) => Container(
                                                     width: 48,
@@ -109,7 +108,7 @@ class _Home1State extends State<Home1> {
                                         width: double.infinity,
                                         padding: EdgeInsets.only(top: 2),
                                         child: Text(
-                                          searchuser[index].name,
+                                          searchuser[index].name!,
                                           textAlign: TextAlign.center,
                                           style: TextStyle(
                                             color: primaryColor,
@@ -266,7 +265,8 @@ class _Home1State extends State<Home1> {
                       width: MediaQuery.of(context).size.width,
                       child: Stack(
                         children: <Widget>[
-                          Swiper(
+                          Text("Swiper")
+/*                          Swiper(
                             key: UniqueKey(),
                             physics: ScrollPhysics(),
                             itemBuilder: (BuildContext context, int index2) {
@@ -304,7 +304,7 @@ class _Home1State extends State<Home1> {
                               disableColor: Colors.grey,
                             ),
                             loop: false,
-                          ),
+                          )*/,
                           Positioned(
                             top: 50,
                             left: 0,
@@ -312,7 +312,7 @@ class _Home1State extends State<Home1> {
                             child: Column(
                               children: <Widget>[
                                 Text(
-                                  widget.currentUser.name,
+                                  widget.currentUser.name!,
                                   style: TextStyle(
                                       color: Colors.white, fontWeight: FontWeight.w900, fontSize: 25),
                                   textAlign: TextAlign.center,
@@ -321,7 +321,7 @@ class _Home1State extends State<Home1> {
                                   height: 10,
                                 ),
                                 Text(
-                                  widget.currentUser.address,
+                                  widget.currentUser.address!,
                                   style: TextStyle(
                                     color: Colors.white,
                                   ),
@@ -386,7 +386,7 @@ class _Home1State extends State<Home1> {
       });
     } else {
       for (int i = 0; i < widget.users.length; i++) {
-        if (widget.users[i].name.toLowerCase().contains(text.toLowerCase())) {
+        if (widget.users[i].name!.toLowerCase().contains(text.toLowerCase())) {
           searchuser.add(widget.users[i]);
         }
       }

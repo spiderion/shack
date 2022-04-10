@@ -8,9 +8,9 @@ import 'package:flutter_grid/models/question_model.dart';
 import 'package:flutter_grid/elements/QuestionWidget.dart';
 
 class Write_answer extends StatefulWidget {
-  Question_model model;
+  Question_model? model;
 
-  Write_answer({Key key, this.model}) : super(key: key);
+  Write_answer({Key? key, this.model}) : super(key: key);
 
   @override
   _Write_answerState createState() => _Write_answerState();

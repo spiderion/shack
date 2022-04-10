@@ -6,7 +6,7 @@ import 'package:flutter_grid/screens/Chat/chatPage.dart';
 import 'package:persistent_bottom_nav_bar/persistent-tab-view.dart';
 
 class Matches extends StatelessWidget {
-  final AppUser currentUser;
+  final AppUser? currentUser;
   final List<AppUser> matches;
 
   Matches(this.currentUser, this.matches);
@@ -62,6 +62,7 @@ class Matches extends StatelessWidget {
                               ),
                               withNavBar: false,
                               pageTransitionAnimation: PageTransitionAnimation.cupertino,
+                              settings: RouteSettings(),
                             );
                           },
                           child: Padding(
@@ -74,20 +75,18 @@ class Matches extends StatelessWidget {
                                   child: ClipRRect(
                                     borderRadius: BorderRadius.circular(90),
                                     child: CachedNetworkImage(
-                                      imageUrl: matches[index].imageUrl[0],
+                                      imageUrl: matches[index].imageUrl![0],
                                       useOldImageOnUrlChange: true,
-                                      placeholder: (context, url) =>
-                                          CupertinoActivityIndicator(
+                                      placeholder: (context, url) => CupertinoActivityIndicator(
                                         radius: 15,
                                       ),
-                                      errorWidget: (context, url, error) =>
-                                          Icon(Icons.error),
+                                      errorWidget: (context, url, error) => Icon(Icons.error),
                                     ),
                                   ),
                                 ),
                                 SizedBox(height: 6.0),
                                 Text(
-                                  matches[index].name,
+                                  matches[index].name!,
                                   style: TextStyle(
                                     color: _theme.backgroundColor,
                                     fontSize: 16.0,
@@ -112,6 +111,7 @@ class Matches extends StatelessWidget {
 }
 
 var groupChatId;
+
 chatId(currentUser, sender) {
   if (currentUser.id.hashCode <= sender.id.hashCode) {
     return groupChatId = '${currentUser.id}-${sender.id}';

@@ -17,7 +17,7 @@ class _UserNameState extends State<UserName> {
   Map<String, dynamic> userData = {}; //user personal info
   String username = '';
 
-  DateTime selecteddate;
+  late DateTime selecteddate;
   TextEditingController agecontroller = new TextEditingController();
   TextEditingController gendercontroller = new TextEditingController();
 
@@ -29,7 +29,7 @@ class _UserNameState extends State<UserName> {
   bool select = false;
 
   final _scaffoldKey = GlobalKey<ScaffoldState>();
-  String code;
+  String? code;
 
   @override
   void initState() {
@@ -247,7 +247,7 @@ Service and Privacy Policy.""",
                               365.2425)
                               .truncate(),
                         });
-                        var userGender;
+                        late var userGender;
                         if (man) {
                           userGender = {
                             'userGender': "man",

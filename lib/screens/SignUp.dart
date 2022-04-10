@@ -23,7 +23,7 @@ class _SignUpState extends State<SignUp> {
   }
 
   Future _setUserData(Map<String, dynamic> userData) async {
-    final user = FirebaseAuth.instance.currentUser;
+    final user = FirebaseAuth.instance.currentUser!;
     await FirebaseFirestore.instance.collection("Users").doc(user.uid).set(userData, SetOptions(merge: true));
   }
 

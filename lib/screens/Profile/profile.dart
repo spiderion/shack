@@ -2,16 +2,12 @@ import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_grid/models/user_model.dart';
-import 'package:flutter_grid/screens/Payment/paymentDetails.dart';
-import 'package:flutter_grid/screens/Payment/subscriptions.dart';
 import 'package:flutter_grid/screens/Profile/EditProfile.dart';
 import 'package:flutter_grid/screens/match/Information.dart';
-import 'package:flutter_grid/screens/match/Informations.dart';
+import 'package:flutter_grid/screens/questions/Answer_questions.dart';
 import 'package:flutter_grid/screens/util/color.dart';
-import 'package:flutter_swiper/flutter_swiper.dart';
 import 'package:in_app_purchase/in_app_purchase.dart';
 import 'package:persistent_bottom_nav_bar/persistent-tab-view.dart';
-import 'package:flutter_grid/screens/questions/Answer_questions.dart';
 
 final List adds = [
   {
@@ -51,6 +47,7 @@ class Profile extends StatefulWidget {
   final bool isPuchased;
   final Map items;
   final List<PurchaseDetails> purchases;
+
   Profile(this.currentUser, this.isPuchased, this.purchases, this.items);
 
   @override
@@ -72,12 +69,10 @@ class _ProfileState extends State<Profile> {
       body: Container(
         height: MediaQuery.of(context).size.height,
         decoration: BoxDecoration(
-            borderRadius: BorderRadius.only(
-                topLeft: Radius.circular(50), topRight: Radius.circular(50)),
+            borderRadius: BorderRadius.only(topLeft: Radius.circular(50), topRight: Radius.circular(50)),
             color: Colors.white),
         child: SingleChildScrollView(
-          child: Column(mainAxisAlignment: MainAxisAlignment.center, children: <
-              Widget>[
+          child: Column(mainAxisAlignment: MainAxisAlignment.center, children: <Widget>[
             SizedBox(
               height: 10,
             ),
@@ -97,8 +92,7 @@ class _ProfileState extends State<Profile> {
                               barrierDismissible: false,
                               context: context,
                               builder: (context) {
-                                return Info(widget.currentUser,
-                                    widget.currentUser, null);
+                                return Info(widget.currentUser, widget.currentUser, null);
                               }),
                           child: Center(
                             child: ClipRRect(
@@ -106,12 +100,11 @@ class _ProfileState extends State<Profile> {
                                 80,
                               ),
                               child: CachedNetworkImage(
-                                imageUrl: widget.currentUser.imageUrl[0],
+                                imageUrl: widget.currentUser.imageUrl![0],
                                 useOldImageOnUrlChange: true,
-                                placeholder: (context, url) =>
-                                    CupertinoActivityIndicator(
-                                      radius: 15,
-                                    ),
+                                placeholder: (context, url) => CupertinoActivityIndicator(
+                                  radius: 15,
+                                ),
                                 errorWidget: (context, url, error) => Column(
                                   mainAxisAlignment: MainAxisAlignment.center,
                                   children: <Widget>[
@@ -135,8 +128,7 @@ class _ProfileState extends State<Profile> {
                         Align(
                           alignment: Alignment.bottomRight,
                           child: Card(
-                            shape: RoundedRectangleBorder(
-                                borderRadius: BorderRadius.circular(30)),
+                            shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(30)),
                             color: primaryColor,
                             child: IconButton(
                                 alignment: Alignment.center,
@@ -146,8 +138,7 @@ class _ProfileState extends State<Profile> {
                                   color: Colors.white,
                                 ),
                                 onPressed: () {
-                                  _editProfileState.source(
-                                      context, widget.currentUser, true);
+                                  _editProfileState.source(context, widget.currentUser, true);
                                 }),
                           ),
                         ),
@@ -161,30 +152,21 @@ class _ProfileState extends State<Profile> {
               widget.currentUser.name != null && widget.currentUser.age != null
                   ? "${widget.currentUser.name}, ${widget.currentUser.age}"
                   : "",
-              style: TextStyle(
-                  color: Colors.black87,
-                  fontWeight: FontWeight.w500,
-                  fontSize: 30),
+              style: TextStyle(color: Colors.black87, fontWeight: FontWeight.w500, fontSize: 30),
             ),
             Text(
-              widget.currentUser.editInfo['job_title'] != null
-                  ? "${widget.currentUser.editInfo['job_title']}  ${widget.currentUser.editInfo['company'] != null ? "at ${widget.currentUser.editInfo['company']}" : ""}"
+              widget.currentUser.editInfo!['job_title'] != null
+                  ? "${widget.currentUser.editInfo!['job_title']}  ${widget.currentUser.editInfo!['company'] != null ? "at ${widget.currentUser.editInfo!['company']}" : ""}"
                   : "",
               textAlign: TextAlign.center,
-              style: TextStyle(
-                  color: Colors.black54,
-                  fontWeight: FontWeight.w400,
-                  fontSize: 20),
+              style: TextStyle(color: Colors.black54, fontWeight: FontWeight.w400, fontSize: 20),
             ),
             Text(
-              widget.currentUser.editInfo['university'] != null
-                  ? "${widget.currentUser.editInfo['university']}"
+              widget.currentUser.editInfo!['university'] != null
+                  ? "${widget.currentUser.editInfo!['university']}"
                   : "",
               textAlign: TextAlign.center,
-              style: TextStyle(
-                  color: Colors.black54,
-                  fontWeight: FontWeight.w400,
-                  fontSize: 20),
+              style: TextStyle(color: Colors.black54, fontWeight: FontWeight.w400, fontSize: 20),
             ),
             Container(
               height: MediaQuery.of(context).size.height * .45,
@@ -209,8 +191,7 @@ class _ProfileState extends State<Profile> {
                                   size: 32,
                                 ),
                                 onPressed: () {
-                                  _editProfileState.source(
-                                      context, widget.currentUser, false);
+                                  _editProfileState.source(context, widget.currentUser, false);
                                 }),
                           ),
                           Padding(
@@ -240,12 +221,11 @@ class _ProfileState extends State<Profile> {
                                   size: 28,
                                 ),
                                 onPressed: () {
-                                  pushNewScreenWithRouteSettings(
-                                    context,
-                                    screen:EditProfile(widget.currentUser),
-                                    withNavBar: false,
-                                    pageTransitionAnimation: PageTransitionAnimation.cupertino,
-                                  );
+                                  pushNewScreenWithRouteSettings(context,
+                                      screen: EditProfile(widget.currentUser),
+                                      withNavBar: false,
+                                      pageTransitionAnimation: PageTransitionAnimation.cupertino,
+                                      settings: RouteSettings());
                                 }),
                             Padding(
                               padding: const EdgeInsets.all(8.0),
@@ -420,20 +400,15 @@ class _ProfileState extends State<Profile> {
                     width: MediaQuery.of(context).size.width * .75,
                     child: Center(
                         child: Text(
-                         "Answer questions",
-                          style: TextStyle(
-                              fontSize: 15,
-                              color: textColor,
-                              fontWeight: FontWeight.bold),
-                        ))),
+                      "Answer questions",
+                      style: TextStyle(fontSize: 15, color: textColor, fontWeight: FontWeight.bold),
+                    ))),
                 onTap: () async {
-                  pushNewScreenWithRouteSettings(
-                    context,
-                    screen: Answer_quetions(),
-                    withNavBar: false,
-                    pageTransitionAnimation:
-                    PageTransitionAnimation.cupertino,
-                  );
+                  pushNewScreenWithRouteSettings(context,
+                      screen: Answer_quetions(),
+                      withNavBar: false,
+                      pageTransitionAnimation: PageTransitionAnimation.cupertino,
+                      settings: RouteSettings());
                 },
               ),
             ),
@@ -459,8 +434,8 @@ class CurvePainter extends CustomPainter {
 
     var path = Path();
     path.moveTo(startPoint.dx, startPoint.dy);
-    path.cubicTo(controlPoint1.dx, controlPoint1.dy, controlPoint2.dx,
-        controlPoint2.dy, endPoint.dx, endPoint.dy);
+    path.cubicTo(
+        controlPoint1.dx, controlPoint1.dy, controlPoint2.dx, controlPoint2.dy, endPoint.dx, endPoint.dy);
 
     canvas.drawPath(path, paint);
   }
@@ -470,4 +445,3 @@ class CurvePainter extends CustomPainter {
     return false;
   }
 }
-

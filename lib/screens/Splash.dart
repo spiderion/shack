@@ -16,8 +16,8 @@ class _SplashState extends State<Splash> with SingleTickerProviderStateMixin{
   bool isAuth = false;
   bool isRegistered = false;
 
-  AnimationController _controller;
-  Animation _textAimation;
+  AnimationController? _controller;
+  late Animation _textAimation;
 
   @override
   void initState() {
@@ -33,23 +33,23 @@ class _SplashState extends State<Splash> with SingleTickerProviderStateMixin{
       end: 1.0,
     ).animate(
       CurvedAnimation(
-        parent: _controller,
+        parent: _controller!,
         curve: Interval(0.6, 1.0, curve: Curves.easeInOut),
       ),
     );
 
     // Listen to animation completion
-    _controller.addStatusListener(handler);
+    _controller!.addStatusListener(handler);
 
     // Starts the animation
-    _controller.forward();
+    _controller!.forward();
 
   }
 
   @override
   void dispose() {
     // Very Important to dispose the controller for optimization.
-    _controller.removeStatusListener(handler);
+    _controller!.removeStatusListener(handler);
     _controller?.dispose();
     super.dispose();
   }
@@ -64,7 +64,7 @@ class _SplashState extends State<Splash> with SingleTickerProviderStateMixin{
           color: _theme.backgroundColor,
           child: Center(
             child: FadeTransition(
-              opacity: _textAimation,
+              opacity: _textAimation as Animation<double>,
               child: Text(
                 'THE GRID',
                 style: TextStyle(

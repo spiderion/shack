@@ -7,14 +7,12 @@ import 'package:flutter/material.dart';
 import 'package:flutter_grid/models/user_model.dart';
 import 'package:flutter_grid/screens/Tab.dart';
 import 'package:flutter_grid/screens/util/color.dart';
-import 'package:flutter_swiper/flutter_swiper.dart';
-import 'package:swipe_stack/swipe_stack.dart';
 import 'package:video_player/video_player.dart';
 
 class Home extends StatefulWidget {
-  final AppUser currentUser;
+  final AppUser? currentUser;
   final List<AppUser> users;
-  final VideoPlayerController controller;
+  final VideoPlayerController? controller;
 
   Home(this.currentUser, this.users, this.controller);
 
@@ -26,8 +24,9 @@ class _HomeState extends State<Home> {
   TextEditingController searchcontroller = new TextEditingController();
   List<AppUser> searchuser = [];
 
-  GlobalKey<SwipeStackState> swipeKey = GlobalKey<SwipeStackState>();
-  SwiperController _controllers = new SwiperController();
+  GlobalKey swipeKey = GlobalKey();
+
+  // SwiperController _controllers = new SwiperController();
   int currentindex = 0;
 
   @override
@@ -39,7 +38,7 @@ class _HomeState extends State<Home> {
   @override
   void dispose() {
     super.dispose();
-    widget.controller.dispose();
+    widget.controller!.dispose();
   }
 
   @override
@@ -88,9 +87,9 @@ class _HomeState extends State<Home> {
                                         child: Container(
                                           decoration: BoxDecoration(
                                               borderRadius: BorderRadius.circular(10), color: Colors.white),
-                                          child: searchuser[index].imageUrl.length != null
+                                          child: searchuser[index].imageUrl!.length != null
                                               ? CachedNetworkImage(
-                                                  imageUrl: searchuser[index].imageUrl[0],
+                                                  imageUrl: searchuser[index].imageUrl![0],
                                                   fit: BoxFit.cover,
                                                   imageBuilder: (context, imageProvider) => Container(
                                                     width: 48,
@@ -116,7 +115,7 @@ class _HomeState extends State<Home> {
                                         width: double.infinity,
                                         padding: EdgeInsets.only(top: 2),
                                         child: Text(
-                                          searchuser[index].name,
+                                          searchuser[index].name!,
                                           textAlign: TextAlign.center,
                                           style: TextStyle(
                                             color: primaryColor,
@@ -144,10 +143,10 @@ class _HomeState extends State<Home> {
                                               children: <Widget>[
                                                 Container(
                                                     alignment: Alignment.center,
-                                                    child: Swiper(
+                                                    child: Text(
+                                                        'Swiper') /*Swiper(
                                                       index: currentindex,
                                                       itemBuilder: (BuildContext context, int indexs) {
-                                                        print(answerlist.length);
                                                         return Container(
                                                           decoration: BoxDecoration(
                                                               borderRadius: BorderRadius.circular(10),
@@ -204,7 +203,8 @@ class _HomeState extends State<Home> {
                                                       onIndexChanged: (inde) {
                                                         currentindex = inde;
                                                       },
-                                                    )),
+                                                    )*/
+                                                    ),
                                                 Container(
                                                   width: media.size.width - 44,
                                                   alignment: Alignment.center,
@@ -217,7 +217,7 @@ class _HomeState extends State<Home> {
                                                           // print(currentindex);
                                                           FirebaseFirestore.instance
                                                               .collection("Users")
-                                                              .doc(widget.currentUser.id)
+                                                              .doc(widget.currentUser!.id)
                                                               .collection('Questions')
                                                               .doc(questions[currentindex].id)
                                                               .set({
@@ -247,7 +247,7 @@ class _HomeState extends State<Home> {
                                                           // print(currentindex);
                                                           FirebaseFirestore.instance
                                                               .collection("Users")
-                                                              .doc(widget.currentUser.id)
+                                                              .doc(widget.currentUser!.id)
                                                               .collection('Questions')
                                                               .doc(questions[currentindex].id)
                                                               .set({
@@ -290,7 +290,7 @@ class _HomeState extends State<Home> {
                                     Container(
                                         margin: EdgeInsets.only(top: 20),
                                         child: widget.controller != null
-                                            ? (widget.controller.value.isInitialized
+                                            ? (widget.controller!.value.isInitialized
                                                 ? Container(
                                                     decoration: BoxDecoration(
                                                       borderRadius: BorderRadius.circular(10),
@@ -298,9 +298,9 @@ class _HomeState extends State<Home> {
                                                     width: media.size.width - 60,
                                                     height: (media.size.width - 60) * 8 / 16,
                                                     child: AspectRatio(
-                                                        aspectRatio: widget.controller.value.aspectRatio,
+                                                        aspectRatio: widget.controller!.value.aspectRatio,
                                                         child: ClipRect(
-                                                          child: VideoPlayer(widget.controller),
+                                                          child: VideoPlayer(widget.controller!),
                                                         )),
                                                   )
                                                 : Container(
@@ -356,7 +356,8 @@ class _HomeState extends State<Home> {
                       width: MediaQuery.of(context).size.width,
                       child: Stack(
                         children: <Widget>[
-                          Swiper(
+                          Text("Swiper")
+/*                          Swiper(
                             key: UniqueKey(),
                             physics: ScrollPhysics(),
                             itemBuilder: (BuildContext context, int index2) {
@@ -381,7 +382,8 @@ class _HomeState extends State<Home> {
                               disableColor: Colors.grey,
                             ),
                             loop: false,
-                          ),
+                          )*/
+                          ,
                           Positioned(
                             top: 30,
                             left: 0,
@@ -389,7 +391,7 @@ class _HomeState extends State<Home> {
                             child: Column(
                               children: <Widget>[
                                 Text(
-                                  widget.currentUser.name,
+                                  widget.currentUser!.name!,
                                   style: TextStyle(
                                       color: Colors.white, fontWeight: FontWeight.w900, fontSize: 39),
                                   textAlign: TextAlign.center,
@@ -398,7 +400,7 @@ class _HomeState extends State<Home> {
                                   height: 10,
                                 ),
                                 Text(
-                                  widget.currentUser.address,
+                                  widget.currentUser!.address!,
                                   style: TextStyle(color: Colors.white, fontSize: 20),
                                   textAlign: TextAlign.center,
                                 )
@@ -461,7 +463,7 @@ class _HomeState extends State<Home> {
       });
     } else {
       for (int i = 0; i < widget.users.length; i++) {
-        if (widget.users[i].name.toLowerCase().contains(text.toLowerCase())) {
+        if (widget.users[i].name!.toLowerCase().contains(text.toLowerCase())) {
           searchuser.add(widget.users[i]);
         }
       }

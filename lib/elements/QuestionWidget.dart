@@ -6,9 +6,9 @@ import 'package:flutter_grid/screens/questions/Write_answer.dart';
 
 // ignore: must_be_immutable
 class QuestionWidget extends StatelessWidget {
-  Question_model model;
+  Question_model? model;
 
-  QuestionWidget({Key key, this.model}) : super(key: key);
+  QuestionWidget({Key? key, this.model}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
@@ -33,7 +33,7 @@ class QuestionWidget extends StatelessWidget {
                 height: double.infinity,
                 width: double.infinity,
                 fit: BoxFit.cover,
-                imageUrl: model.img,
+                imageUrl: model!.img!,
                 placeholder: (context, url) => Image.asset(
                   'assets/loading.gif',
                   fit: BoxFit.cover,
@@ -50,14 +50,14 @@ class QuestionWidget extends StatelessWidget {
                 mainAxisAlignment: MainAxisAlignment.start,
                 children: <Widget>[
                   Text(
-                    model.title,
+                    model!.title!,
                     style: TextStyle(color: Colors.black, fontSize: 30),
                   ),
                   SizedBox(
                     height: 20,
                   ),
                   Text(
-                    model.text,
+                    model!.text!,
                     style: TextStyle(
                       color: Colors.black87,
                       fontSize: 20

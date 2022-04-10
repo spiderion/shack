@@ -1,4 +1,3 @@
-import 'package:cached_network_image/cached_network_image.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/cupertino.dart';
@@ -8,11 +7,10 @@ import 'package:flutter_grid/screens/Settings/Addphoto.dart';
 import 'package:flutter_grid/screens/Settings/EditBio.dart';
 import 'package:flutter_grid/screens/Settings/Filters.dart';
 import 'package:flutter_grid/screens/util/color.dart';
-import 'package:flutter_swiper/flutter_swiper.dart';
 import 'package:persistent_bottom_nav_bar/persistent-tab-view.dart';
 
 class Setting extends StatefulWidget {
-  final AppUser currentUser;
+  final AppUser? currentUser;
   final bool isPurchased;
   final Map items;
 
@@ -24,12 +22,12 @@ class Setting extends StatefulWidget {
 
 class _SettingState extends State<Setting> {
   Map<String, dynamic> changeValues = {};
-  RangeValues ageRange;
+  RangeValues? ageRange;
   var _showMe;
-  int distance;
+  int? distance;
   final FirebaseAuth _auth = FirebaseAuth.instance;
   bool checkedValue = false;
-  bool isSwitched = true;
+  bool? isSwitched = true;
 
   @override
   void dispose() {
@@ -42,14 +40,14 @@ class _SettingState extends State<Setting> {
   Future updateData() async {
     FirebaseFirestore.instance
         .collection("Users")
-        .doc(widget.currentUser.id)
+        .doc(widget.currentUser!.id)
         .set(changeValues, SetOptions(merge: true));
     // lastVisible = null;
     // print('ewew$lastVisible');
   }
 
-  int freeR;
-  int paidR;
+  late int freeR;
+  late int paidR;
 
   @override
   void initState() {
@@ -57,18 +55,18 @@ class _SettingState extends State<Setting> {
     freeR = widget.items['free_radius'] != null ? int.parse(widget.items['free_radius']) : 400;
     paidR = widget.items['paid_radius'] != null ? int.parse(widget.items['paid_radius']) : 400;
     setState(() {
-      if (!widget.isPurchased && widget.currentUser.maxDistance > freeR) {
-        widget.currentUser.maxDistance = freeR.round();
+      if (!widget.isPurchased && widget.currentUser!.maxDistance! > freeR) {
+        widget.currentUser!.maxDistance = freeR.round();
         changeValues.addAll({'maximum_distance': freeR.round()});
-      } else if (widget.isPurchased && widget.currentUser.maxDistance >= paidR) {
-        widget.currentUser.maxDistance = paidR.round();
+      } else if (widget.isPurchased && widget.currentUser!.maxDistance! >= paidR) {
+        widget.currentUser!.maxDistance = paidR.round();
         changeValues.addAll({'maximum_distance': paidR.round()});
       }
-      _showMe = widget.currentUser.showGender;
-      distance = widget.currentUser.maxDistance.round();
-      ageRange = RangeValues(double.parse(widget.currentUser.ageRange['min']),
-          (double.parse(widget.currentUser.ageRange['max'])));
-      isSwitched = widget.currentUser.isActive;
+      _showMe = widget.currentUser!.showGender;
+      distance = widget.currentUser!.maxDistance!.round();
+      ageRange = RangeValues(double.parse(widget.currentUser!.ageRange!['min']),
+          (double.parse(widget.currentUser!.ageRange!['max'])));
+      isSwitched = widget.currentUser!.isActive;
     });
   }
 
@@ -109,7 +107,8 @@ class _SettingState extends State<Setting> {
                     : Container(
                         height: 400,
                         width: MediaQuery.of(context).size.width - 50,
-                        child: Swiper(
+                        child:
+                            Container() /*Swiper(
                           key: UniqueKey(),
                           physics: ScrollPhysics(),
                           itemBuilder: (BuildContext context, int index2) {
@@ -144,13 +143,14 @@ class _SettingState extends State<Setting> {
                             disableColor: secondryColor,
                           ),
                           loop: false,
-                        ),
+                        )*/
+                        ,
                       ),
               ),
               Container(
                 padding: EdgeInsets.only(top: 10),
                 child: Text(
-                  "${widget.currentUser.name}, ${widget.currentUser.age}",
+                  "${widget.currentUser!.name}, ${widget.currentUser!.age}",
                   style: TextStyle(color: primaryColor, fontSize: 35, fontWeight: FontWeight.w900),
                 ),
               ),
@@ -161,7 +161,7 @@ class _SettingState extends State<Setting> {
                   color: primaryColor,
                 ),
                 title: Text(
-                  "${widget.currentUser.address}",
+                  "${widget.currentUser!.address}",
                   style: TextStyle(color: primaryColor, fontSize: 16, fontWeight: FontWeight.w500),
                 ),
               ),
@@ -175,12 +175,11 @@ class _SettingState extends State<Setting> {
                         InkWell(
                           borderRadius: BorderRadius.circular(10),
                           onTap: () {
-                            pushNewScreenWithRouteSettings(
-                              context,
-                              screen: EditBio(widget.currentUser),
-                              withNavBar: false,
-                              pageTransitionAnimation: PageTransitionAnimation.cupertino,
-                            );
+                            pushNewScreenWithRouteSettings(context,
+                                screen: EditBio(widget.currentUser),
+                                withNavBar: false,
+                                pageTransitionAnimation: PageTransitionAnimation.cupertino,
+                                settings: RouteSettings());
                           },
                           child: Container(
                             height: 60,
@@ -212,12 +211,11 @@ class _SettingState extends State<Setting> {
                         InkWell(
                           borderRadius: BorderRadius.circular(10),
                           onTap: () {
-                            pushNewScreenWithRouteSettings(
-                              context,
-                              screen: Addphoto(widget.currentUser),
-                              withNavBar: false,
-                              pageTransitionAnimation: PageTransitionAnimation.cupertino,
-                            );
+                            pushNewScreenWithRouteSettings(context,
+                                screen: Addphoto(widget.currentUser),
+                                withNavBar: false,
+                                pageTransitionAnimation: PageTransitionAnimation.cupertino,
+                                settings: RouteSettings());
                           },
                           child: Container(
                             height: 60,
@@ -249,12 +247,11 @@ class _SettingState extends State<Setting> {
                         InkWell(
                           borderRadius: BorderRadius.circular(10),
                           onTap: () {
-                            pushNewScreenWithRouteSettings(
-                              context,
-                              screen: Filters(widget.currentUser),
-                              withNavBar: false,
-                              pageTransitionAnimation: PageTransitionAnimation.cupertino,
-                            );
+                            pushNewScreenWithRouteSettings(context,
+                                screen: Filters(widget.currentUser),
+                                withNavBar: false,
+                                pageTransitionAnimation: PageTransitionAnimation.cupertino,
+                                settings: RouteSettings());
                           },
                           child: Container(
                             height: 60,
@@ -288,14 +285,14 @@ class _SettingState extends State<Setting> {
                           width: 60,
                           child: Center(
                             child: CupertinoSwitch(
-                              value: isSwitched,
+                              value: isSwitched!,
                               onChanged: (value) async {
                                 setState(() {
                                   isSwitched = value;
                                 });
                                 Map<String, dynamic> userData = {};
                                 userData.addAll({'isActive': isSwitched});
-                                final user = FirebaseAuth.instance.currentUser;
+                                final user = FirebaseAuth.instance.currentUser!;
                                 await FirebaseFirestore.instance
                                     .collection("Users")
                                     .doc(user.uid)

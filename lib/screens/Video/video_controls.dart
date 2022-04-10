@@ -4,7 +4,7 @@ import 'package:video_player/video_player.dart';
 class VideoControls extends StatefulWidget {
   const VideoControls({this.videoController});
 
-  final VideoPlayerController videoController;
+  final VideoPlayerController? videoController;
 
   @override
   _VideoControlsState createState() => _VideoControlsState();
@@ -12,7 +12,7 @@ class VideoControls extends StatefulWidget {
 
 class _VideoControlsState extends State<VideoControls>
     with SingleTickerProviderStateMixin {
-  AnimationController _animationController;
+  AnimationController? _animationController;
 
   @override
   void initState() {
@@ -20,8 +20,8 @@ class _VideoControlsState extends State<VideoControls>
       vsync: this,
       duration: Duration(milliseconds: 300),
     );
-    widget.videoController.addListener(_videoListener);
-    widget.videoController.setLooping(true);
+    widget.videoController!.addListener(_videoListener);
+    widget.videoController!.setLooping(true);
     super.initState();
   }
 
@@ -33,9 +33,9 @@ class _VideoControlsState extends State<VideoControls>
   }
 
   void _videoListener() {
-    (widget.videoController.value.isPlaying)
-        ? _animationController.forward()
-        : _animationController.reverse();
+    (widget.videoController!.value.isPlaying)
+        ? _animationController!.forward()
+        : _animationController!.reverse();
   }
 
   @override
@@ -57,7 +57,7 @@ class _VideoControlsState extends State<VideoControls>
                 ),
                 Expanded(
                   child: VideoProgressIndicator(
-                    widget.videoController,
+                    widget.videoController!,
                     allowScrubbing: true,
                     padding: const EdgeInsets.only(left: 8.0, right: 8.0),
                     colors: VideoProgressColors(
@@ -66,7 +66,7 @@ class _VideoControlsState extends State<VideoControls>
                   ),
                 ),
                 Text(
-                  timeFormatter(widget.videoController.value.duration),
+                  timeFormatter(widget.videoController!.value.duration),
                   style: TextStyle(color: Colors.white),
                 ),
               ],
@@ -77,7 +77,7 @@ class _VideoControlsState extends State<VideoControls>
               iconSize: 40,
               icon: AnimatedIcon(
                 icon: AnimatedIcons.play_pause,
-                progress: _animationController,
+                progress: _animationController!,
                 color: Colors.white,
               ),
               onPressed: _handleOnPressed,
@@ -97,16 +97,16 @@ class _VideoControlsState extends State<VideoControls>
   }
 
   void _handleOnPressed() {
-    widget.videoController.value.isPlaying ? _pauseVideo() : _playVideo();
+    widget.videoController!.value.isPlaying ? _pauseVideo() : _playVideo();
   }
 
   void _playVideo() {
-    _animationController.forward();
-    widget.videoController.play();
+    _animationController!.forward();
+    widget.videoController!.play();
   }
 
   void _pauseVideo() {
-    _animationController.reverse();
-    widget.videoController.pause();
+    _animationController!.reverse();
+    widget.videoController!.pause();
   }
 }
