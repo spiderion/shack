@@ -6,17 +6,13 @@ import 'package:flutter/material.dart';
 import 'package:flutter_grid/models/user_model.dart';
 import 'package:flutter_grid/screens/Settings/Addphoto.dart';
 import 'package:flutter_grid/screens/Settings/EditBio.dart';
-import 'package:flutter_grid/screens/Settings/Filterlist.dart';
 import 'package:flutter_grid/screens/Settings/Filters.dart';
-import 'package:flutter_grid/screens/Settings/UpdateNumber.dart';
-import 'package:flutter_grid/screens/Welcome.dart';
 import 'package:flutter_grid/screens/util/color.dart';
 import 'package:flutter_swiper/flutter_swiper.dart';
-import 'package:geolocator/geolocator.dart';
 import 'package:persistent_bottom_nav_bar/persistent-tab-view.dart';
 
 class Setting extends StatefulWidget {
-  final User currentUser;
+  final AppUser currentUser;
   final bool isPurchased;
   final Map items;
 
@@ -44,10 +40,10 @@ class _SettingState extends State<Setting> {
   }
 
   Future updateData() async {
-    Firestore.instance
+    FirebaseFirestore.instance
         .collection("Users")
-        .document(widget.currentUser.id)
-        .setData(changeValues, merge: true);
+        .doc(widget.currentUser.id)
+        .set(changeValues, SetOptions(merge: true));
     // lastVisible = null;
     // print('ewew$lastVisible');
   }
@@ -58,18 +54,13 @@ class _SettingState extends State<Setting> {
   @override
   void initState() {
     super.initState();
-    freeR = widget.items['free_radius'] != null
-        ? int.parse(widget.items['free_radius'])
-        : 400;
-    paidR = widget.items['paid_radius'] != null
-        ? int.parse(widget.items['paid_radius'])
-        : 400;
+    freeR = widget.items['free_radius'] != null ? int.parse(widget.items['free_radius']) : 400;
+    paidR = widget.items['paid_radius'] != null ? int.parse(widget.items['paid_radius']) : 400;
     setState(() {
       if (!widget.isPurchased && widget.currentUser.maxDistance > freeR) {
         widget.currentUser.maxDistance = freeR.round();
         changeValues.addAll({'maximum_distance': freeR.round()});
-      } else if (widget.isPurchased &&
-          widget.currentUser.maxDistance >= paidR) {
+      } else if (widget.isPurchased && widget.currentUser.maxDistance >= paidR) {
         widget.currentUser.maxDistance = paidR.round();
         changeValues.addAll({'maximum_distance': paidR.round()});
       }
@@ -94,300 +85,263 @@ class _SettingState extends State<Setting> {
           centerTitle: true,
           backgroundColor: Colors.white),
       body: Container(
-        decoration: BoxDecoration(
-            color: Colors.white),
+        decoration: BoxDecoration(color: Colors.white),
         child: ClipRRect(
           child: SingleChildScrollView(
-            child: Column(
-              children: <Widget>[
-                SizedBox(
-                  height: 20,
-                ),
-                Container(
-                  alignment: Alignment.center,
-
-                  child: widget.currentUser == null
-                      ? Container(
-                    height: 250,
-                    width: MediaQuery.of(context).size.width,
-                    child: Image.asset(
-                      'assets/loading.gif',
-                      fit: BoxFit.cover,
-                      width: double.infinity,
-                      height: 200,
-                    ),
-                  )
-                      : Container(
-                    height: 400,
-                    width: MediaQuery.of(context).size.width - 50,
-                    child: Swiper(
-                      key: UniqueKey(),
-                      physics: ScrollPhysics(),
-                      itemBuilder: (BuildContext context, int index2) {
-                        return widget.currentUser.imageUrl.length != null
-                            ? Hero(
-                          tag: "abcd",
-                          child: CachedNetworkImage(
-                            imageUrl:
-                            widget.currentUser.imageUrl[index2],
-                            fit: BoxFit.cover,
-                            useOldImageOnUrlChange: true,
-                            placeholder: (context, url) =>
-                                CupertinoActivityIndicator(
-                                  radius: 20,
-                                ),
-                            imageBuilder: (context,
-                                imageProvider) =>
-                                Container(
-                                  decoration: BoxDecoration(
-                                      borderRadius:
-                                      BorderRadius.circular(10),
-                                      image: DecorationImage(
-                                          image: imageProvider, fit: BoxFit.cover
-                                      )),
-                                ),
-                            errorWidget: (context, url, error) =>
-                                Icon(Icons.error),
+              child: Column(
+            children: <Widget>[
+              SizedBox(
+                height: 20,
+              ),
+              Container(
+                alignment: Alignment.center,
+                child: widget.currentUser == null
+                    ? Container(
+                        height: 250,
+                        width: MediaQuery.of(context).size.width,
+                        child: Image.asset(
+                          'assets/loading.gif',
+                          fit: BoxFit.cover,
+                          width: double.infinity,
+                          height: 200,
+                        ),
+                      )
+                    : Container(
+                        height: 400,
+                        width: MediaQuery.of(context).size.width - 50,
+                        child: Swiper(
+                          key: UniqueKey(),
+                          physics: ScrollPhysics(),
+                          itemBuilder: (BuildContext context, int index2) {
+                            return widget.currentUser.imageUrl.length != null
+                                ? Hero(
+                                    tag: "abcd",
+                                    child: CachedNetworkImage(
+                                      imageUrl: widget.currentUser.imageUrl[index2],
+                                      fit: BoxFit.cover,
+                                      useOldImageOnUrlChange: true,
+                                      placeholder: (context, url) => CupertinoActivityIndicator(
+                                        radius: 20,
+                                      ),
+                                      imageBuilder: (context, imageProvider) => Container(
+                                        decoration: BoxDecoration(
+                                            borderRadius: BorderRadius.circular(10),
+                                            image: DecorationImage(image: imageProvider, fit: BoxFit.cover)),
+                                      ),
+                                      errorWidget: (context, url, error) => Icon(Icons.error),
+                                    ),
+                                  )
+                                : Container();
+                          },
+                          itemCount: widget.currentUser.imageUrl.length,
+                          pagination: new SwiperPagination(
+                              alignment: Alignment.bottomCenter,
+                              builder: DotSwiperPaginationBuilder(
+                                  activeSize: 13, color: secondryColor, activeColor: primaryColor),
+                              margin: EdgeInsets.only(bottom: 40)),
+                          control: new SwiperControl(
+                            color: primaryColor,
+                            disableColor: secondryColor,
                           ),
-                        )
-                            : Container();
-                      },
-                      itemCount: widget.currentUser.imageUrl.length,
-                      pagination: new SwiperPagination(
-                          alignment: Alignment.bottomCenter,
-                          builder: DotSwiperPaginationBuilder(
-                              activeSize: 13,
-                              color: secondryColor,
-                              activeColor: primaryColor),
-                          margin: EdgeInsets.only(bottom: 40)),
-                      control: new SwiperControl(
-                        color: primaryColor,
-                        disableColor: secondryColor,
+                          loop: false,
+                        ),
                       ),
-                      loop: false,
-                    ),
-                  ),
-
+              ),
+              Container(
+                padding: EdgeInsets.only(top: 10),
+                child: Text(
+                  "${widget.currentUser.name}, ${widget.currentUser.age}",
+                  style: TextStyle(color: primaryColor, fontSize: 35, fontWeight: FontWeight.w900),
                 ),
-                Container(
-                  padding: EdgeInsets.only(top: 10),
-                  child: Text(
-                    "${widget.currentUser.name}, ${widget.currentUser.age}",
-                    style: TextStyle(
-                        color: primaryColor,
-                        fontSize: 35,
-                        fontWeight: FontWeight.w900),
-                  ),
+              ),
+              ListTile(
+                dense: true,
+                leading: Icon(
+                  Icons.location_on,
+                  color: primaryColor,
                 ),
-                ListTile(
-                  dense: true,
-                  leading: Icon(
-                    Icons.location_on,
-                    color: primaryColor,
-                  ),
-                  title: Text(
-                    "${widget.currentUser.address}",
-                    style: TextStyle(
-                        color: primaryColor,
-                        fontSize: 16,
-                        fontWeight: FontWeight.w500),
-                  ),
+                title: Text(
+                  "${widget.currentUser.address}",
+                  style: TextStyle(color: primaryColor, fontSize: 16, fontWeight: FontWeight.w500),
                 ),
-                Container(
-                  padding: EdgeInsets.only(left: 25, right: 25, top:  10),
-                  child: Row(
-                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                    children: <Widget>[
-                      Column(
-                        children: <Widget>[
-                          InkWell(
-                            borderRadius: BorderRadius.circular(10),
-                            onTap: () {
-                              pushNewScreenWithRouteSettings(
-                                context,
-                                screen:EditBio(widget.currentUser),
-                                withNavBar: false,
-                                pageTransitionAnimation: PageTransitionAnimation.cupertino,
-                              );
-                            },
-                            child: Container(
-                              height: 60,
-                              width: 60,
-                              decoration: BoxDecoration(
-                                  borderRadius: BorderRadius.circular(10),
-                                  border: Border.all(color: primaryColor),
-                                  color: primaryColor),
-                              child: Center(
-                                child: Icon(
-                                  Icons.settings,
-                                  color: Colors.white,
-                                  size: 40,
-                                ),
-                              ),
-                            ),
-                          ),
-                          Container(
-                            padding: EdgeInsets.only(top: 5),
-                            child: Text(
-                              'Edit Bio',
-                              style: TextStyle(
-                                color: primaryColor,
-                                fontSize: 15
-                              ),
-                            ),
-                          )
-                        ],
-                      ),
-                      Column(
-                        children: <Widget>[
-                          InkWell(
-                            borderRadius: BorderRadius.circular(10),
-                            onTap: () {
-                              pushNewScreenWithRouteSettings(
-                                context,
-                                screen:Addphoto(widget.currentUser),
-                                withNavBar: false,
-                                pageTransitionAnimation: PageTransitionAnimation.cupertino,
-                              );
-                            },
-                            child: Container(
-                              height: 60,
-                              width: 60,
-                              decoration: BoxDecoration(
-                                  borderRadius: BorderRadius.circular(10),
-                                  border: Border.all(color: primaryColor),
-                                  color: primaryColor),
-                              child: Center(
-                                child: Icon(
-                                  Icons.person_outline,
-                                  color: Colors.white,
-                                  size: 40,
-                                ),
-                              ),
-                            ),
-                          ),
-                          Container(
-                            padding: EdgeInsets.only(top: 5),
-                            child: Text(
-                              'Add Photos',
-                              style: TextStyle(
-                                  color: primaryColor,
-                                  fontSize: 15
-                              ),
-                            ),
-                          )
-                        ],
-                      ),
-                      Column(
-                        children: <Widget>[
-                          InkWell(
-                            borderRadius: BorderRadius.circular(10),
-                            onTap: () {
-                              pushNewScreenWithRouteSettings(
-                                context,
-                                screen:Filters(widget.currentUser),
-                                withNavBar: false,
-                                pageTransitionAnimation: PageTransitionAnimation.cupertino,
-                              );
-                            },
-                            child: Container(
-                              height: 60,
-                              width: 60,
-                              decoration: BoxDecoration(
-                                  borderRadius: BorderRadius.circular(10),
-                                  border: Border.all(color: primaryColor),
-                                  color: primaryColor),
-                              child: Center(
-                                child: Icon(
-                                  Icons.tune,
-                                  color: Colors.white,
-                                  size: 40,
-                                ),
-                              ),
-                            ),
-                          ),
-                          Container(
-                            padding: EdgeInsets.only(top: 5),
-                            child: Text(
-                              'Edit Filters',
-                              style: TextStyle(
-                                  color: primaryColor,
-                                  fontSize: 15
-                              ),
-                            ),
-                          )
-                        ],
-                      ),
-                      Column(
-                        children: <Widget>[
-                          Container(
+              ),
+              Container(
+                padding: EdgeInsets.only(left: 25, right: 25, top: 10),
+                child: Row(
+                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                  children: <Widget>[
+                    Column(
+                      children: <Widget>[
+                        InkWell(
+                          borderRadius: BorderRadius.circular(10),
+                          onTap: () {
+                            pushNewScreenWithRouteSettings(
+                              context,
+                              screen: EditBio(widget.currentUser),
+                              withNavBar: false,
+                              pageTransitionAnimation: PageTransitionAnimation.cupertino,
+                            );
+                          },
+                          child: Container(
                             height: 60,
                             width: 60,
+                            decoration: BoxDecoration(
+                                borderRadius: BorderRadius.circular(10),
+                                border: Border.all(color: primaryColor),
+                                color: primaryColor),
                             child: Center(
-                              child:  CupertinoSwitch(
-                                value: isSwitched,
-                                onChanged: (value) async {
-                                  setState(() {
-                                    isSwitched = value;
-                                  });
-                                  Map<String, dynamic> userData = {};
-                                  userData.addAll({'isActive': isSwitched});
-                                  await FirebaseAuth.instance.currentUser().then((FirebaseUser user) async {
-                                    await Firestore.instance
-                                        .collection("Users")
-                                        .document(user.uid)
-                                        .updateData(userData);
-                                  });
-                                },
+                              child: Icon(
+                                Icons.settings,
+                                color: Colors.white,
+                                size: 40,
                               ),
                             ),
                           ),
-                          Container(
-                            padding: EdgeInsets.only(top: 5),
-                            child: Text(
-                              'Grid Status',
-                              style: TextStyle(
-                                  color: primaryColor,
-                                  fontSize: 15
+                        ),
+                        Container(
+                          padding: EdgeInsets.only(top: 5),
+                          child: Text(
+                            'Edit Bio',
+                            style: TextStyle(color: primaryColor, fontSize: 15),
+                          ),
+                        )
+                      ],
+                    ),
+                    Column(
+                      children: <Widget>[
+                        InkWell(
+                          borderRadius: BorderRadius.circular(10),
+                          onTap: () {
+                            pushNewScreenWithRouteSettings(
+                              context,
+                              screen: Addphoto(widget.currentUser),
+                              withNavBar: false,
+                              pageTransitionAnimation: PageTransitionAnimation.cupertino,
+                            );
+                          },
+                          child: Container(
+                            height: 60,
+                            width: 60,
+                            decoration: BoxDecoration(
+                                borderRadius: BorderRadius.circular(10),
+                                border: Border.all(color: primaryColor),
+                                color: primaryColor),
+                            child: Center(
+                              child: Icon(
+                                Icons.person_outline,
+                                color: Colors.white,
+                                size: 40,
                               ),
                             ),
-                          )
-                        ],
-                      ),
-                    ],
-                  ),
-                ),
-                Container(
-                  width: double.infinity,
-                  height: 50,
-                  margin: EdgeInsets.only(top: 10, bottom: 30),
-                  padding: EdgeInsets.only(left: 25, right: 25),
-                  child: FlatButton(
-                      shape: RoundedRectangleBorder(
-                        borderRadius: BorderRadius.circular(8.0),
-                      ),
-                      color: primaryColor,
-                      padding: EdgeInsets.all(8),
-                      textColor: secondryColor,
-                      onPressed: (){
-                      },
-                      child: Container(
-                        alignment: Alignment.center,
-                        child: Text('UPGRADE TO PREMIUM',
-                          style: TextStyle(
-                              fontWeight: FontWeight.w900,
-                              fontSize: 15
                           ),
-                          textAlign: TextAlign.center,),
-                      )
-                  ),
+                        ),
+                        Container(
+                          padding: EdgeInsets.only(top: 5),
+                          child: Text(
+                            'Add Photos',
+                            style: TextStyle(color: primaryColor, fontSize: 15),
+                          ),
+                        )
+                      ],
+                    ),
+                    Column(
+                      children: <Widget>[
+                        InkWell(
+                          borderRadius: BorderRadius.circular(10),
+                          onTap: () {
+                            pushNewScreenWithRouteSettings(
+                              context,
+                              screen: Filters(widget.currentUser),
+                              withNavBar: false,
+                              pageTransitionAnimation: PageTransitionAnimation.cupertino,
+                            );
+                          },
+                          child: Container(
+                            height: 60,
+                            width: 60,
+                            decoration: BoxDecoration(
+                                borderRadius: BorderRadius.circular(10),
+                                border: Border.all(color: primaryColor),
+                                color: primaryColor),
+                            child: Center(
+                              child: Icon(
+                                Icons.tune,
+                                color: Colors.white,
+                                size: 40,
+                              ),
+                            ),
+                          ),
+                        ),
+                        Container(
+                          padding: EdgeInsets.only(top: 5),
+                          child: Text(
+                            'Edit Filters',
+                            style: TextStyle(color: primaryColor, fontSize: 15),
+                          ),
+                        )
+                      ],
+                    ),
+                    Column(
+                      children: <Widget>[
+                        Container(
+                          height: 60,
+                          width: 60,
+                          child: Center(
+                            child: CupertinoSwitch(
+                              value: isSwitched,
+                              onChanged: (value) async {
+                                setState(() {
+                                  isSwitched = value;
+                                });
+                                Map<String, dynamic> userData = {};
+                                userData.addAll({'isActive': isSwitched});
+                                final user = FirebaseAuth.instance.currentUser;
+                                await FirebaseFirestore.instance
+                                    .collection("Users")
+                                    .doc(user.uid)
+                                    .update(userData);
+                              },
+                            ),
+                          ),
+                        ),
+                        Container(
+                          padding: EdgeInsets.only(top: 5),
+                          child: Text(
+                            'Grid Status',
+                            style: TextStyle(color: primaryColor, fontSize: 15),
+                          ),
+                        )
+                      ],
+                    ),
+                  ],
                 ),
-              ],
-            )
-          ),
+              ),
+              Container(
+                width: double.infinity,
+                height: 50,
+                margin: EdgeInsets.only(top: 10, bottom: 30),
+                padding: EdgeInsets.only(left: 25, right: 25),
+                child: FlatButton(
+                    shape: RoundedRectangleBorder(
+                      borderRadius: BorderRadius.circular(8.0),
+                    ),
+                    color: primaryColor,
+                    padding: EdgeInsets.all(8),
+                    textColor: secondryColor,
+                    onPressed: () {},
+                    child: Container(
+                      alignment: Alignment.center,
+                      child: Text(
+                        'UPGRADE TO PREMIUM',
+                        style: TextStyle(fontWeight: FontWeight.w900, fontSize: 15),
+                        textAlign: TextAlign.center,
+                      ),
+                    )),
+              ),
+            ],
+          )),
         ),
       ),
     );
   }
-
 }

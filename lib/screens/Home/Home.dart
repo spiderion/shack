@@ -4,8 +4,6 @@ import 'package:cached_network_image/cached_network_image.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_grid/models/answer_model.dart';
-import 'package:flutter_grid/models/question_model.dart';
 import 'package:flutter_grid/models/user_model.dart';
 import 'package:flutter_grid/screens/Tab.dart';
 import 'package:flutter_grid/screens/util/color.dart';
@@ -28,16 +26,14 @@ class _HomeState extends State<Home> {
   TextEditingController searchcontroller = new TextEditingController();
   List<AppUser> searchuser = [];
 
-
   GlobalKey<SwipeStackState> swipeKey = GlobalKey<SwipeStackState>();
-  SwiperController _controllers =new SwiperController();
+  SwiperController _controllers = new SwiperController();
   int currentindex = 0;
 
   @override
   void initState() {
     super.initState();
     searchuser = widget.users;
-
   }
 
   @override
@@ -55,8 +51,7 @@ class _HomeState extends State<Home> {
       backgroundColor: Colors.white,
       body: Container(
           decoration: BoxDecoration(
-              image: DecorationImage(
-                  image: AssetImage("assets/auth/city.jpg"), fit: BoxFit.cover),
+              image: DecorationImage(image: AssetImage("assets/auth/city.jpg"), fit: BoxFit.cover),
               color: Colors.white),
           padding: EdgeInsets.only(top: media.padding.top),
           height: MediaQuery.of(context).size.height,
@@ -67,129 +62,98 @@ class _HomeState extends State<Home> {
                   child: Container(
                     width: media.size.width,
                     height: media.size.height - 190,
-                    child: Column(
-                        mainAxisAlignment: MainAxisAlignment.start,
-                        children: <Widget>[
-                          SizedBox(
-                            height: 50,
-                          ),
-                          Container(
-                            width: media.size.width,
-                            height: 80,
-                            child: ListView.builder(
-                                scrollDirection: Axis.horizontal,
-                                itemCount: searchuser.length,
-                                itemBuilder: (context, index) {
-                                  return Container(
-                                      width: 80,
-                                      padding: EdgeInsets.only(
-                                          top: 5, bottom: 5, left: 10),
-                                      child: Column(
-                                        mainAxisAlignment:
-                                            MainAxisAlignment.start,
-                                        children: <Widget>[
-                                          Container(
-                                            decoration: BoxDecoration(
-                                                borderRadius:
-                                                    BorderRadius.circular(10),
-                                                color: Colors.green),
-                                            width: 50,
-                                            height: 50,
-                                            padding: EdgeInsets.all(1),
-                                            child: Container(
-                                              decoration: BoxDecoration(
-                                                  borderRadius:
-                                                      BorderRadius.circular(10),
-                                                  color: Colors.white),
-                                              child: searchuser[index]
-                                                          .imageUrl
-                                                          .length !=
-                                                      null
-                                                  ? CachedNetworkImage(
-                                                      imageUrl:
-                                                          searchuser[index]
-                                                              .imageUrl[0],
-                                                      fit: BoxFit.cover,
-                                                      imageBuilder: (context,
-                                                              imageProvider) =>
-                                                          Container(
-                                                        width: 48,
-                                                        height: 48,
-                                                        decoration: BoxDecoration(
-                                                            borderRadius:
-                                                                BorderRadius
-                                                                    .circular(
-                                                                        10),
-                                                            image: DecorationImage(
-                                                                image:
-                                                                    imageProvider,
-                                                                fit: BoxFit
-                                                                    .cover)),
-                                                      ),
-                                                      useOldImageOnUrlChange:
-                                                          true,
-                                                      placeholder: (context,
-                                                              url) =>
-                                                          CupertinoActivityIndicator(
-                                                        radius: 20,
-                                                      ),
-                                                      errorWidget: (context,
-                                                              url, error) =>
-                                                          Icon(Icons.error),
-                                                    )
-                                                  : Image.asset(
-                                                      'assets/loading.gif',
-                                                      fit: BoxFit.cover,
-                                                    ),
-                                            ),
+                    child: Column(mainAxisAlignment: MainAxisAlignment.start, children: <Widget>[
+                      SizedBox(
+                        height: 50,
+                      ),
+                      Container(
+                        width: media.size.width,
+                        height: 80,
+                        child: ListView.builder(
+                            scrollDirection: Axis.horizontal,
+                            itemCount: searchuser.length,
+                            itemBuilder: (context, index) {
+                              return Container(
+                                  width: 80,
+                                  padding: EdgeInsets.only(top: 5, bottom: 5, left: 10),
+                                  child: Column(
+                                    mainAxisAlignment: MainAxisAlignment.start,
+                                    children: <Widget>[
+                                      Container(
+                                        decoration: BoxDecoration(
+                                            borderRadius: BorderRadius.circular(10), color: Colors.green),
+                                        width: 50,
+                                        height: 50,
+                                        padding: EdgeInsets.all(1),
+                                        child: Container(
+                                          decoration: BoxDecoration(
+                                              borderRadius: BorderRadius.circular(10), color: Colors.white),
+                                          child: searchuser[index].imageUrl.length != null
+                                              ? CachedNetworkImage(
+                                                  imageUrl: searchuser[index].imageUrl[0],
+                                                  fit: BoxFit.cover,
+                                                  imageBuilder: (context, imageProvider) => Container(
+                                                    width: 48,
+                                                    height: 48,
+                                                    decoration: BoxDecoration(
+                                                        borderRadius: BorderRadius.circular(10),
+                                                        image: DecorationImage(
+                                                            image: imageProvider, fit: BoxFit.cover)),
+                                                  ),
+                                                  useOldImageOnUrlChange: true,
+                                                  placeholder: (context, url) => CupertinoActivityIndicator(
+                                                    radius: 20,
+                                                  ),
+                                                  errorWidget: (context, url, error) => Icon(Icons.error),
+                                                )
+                                              : Image.asset(
+                                                  'assets/loading.gif',
+                                                  fit: BoxFit.cover,
+                                                ),
+                                        ),
+                                      ),
+                                      Container(
+                                        width: double.infinity,
+                                        padding: EdgeInsets.only(top: 2),
+                                        child: Text(
+                                          searchuser[index].name,
+                                          textAlign: TextAlign.center,
+                                          style: TextStyle(
+                                            color: primaryColor,
                                           ),
-                                          Container(
-                                            width: double.infinity,
-                                            padding: EdgeInsets.only(top: 2),
-                                            child: Text(
-                                              searchuser[index].name,
-                                              textAlign: TextAlign.center,
-                                              style: TextStyle(
-                                                color: primaryColor,
-                                              ),
-                                              maxLines: 1,
-                                            ),
-                                          )
-                                        ],
-                                      ));
-                                }),
-                          ),
-                          Expanded(
-                              child: SingleChildScrollView(
-                                  physics: ScrollPhysics(),
-                                  child: Container(
-                                    height: media.size.width + 100,
-                                    child: Column(
-                                      children: <Widget>[
-                                        Container(
-                                            padding: EdgeInsets.only(top: 20),
-                                            width: media.size.width,
-                                            child: questions.length != 0 && answerlist.length != 0?
-                                            Stack(
+                                          maxLines: 1,
+                                        ),
+                                      )
+                                    ],
+                                  ));
+                            }),
+                      ),
+                      Expanded(
+                          child: SingleChildScrollView(
+                              physics: ScrollPhysics(),
+                              child: Container(
+                                height: media.size.width + 100,
+                                child: Column(
+                                  children: <Widget>[
+                                    Container(
+                                      padding: EdgeInsets.only(top: 20),
+                                      width: media.size.width,
+                                      child: questions.length != 0 && answerlist.length != 0
+                                          ? Stack(
                                               alignment: Alignment.center,
                                               children: <Widget>[
                                                 Container(
                                                     alignment: Alignment.center,
                                                     child: Swiper(
                                                       index: currentindex,
-                                                      itemBuilder: (BuildContext context, int indexs){
+                                                      itemBuilder: (BuildContext context, int indexs) {
                                                         print(answerlist.length);
                                                         return Container(
                                                           decoration: BoxDecoration(
-                                                              borderRadius:
-                                                              BorderRadius.circular(
-                                                                  10),
+                                                              borderRadius: BorderRadius.circular(10),
                                                               color: primaryColor),
                                                           width: media.size.width - 60,
-                                                          height:
-                                                          (media.size.width - 60) *
-                                                              8 /
-                                                              16,
+                                                          height: (media.size.width - 60) * 8 / 16,
                                                           child: Column(
                                                             mainAxisAlignment: MainAxisAlignment.center,
                                                             children: <Widget>[
@@ -215,105 +179,95 @@ class _HomeState extends State<Home> {
                                                               SizedBox(
                                                                 height: 5,
                                                               ),
-                                                              answerlist[indexs] != null ?Text(
-                                                                'Your answer is ' + (answerlist[indexs].answer? 'yes': 'no'),
-                                                                style: TextStyle(
-                                                                  color: secondryColor,
-                                                                  fontSize: 15,
-                                                                ),
-                                                                textAlign: TextAlign.center,
-                                                              ): Container()
+                                                              answerlist[indexs] != null
+                                                                  ? Text(
+                                                                      'Your answer is ' +
+                                                                          (answerlist[indexs].answer
+                                                                              ? 'yes'
+                                                                              : 'no'),
+                                                                      style: TextStyle(
+                                                                        color: secondryColor,
+                                                                        fontSize: 15,
+                                                                      ),
+                                                                      textAlign: TextAlign.center,
+                                                                    )
+                                                                  : Container()
                                                             ],
                                                           ),
                                                         );
                                                       },
                                                       itemCount: questions.length,
                                                       layout: SwiperLayout.TINDER,
-                                                      itemHeight: (media.size.width - 60) *
-                                                          8 /
-                                                          16,
-                                                      itemWidth:  media.size.width - 30,
+                                                      itemHeight: (media.size.width - 60) * 8 / 16,
+                                                      itemWidth: media.size.width - 30,
                                                       controller: _controllers,
-                                                      onIndexChanged: (inde){
+                                                      onIndexChanged: (inde) {
                                                         currentindex = inde;
-                                                    },
-                                                    )
-                                                ),
+                                                      },
+                                                    )),
                                                 Container(
                                                   width: media.size.width - 44,
                                                   alignment: Alignment.center,
                                                   child: Row(
-                                                    mainAxisAlignment:
-                                                    MainAxisAlignment
-                                                        .spaceBetween,
+                                                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
                                                     children: <Widget>[
                                                       InkWell(
-                                                        borderRadius:
-                                                        BorderRadius
-                                                            .circular(5),
+                                                        borderRadius: BorderRadius.circular(5),
                                                         onTap: () {
                                                           // print(currentindex);
-                                                          Firestore.instance
+                                                          FirebaseFirestore.instance
                                                               .collection("Users")
-                                                              .document(widget.currentUser.id).collection('Questions').document(questions[currentindex].id)
-                                                              .setData({'id': questions[currentindex].id, 'answer': false});
+                                                              .doc(widget.currentUser.id)
+                                                              .collection('Questions')
+                                                              .doc(questions[currentindex].id)
+                                                              .set({
+                                                            'id': questions[currentindex].id,
+                                                            'answer': false
+                                                          });
                                                         },
                                                         child: Container(
                                                           height: 50,
                                                           width: 50,
                                                           decoration: BoxDecoration(
-                                                              borderRadius:
-                                                              BorderRadius
-                                                                  .circular(
-                                                                  5),
-                                                              border: Border.all(
-                                                                  color: Colors
-                                                                      .grey),
-                                                              color:
-                                                              Colors.grey),
+                                                              borderRadius: BorderRadius.circular(5),
+                                                              border: Border.all(color: Colors.grey),
+                                                              color: Colors.grey),
                                                           child: Center(
                                                             child: Icon(
                                                               Icons.clear,
-                                                              color:
-                                                              primaryColor,
+                                                              color: primaryColor,
                                                               size: 40,
                                                             ),
                                                           ),
                                                         ),
                                                       ),
                                                       InkWell(
-                                                        borderRadius:
-                                                        BorderRadius
-                                                            .circular(5),
+                                                        borderRadius: BorderRadius.circular(5),
                                                         onTap: () {
                                                           // print(currentindex);
-                                                          Firestore.instance
+                                                          FirebaseFirestore.instance
                                                               .collection("Users")
-                                                              .document(widget.currentUser.id).collection('Questions').document(questions[currentindex].id)
-                                                              .setData({'id': questions[currentindex].id, 'answer': true});
+                                                              .doc(widget.currentUser.id)
+                                                              .collection('Questions')
+                                                              .doc(questions[currentindex].id)
+                                                              .set({
+                                                            'id': questions[currentindex].id,
+                                                            'answer': true
+                                                          });
                                                         },
-                                                        splashColor:
-                                                        Colors.blue,
-                                                        highlightColor:
-                                                        Colors.blue,
+                                                        splashColor: Colors.blue,
+                                                        highlightColor: Colors.blue,
                                                         child: Container(
                                                           height: 50,
                                                           width: 50,
                                                           decoration: BoxDecoration(
-                                                              borderRadius:
-                                                              BorderRadius
-                                                                  .circular(
-                                                                  5),
-                                                              border: Border.all(
-                                                                  color: Colors
-                                                                      .greenAccent),
-                                                              color: Colors
-                                                                  .greenAccent),
+                                                              borderRadius: BorderRadius.circular(5),
+                                                              border: Border.all(color: Colors.greenAccent),
+                                                              color: Colors.greenAccent),
                                                           child: Center(
                                                             child: Icon(
                                                               Icons.check,
-                                                              color:
-                                                              primaryColor,
+                                                              color: primaryColor,
                                                               size: 40,
                                                             ),
                                                           ),
@@ -323,108 +277,66 @@ class _HomeState extends State<Home> {
                                                   ),
                                                 )
                                               ],
-                                            ) : Container(
-                                                decoration: BoxDecoration(
-                                                    borderRadius:
-                                                    BorderRadius.circular(
-                                                        10),
-                                                    color: primaryColor),
-                                                width: media.size.width - 60,
-                                                height:
-                                                (media.size.width - 60) *
-                                                    8 /
-                                                    16,
-                                                alignment: Alignment.center,
+                                            )
+                                          : Container(
+                                              decoration: BoxDecoration(
+                                                  borderRadius: BorderRadius.circular(10),
+                                                  color: primaryColor),
+                                              width: media.size.width - 60,
+                                              height: (media.size.width - 60) * 8 / 16,
+                                              alignment: Alignment.center,
                                             ),
-                                        ),
-                                        Container(
-                                            margin: EdgeInsets.only(top: 20),
-                                            child: widget.controller != null
-                                                ? (widget.controller.value
-                                                        .initialized
-                                                    ? Container(
-                                                        decoration:
-                                                            BoxDecoration(
-                                                          borderRadius:
-                                                              BorderRadius
-                                                                  .circular(10),
-                                                        ),
-                                                        width:
-                                                            media.size.width -
-                                                                60,
-                                                        height:
-                                                            (media.size.width -
-                                                                    60) *
-                                                                8 /
-                                                                16,
-                                                        child:  AspectRatio(
-                                                          aspectRatio: widget
-                                                              .controller
-                                                              .value
-                                                              .aspectRatio,
-                                                          child: ClipRect(
-                                                            child: VideoPlayer(
-                                                                widget
-                                                                    .controller),
-                                                          )
-                                                        ),
-                                                      )
-                                                    : Container(
-                                                        decoration:
-                                                            BoxDecoration(
-                                                                borderRadius:
-                                                                    BorderRadius
-                                                                        .circular(
-                                                                            10),
-                                                                image:
-                                                                    DecorationImage(
-                                                                        image: Image
-                                                                            .asset(
-                                                                          'assets/loading.gif',
-                                                                          fit: BoxFit
-                                                                              .contain,
-                                                                        ).image,
-                                                                        fit: BoxFit
-                                                                            .cover)),
-                                                        width:
-                                                            media.size.width -
-                                                                60,
-                                                        height:
-                                                            (media.size.width -
-                                                                    60) *
-                                                                8 /
-                                                                16,
-                                                      ))
+                                    ),
+                                    Container(
+                                        margin: EdgeInsets.only(top: 20),
+                                        child: widget.controller != null
+                                            ? (widget.controller.value.isInitialized
+                                                ? Container(
+                                                    decoration: BoxDecoration(
+                                                      borderRadius: BorderRadius.circular(10),
+                                                    ),
+                                                    width: media.size.width - 60,
+                                                    height: (media.size.width - 60) * 8 / 16,
+                                                    child: AspectRatio(
+                                                        aspectRatio: widget.controller.value.aspectRatio,
+                                                        child: ClipRect(
+                                                          child: VideoPlayer(widget.controller),
+                                                        )),
+                                                  )
                                                 : Container(
                                                     decoration: BoxDecoration(
-                                                        borderRadius:
-                                                            BorderRadius
-                                                                .circular(10),
+                                                        borderRadius: BorderRadius.circular(10),
                                                         image: DecorationImage(
                                                             image: Image.asset(
                                                               'assets/loading.gif',
-                                                              fit: BoxFit
-                                                                  .contain,
+                                                              fit: BoxFit.contain,
                                                             ).image,
                                                             fit: BoxFit.cover)),
-                                                    width:
-                                                        media.size.width - 60,
-                                                    height: (media.size.width -
-                                                            60) *
-                                                        8 /
-                                                        16,
-                                                  )),
-                                      ],
-                                    ),
-                                  )))
-                        ]),
+                                                    width: media.size.width - 60,
+                                                    height: (media.size.width - 60) * 8 / 16,
+                                                  ))
+                                            : Container(
+                                                decoration: BoxDecoration(
+                                                    borderRadius: BorderRadius.circular(10),
+                                                    image: DecorationImage(
+                                                        image: Image.asset(
+                                                          'assets/loading.gif',
+                                                          fit: BoxFit.contain,
+                                                        ).image,
+                                                        fit: BoxFit.cover)),
+                                                width: media.size.width - 60,
+                                                height: (media.size.width - 60) * 8 / 16,
+                                              )),
+                                  ],
+                                ),
+                              )))
+                    ]),
                   )),
               widget.currentUser == null
                   ? Container(
                       decoration: BoxDecoration(
                         borderRadius: BorderRadius.only(
-                            bottomLeft: Radius.circular(10),
-                            bottomRight: Radius.circular(10)),
+                            bottomLeft: Radius.circular(10), bottomRight: Radius.circular(10)),
                       ),
                       height: 200,
                       width: MediaQuery.of(context).size.width,
@@ -438,8 +350,7 @@ class _HomeState extends State<Home> {
                   : Container(
                       decoration: BoxDecoration(
                         borderRadius: BorderRadius.only(
-                            bottomLeft: Radius.circular(10),
-                            bottomRight: Radius.circular(10)),
+                            bottomLeft: Radius.circular(10), bottomRight: Radius.circular(10)),
                       ),
                       height: 200,
                       width: MediaQuery.of(context).size.width,
@@ -453,22 +364,17 @@ class _HomeState extends State<Home> {
                                 width: media.size.width,
                                 height: 200,
                                 decoration: BoxDecoration(
-                                  image: DecorationImage(
-                                    image: AssetImage("assets/auth/lib.jpg"),
-                                    fit: BoxFit.cover
-                                  ),
+                                    image: DecorationImage(
+                                        image: AssetImage("assets/auth/lib.jpg"), fit: BoxFit.cover),
                                     borderRadius: BorderRadius.only(
-                                        bottomLeft: Radius.circular(10),
-                                        bottomRight: Radius.circular(10))),
+                                        bottomLeft: Radius.circular(10), bottomRight: Radius.circular(10))),
                               );
                             },
                             itemCount: 1,
                             pagination: new SwiperPagination(
                                 alignment: Alignment.bottomCenter,
                                 builder: DotSwiperPaginationBuilder(
-                                    activeSize: 10,
-                                    color: Colors.grey,
-                                    activeColor: Colors.white),
+                                    activeSize: 10, color: Colors.grey, activeColor: Colors.white),
                                 margin: EdgeInsets.only(bottom: 30)),
                             control: new SwiperControl(
                               color: Colors.white,
@@ -485,9 +391,7 @@ class _HomeState extends State<Home> {
                                 Text(
                                   widget.currentUser.name,
                                   style: TextStyle(
-                                      color: Colors.white,
-                                      fontWeight: FontWeight.w900,
-                                      fontSize: 39),
+                                      color: Colors.white, fontWeight: FontWeight.w900, fontSize: 39),
                                   textAlign: TextAlign.center,
                                 ),
                                 SizedBox(
@@ -495,10 +399,7 @@ class _HomeState extends State<Home> {
                                 ),
                                 Text(
                                   widget.currentUser.address,
-                                  style: TextStyle(
-                                    color: Colors.white,
-                                    fontSize: 20
-                                  ),
+                                  style: TextStyle(color: Colors.white, fontSize: 20),
                                   textAlign: TextAlign.center,
                                 )
                               ],
@@ -513,9 +414,7 @@ class _HomeState extends State<Home> {
                   width: media.size.width - 60,
                   margin: EdgeInsets.only(left: 30, right: 30),
                   padding: EdgeInsets.all(1),
-                  decoration: BoxDecoration(
-                      borderRadius: BorderRadius.circular(10),
-                      color: primaryColor),
+                  decoration: BoxDecoration(borderRadius: BorderRadius.circular(10), color: primaryColor),
                   child: Row(
                     children: <Widget>[
                       Container(
@@ -523,9 +422,7 @@ class _HomeState extends State<Home> {
                         child: Text(
                           'THE GRID',
                           textAlign: TextAlign.center,
-                          style: TextStyle(
-                              color: secondryColor,
-                              fontWeight: FontWeight.bold),
+                          style: TextStyle(color: secondryColor, fontWeight: FontWeight.bold),
                         ),
                       ),
                       Expanded(
@@ -536,11 +433,9 @@ class _HomeState extends State<Home> {
                           decoration: new InputDecoration(
                             border: new OutlineInputBorder(
                               borderRadius: const BorderRadius.only(
-                                  topRight: Radius.circular(10.0),
-                                  bottomRight: Radius.circular(10.0)),
+                                  topRight: Radius.circular(10.0), bottomRight: Radius.circular(10.0)),
                             ),
-                            contentPadding: EdgeInsets.only(
-                                left: 10, right: 5, top: 5, bottom: 5),
+                            contentPadding: EdgeInsets.only(left: 10, right: 5, top: 5, bottom: 5),
                             hintStyle: new TextStyle(color: Colors.grey[800]),
                             hintText: "Search",
                           ),
@@ -573,5 +468,4 @@ class _HomeState extends State<Home> {
       setState(() {});
     }
   }
-
 }

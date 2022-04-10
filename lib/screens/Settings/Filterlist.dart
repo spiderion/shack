@@ -1,19 +1,12 @@
-import 'dart:io';
-import 'package:cached_network_image/cached_network_image.dart';
-import 'package:firebase_auth/firebase_auth.dart';
-import 'package:flutter_grid/models/user_model.dart';
-import 'package:flutter_grid/screens/util/color.dart';
-import 'package:image/image.dart' as i;
 import 'package:cloud_firestore/cloud_firestore.dart';
-import 'package:firebase_storage/firebase_storage.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-import 'package:image_cropper/image_cropper.dart';
-import 'package:image_picker/image_picker.dart';
-import 'package:path_provider/path_provider.dart';
+import 'package:flutter_grid/models/user_model.dart';
 
 class Filterlist extends StatefulWidget {
-  final User currentUser;
+  final AppUser currentUser;
+
   Filterlist(this.currentUser);
 
   @override
@@ -56,11 +49,12 @@ class FilterlistState extends State<Filterlist> {
       updateData();
     }
   }
+
   Future updateData() async {
-    Firestore.instance
+    FirebaseFirestore.instance
         .collection("Users")
-        .document(widget.currentUser.id)
-        .setData(changeValues, merge: true);
+        .doc(widget.currentUser.id)
+        .set(changeValues, SetOptions(merge: true));
     // lastVisible = null;
     // print('ewew$lastVisible');
   }
@@ -85,8 +79,7 @@ class FilterlistState extends State<Filterlist> {
           backgroundColor: Colors.white),
       body: Scaffold(
         backgroundColor: Colors.white,
-        body: Container(
-        ),
+        body: Container(),
       ),
     );
   }

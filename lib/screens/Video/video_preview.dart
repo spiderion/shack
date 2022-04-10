@@ -1,5 +1,3 @@
-import 'dart:io';
-
 import 'package:flutter/material.dart';
 import 'package:flutter_grid/screens/Video/video_controls.dart';
 import 'package:video_player/video_player.dart';
@@ -8,12 +6,12 @@ class VideoPreview extends StatefulWidget {
   const VideoPreview({this.controller});
 
   final VideoPlayerController controller;
+
   @override
   _VideoPreviewState createState() => _VideoPreviewState();
 }
 
-class _VideoPreviewState extends State<VideoPreview>
-    with SingleTickerProviderStateMixin {
+class _VideoPreviewState extends State<VideoPreview> with SingleTickerProviderStateMixin {
   AnimationController _animationController;
 
   @override
@@ -35,7 +33,7 @@ class _VideoPreviewState extends State<VideoPreview>
   @override
   Widget build(BuildContext context) {
     final size = MediaQuery.of(context).size;
-    if (widget.controller.value.initialized) {
+    if (widget.controller.value.isInitialized) {
       return Stack(
         children: <Widget>[
           ClipRect(

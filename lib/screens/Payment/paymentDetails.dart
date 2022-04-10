@@ -1,10 +1,10 @@
-import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_grid/screens/util/color.dart';
 import 'package:in_app_purchase/in_app_purchase.dart';
 
 class PaymentDetails extends StatelessWidget {
   final List<PurchaseDetails> purchases;
+
   PaymentDetails(this.purchases);
 
   @override
@@ -24,13 +24,10 @@ class PaymentDetails extends StatelessWidget {
         body: Container(
             height: MediaQuery.of(context).size.height,
             decoration: BoxDecoration(
-                borderRadius: BorderRadius.only(
-                    topLeft: Radius.circular(50),
-                    topRight: Radius.circular(50)),
+                borderRadius: BorderRadius.only(topLeft: Radius.circular(50), topRight: Radius.circular(50)),
                 color: Colors.white),
             child: ClipRRect(
-              borderRadius: BorderRadius.only(
-                  topLeft: Radius.circular(50), topRight: Radius.circular(50)),
+              borderRadius: BorderRadius.only(topLeft: Radius.circular(50), topRight: Radius.circular(50)),
               child: SingleChildScrollView(
                 child: Column(
                   crossAxisAlignment: CrossAxisAlignment.center,
@@ -40,10 +37,7 @@ class PaymentDetails extends StatelessWidget {
                       Padding(
                         padding: const EdgeInsets.all(38.0),
                         child: Text("Payment Summary:",
-                            style: TextStyle(
-                                color: primaryColor,
-                                fontWeight: FontWeight.bold,
-                                fontSize: 23)),
+                            style: TextStyle(color: primaryColor, fontWeight: FontWeight.bold, fontSize: 23)),
                       ),
                     ]),
                     purchases.length > 0
@@ -72,8 +66,7 @@ class PaymentDetails extends StatelessWidget {
                                                     style: TextStyle(
                                                       fontSize: 15,
                                                       // color: primaryColor,
-                                                      fontWeight:
-                                                          FontWeight.w400,
+                                                      fontWeight: FontWeight.w400,
                                                     ))),
                                           ],
                                           rows: [
@@ -82,23 +75,21 @@ class PaymentDetails extends StatelessWidget {
                                                   style: TextStyle(
                                                     fontSize: 15,
                                                   ))),
-                                              DataCell(
-                                                  Text("${index.purchaseID}",
-                                                      style: TextStyle(
-                                                        fontSize: 15,
-                                                      ))),
+                                              DataCell(Text("${index.purchaseID}",
+                                                  style: TextStyle(
+                                                    fontSize: 15,
+                                                  ))),
                                             ]),
                                             DataRow(cells: [
                                               DataCell(Text("product_id",
                                                   style: TextStyle(
                                                     fontSize: 15,
                                                   ))),
-                                              DataCell(
-                                                  Text("${index.productID}",
-                                                      style: TextStyle(
-                                                        fontSize: 15,
-                                                        // color: primaryColor,
-                                                      ))),
+                                              DataCell(Text("${index.productID}",
+                                                  style: TextStyle(
+                                                    fontSize: 15,
+                                                    // color: primaryColor,
+                                                  ))),
                                             ]),
                                             DataRow(cells: [
                                               DataCell(Text("Subscribed on",
@@ -107,8 +98,7 @@ class PaymentDetails extends StatelessWidget {
                                                   ))),
                                               DataCell(Text(
                                                   DateTime.fromMillisecondsSinceEpoch(
-                                                          int.parse(index
-                                                              .transactionDate))
+                                                          int.parse(index.transactionDate))
                                                       .toLocal()
                                                       .toString(),
                                                   style: TextStyle(
@@ -122,14 +112,11 @@ class PaymentDetails extends StatelessWidget {
                                                     fontSize: 15,
                                                   ))),
                                               DataCell(Text(
-                                                  index.billingClientPurchase
-                                                          .isAutoRenewing
+                                                  index.billingClientPurchase.isAutoRenewing
                                                       ? "Active"
                                                       : "Cancelled",
                                                   style: TextStyle(
-                                                    color: index
-                                                            .billingClientPurchase
-                                                            .isAutoRenewing
+                                                    color: index.billingClientPurchase.isAutoRenewing
                                                         ? Colors.green
                                                         : Colors.red,
                                                     fontSize: 15,
@@ -153,8 +140,7 @@ class PaymentDetails extends StatelessWidget {
                       child: InkWell(
                         child: Card(
                           color: primaryColor,
-                          shape: RoundedRectangleBorder(
-                              borderRadius: BorderRadius.circular(25)),
+                          shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(25)),
                           child: Center(
                               child: Text(
                             "Back",

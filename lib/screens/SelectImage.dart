@@ -1,19 +1,16 @@
-
 import 'dart:io';
 
-import 'package:flutter/cupertino.dart';
-import 'package:flutter/gestures.dart';
-import 'package:flutter/material.dart';
-import 'package:flutter_grid/models/user_model.dart';
-import 'package:flutter_grid/screens/UserName.dart';
-import 'package:image_cropper/image_cropper.dart';
-import 'package:image_picker/image_picker.dart';
-import 'package:path_provider/path_provider.dart';
-import 'package:image/image.dart' as i;
-import 'package:cached_network_image/cached_network_image.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:firebase_storage/firebase_storage.dart';
+import 'package:flutter/cupertino.dart';
+import 'package:flutter/material.dart';
+import 'package:flutter_grid/models/user_model.dart';
+import 'package:flutter_grid/screens/UserName.dart';
+import 'package:image/image.dart' as i;
+import 'package:image_cropper/image_cropper.dart';
+import 'package:image_picker/image_picker.dart';
+import 'package:path_provider/path_provider.dart';
 
 class SelectImage extends StatefulWidget {
   SelectImage();
@@ -22,28 +19,27 @@ class SelectImage extends StatefulWidget {
   _SelectImageState createState() => _SelectImageState();
 }
 
-
 class _SelectImageState extends State<SelectImage> {
   final _scaffoldKey = GlobalKey<ScaffoldState>();
   String code;
-  CollectionReference docRef = Firestore.instance.collection('Users');
-  User currentUser;
+  CollectionReference docRef = FirebaseFirestore.instance.collection('Users');
+  AppUser currentUser;
 
   @override
   void initState() {
     super.initState();
     getcurrentuser();
   }
-  getcurrentuser() async {
-    await FirebaseAuth.instance.currentUser().then((_user) {
-      if(_user != null){
-        docRef.document("${_user.uid}").snapshots().listen((data) {
-          currentUser = User.fromimageDocument(data);
-        });
 
-      }
-    });
+  getcurrentuser() async {
+    final _user = FirebaseAuth.instance.currentUser;
+    if (_user != null) {
+      docRef.doc("${_user.uid}").snapshots().listen((data) {
+        currentUser = AppUser.fromimageDocument(data);
+      });
+    }
   }
+
   Widget build(BuildContext context) {
     final ThemeData _theme = Theme.of(context);
     MediaQueryData mediaQueryData = MediaQuery.of(context);
@@ -73,24 +69,27 @@ class _SelectImageState extends State<SelectImage> {
                     height: 20,
                   ),
                   ListTile(
-                    title: Text(
-                      "ADD A PROFILE\nPICTURE",
-                      textAlign: TextAlign.center,
-                      style: TextStyle(fontSize: 30, fontWeight: FontWeight.w900, color: _theme.backgroundColor),
-                    ),
-                    subtitle: Container(
-                      padding: EdgeInsets.only(top: 10),
-                      child: Text(
-                        "Add a photo so your friends can see you",
+                      title: Text(
+                        "ADD A PROFILE\nPICTURE",
                         textAlign: TextAlign.center,
-                        style: TextStyle(fontSize: 15, color: Colors.black),
+                        style: TextStyle(
+                            fontSize: 30, fontWeight: FontWeight.w900, color: _theme.backgroundColor),
                       ),
-                    )
-                  ),
+                      subtitle: Container(
+                        padding: EdgeInsets.only(top: 10),
+                        child: Text(
+                          "Add a photo so your friends can see you",
+                          textAlign: TextAlign.center,
+                          style: TextStyle(fontSize: 15, color: Colors.black),
+                        ),
+                      )),
                   Container(
                     height: 180,
                     margin: EdgeInsets.only(top: 80),
-                    child: Image.asset('assets/auth/user.png', fit: BoxFit.fitHeight,),
+                    child: Image.asset(
+                      'assets/auth/user.png',
+                      fit: BoxFit.fitHeight,
+                    ),
                   )
                 ],
               ),
@@ -109,37 +108,33 @@ class _SelectImageState extends State<SelectImage> {
                       height: 50,
                       margin: EdgeInsets.only(top: 10, bottom: 10),
                       child: FlatButton(
-                        shape: RoundedRectangleBorder(
-                          borderRadius: BorderRadius.circular(8.0),
-                        ),
-                        color: _theme.backgroundColor,
-                        padding: EdgeInsets.all(8),
-                        textColor: _theme.primaryColor,
-                        onPressed: (){
-                          showDialog(
-                              barrierDismissible: false,
-                              context: context,
-                              builder: (context) {
-                                getImage(ImageSource.gallery, context,
-                                    currentUser);
-                                return Center(
-                                    child: CircularProgressIndicator(
-                                      strokeWidth: 2,
-                                      valueColor: AlwaysStoppedAnimation<Color>(
-                                          Colors.white),
-                                    ));
-                              });
-                        },
-                        child: Container(
-                          alignment: Alignment.center,
-                          child: Text('CHOOSE A PHOTO',
-                            style: TextStyle(
-                                fontWeight: FontWeight.w900,
-                                fontSize: 15
+                          shape: RoundedRectangleBorder(
+                            borderRadius: BorderRadius.circular(8.0),
+                          ),
+                          color: _theme.backgroundColor,
+                          padding: EdgeInsets.all(8),
+                          textColor: _theme.primaryColor,
+                          onPressed: () {
+                            showDialog(
+                                barrierDismissible: false,
+                                context: context,
+                                builder: (context) {
+                                  getImage(ImageSource.gallery, context, currentUser);
+                                  return Center(
+                                      child: CircularProgressIndicator(
+                                    strokeWidth: 2,
+                                    valueColor: AlwaysStoppedAnimation<Color>(Colors.white),
+                                  ));
+                                });
+                          },
+                          child: Container(
+                            alignment: Alignment.center,
+                            child: Text(
+                              'CHOOSE A PHOTO',
+                              style: TextStyle(fontWeight: FontWeight.w900, fontSize: 15),
+                              textAlign: TextAlign.center,
                             ),
-                            textAlign: TextAlign.center,),
-                        )
-                      ),
+                          )),
                     ),
                     Container(
                       width: double.infinity,
@@ -152,30 +147,26 @@ class _SelectImageState extends State<SelectImage> {
                           color: _theme.backgroundColor,
                           padding: EdgeInsets.all(8),
                           textColor: _theme.primaryColor,
-                          onPressed: (){
+                          onPressed: () {
                             showDialog(
                                 context: context,
                                 builder: (context) {
-                                  getImage(
-                                      ImageSource.camera, context, currentUser);
+                                  getImage(ImageSource.camera, context, currentUser);
                                   return Center(
                                       child: CircularProgressIndicator(
-                                        strokeWidth: 2,
-                                        valueColor: AlwaysStoppedAnimation<Color>(
-                                            Colors.white),
-                                      ));
+                                    strokeWidth: 2,
+                                    valueColor: AlwaysStoppedAnimation<Color>(Colors.white),
+                                  ));
                                 });
                           },
                           child: Container(
                             alignment: Alignment.center,
-                            child: Text('TAKE A PHOTO',
-                              style: TextStyle(
-                                  fontWeight: FontWeight.w900,
-                                  fontSize: 15
-                              ),
-                              textAlign: TextAlign.center,),
-                          )
-                      ),
+                            child: Text(
+                              'TAKE A PHOTO',
+                              style: TextStyle(fontWeight: FontWeight.w900, fontSize: 15),
+                              textAlign: TextAlign.center,
+                            ),
+                          )),
                     ),
                   ],
                 ),
@@ -186,11 +177,12 @@ class _SelectImageState extends State<SelectImage> {
       ),
     );
   }
+
   Future getImage(ImageSource imageSource, context, currentUser) async {
     ThemeData _theme = Theme.of(context);
-    var image = await ImagePicker.pickImage(source: imageSource);
+    var image = await ImagePicker().pickImage(source: imageSource);
     if (image != null) {
-      File croppedFile = await ImageCropper.cropImage(
+      File croppedFile = await ImageCropper().cropImage(
           sourcePath: image.path,
           aspectRatioPresets: [CropAspectRatioPreset.square],
           androidUiSettings: AndroidUiSettings(
@@ -208,17 +200,17 @@ class _SelectImageState extends State<SelectImage> {
     }
     Navigator.pop(context);
   }
-  Future uploadFile(File image,User currentUser) async {
-    StorageReference storageReference = FirebaseStorage.instance
-        .ref()
-        .child('users/${currentUser.id}/${image.hashCode}.jpg');
-    StorageUploadTask uploadTask = storageReference.putFile(image);
-    if (uploadTask.isInProgress == true) {}
-    if (await uploadTask.onComplete != null) {
+
+  Future uploadFile(File image, AppUser currentUser) async {
+    Reference storageReference =
+        FirebaseStorage.instance.ref().child('users/${currentUser.id}/${image.hashCode}.jpg');
+    UploadTask uploadTask = storageReference.putFile(image);
+    // if (uploadTask.isInProgress == true) {}
+    uploadTask.whenComplete(() {
       storageReference.getDownloadURL().then((fileURL) async {
         if (mounted)
           setState(() {
-            if(currentUser.imageUrl == null){
+            if (currentUser.imageUrl == null) {
               currentUser.imageUrl = List();
             }
             currentUser.imageUrl.add(fileURL);
@@ -232,23 +224,18 @@ class _SelectImageState extends State<SelectImage> {
           ])
         };
         try {
-          await Firestore.instance
-              .collection("Users")
-              .document(currentUser.id)
-              .setData(updateObject);
-          Navigator.push(
-              context, CupertinoPageRoute(builder: (context) => UserName()));
-        } catch (err) {
-        }
+          await FirebaseFirestore.instance.collection("Users").doc(currentUser.id).set(updateObject);
+          Navigator.push(context, CupertinoPageRoute(builder: (context) => UserName()));
+        } catch (err) {}
       });
-    }
+    });
   }
+
   Future compressimage(File image) async {
     final tempdir = await getTemporaryDirectory();
     final path = tempdir.path;
     i.Image imagefile = i.decodeImage(image.readAsBytesSync());
-    final compressedImagefile = File('$path.jpg')
-      ..writeAsBytesSync(i.encodeJpg(imagefile, quality: 80));
+    final compressedImagefile = File('$path.jpg')..writeAsBytesSync(i.encodeJpg(imagefile, quality: 80));
     // setState(() {
     return compressedImagefile;
     // });

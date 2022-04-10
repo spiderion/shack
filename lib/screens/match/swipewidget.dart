@@ -36,6 +36,7 @@ class _SwipeWidget extends State<SwipeWidget> {
     getanswerlist();
     getfollowlist();
   }
+
   @override
   Widget build(BuildContext context) {
     //  if()
@@ -44,9 +45,8 @@ class _SwipeWidget extends State<SwipeWidget> {
     MediaQueryData mediaQueryData = MediaQuery.of(context);
     final ThemeData _theme = Theme.of(context);
     bool check_follow = false;
-    for(int i= 0; i < followedUser.length; i++){
-      if(followedUser[i] == widget.currentUser.id)
-        check_follow = true;
+    for (int i = 0; i < followedUser.length; i++) {
+      if (followedUser[i] == widget.currentUser.id) check_follow = true;
     }
     return Container(
       child: SingleChildScrollView(
@@ -62,16 +62,11 @@ class _SwipeWidget extends State<SwipeWidget> {
                       Text(
                         "${widget.user.name}, ${widget.user.age}",
                         style: TextStyle(
-                            color: _theme.backgroundColor,
-                            fontSize: 20,
-                            fontWeight: FontWeight.w900),
+                            color: _theme.backgroundColor, fontSize: 20, fontWeight: FontWeight.w900),
                       ),
                       Text(
                         "${widget.user.editInfo['DistanceVisible'] != null ? widget.user.editInfo['DistanceVisible'] ? 'Less than ${widget.user.distanceBW} KM away' : 'Distance not visible' : 'Less than ${widget.user.distanceBW} KM away'}",
-                        style: TextStyle(
-                            color: primaryColor,
-                            fontSize: 15,
-                            fontWeight: FontWeight.w500),
+                        style: TextStyle(color: primaryColor, fontSize: 15, fontWeight: FontWeight.w500),
                       ),
                     ],
                   ),
@@ -81,8 +76,7 @@ class _SwipeWidget extends State<SwipeWidget> {
                         padding: EdgeInsets.only(left: 3, right: 3),
                         child: Text(
                           '1\nPosts',
-                          style: TextStyle(
-                              color: primaryColor, fontWeight: FontWeight.bold),
+                          style: TextStyle(color: primaryColor, fontWeight: FontWeight.bold),
                           textAlign: TextAlign.center,
                         ),
                       ),
@@ -90,8 +84,7 @@ class _SwipeWidget extends State<SwipeWidget> {
                         padding: EdgeInsets.only(left: 3, right: 3),
                         child: Text(
                           '${followedUser.length}\nFollowers',
-                          style: TextStyle(
-                              color: primaryColor, fontWeight: FontWeight.bold),
+                          style: TextStyle(color: primaryColor, fontWeight: FontWeight.bold),
                           textAlign: TextAlign.center,
                         ),
                       ),
@@ -99,8 +92,7 @@ class _SwipeWidget extends State<SwipeWidget> {
                         padding: EdgeInsets.only(left: 3, right: 3),
                         child: Text(
                           '${followingUser.length}\nFollowing',
-                          style: TextStyle(
-                              color: primaryColor, fontWeight: FontWeight.bold),
+                          style: TextStyle(color: primaryColor, fontWeight: FontWeight.bold),
                           textAlign: TextAlign.center,
                         ),
                       )
@@ -122,18 +114,17 @@ class _SwipeWidget extends State<SwipeWidget> {
                   padding: EdgeInsets.all(8),
                   textColor: secondryColor,
                   onPressed: () {
-                    if(check_follow){
+                    if (check_follow) {
                       unfollowuser();
-                    } else{
+                    } else {
                       followuser();
                     }
                   },
                   child: Container(
                     alignment: Alignment.center,
                     child: Text(
-                      (check_follow? 'UNFOLLOW ': 'FOLLOW ') + widget.user.name,
-                      style:
-                          TextStyle(fontWeight: FontWeight.w900, fontSize: 15),
+                      (check_follow ? 'UNFOLLOW ' : 'FOLLOW ') + widget.user.name,
+                      style: TextStyle(fontWeight: FontWeight.w900, fontSize: 15),
                       textAlign: TextAlign.center,
                     ),
                   )),
@@ -142,8 +133,7 @@ class _SwipeWidget extends State<SwipeWidget> {
               length: 3,
               child: Builder(
                 builder: (BuildContext context) {
-                  final TabController tabController =
-                      DefaultTabController.of(context);
+                  final TabController tabController = DefaultTabController.of(context);
                   tabindex = DefaultTabController.of(context).index;
                   tabController.addListener(() {
                     if (!tabController.indexIsChanging) {
@@ -178,11 +168,7 @@ class _SwipeWidget extends State<SwipeWidget> {
                         height: mediaQueryData.size.width,
                         width: mediaQueryData.size.width,
                         child: TabBarView(
-                          children: <Widget>[
-                            profileimage(),
-                            answerview(),
-                            ignoreview()
-                          ],
+                          children: <Widget>[profileimage(), answerview(), ignoreview()],
                         ),
                       )
                     ],
@@ -223,9 +209,7 @@ class _SwipeWidget extends State<SwipeWidget> {
                       : BoxDecoration(
                           borderRadius: BorderRadius.circular(10),
                           border: Border.all(
-                              style: BorderStyle.solid,
-                              width: 1,
-                              color: Theme.of(context).backgroundColor)),
+                              style: BorderStyle.solid, width: 1, color: Theme.of(context).backgroundColor)),
                   child: Stack(
                     children: <Widget>[
                       widget.user.imageUrl.length > index
@@ -269,9 +253,9 @@ class _SwipeWidget extends State<SwipeWidget> {
 
   answerview() {
     List<Question_model> temp = [];
-    for(int i = 0; i < questions.length; i++){
-      if(myanswer.length > i && useranswer.length > i){
-        if(myanswer[i].answer == useranswer[i].answer && useranswer[i].answer == true){
+    for (int i = 0; i < questions.length; i++) {
+      if (myanswer.length > i && useranswer.length > i) {
+        if (myanswer[i].answer == useranswer[i].answer && useranswer[i].answer == true) {
           temp.add(questions[i]);
         }
       }
@@ -285,15 +269,12 @@ class _SwipeWidget extends State<SwipeWidget> {
             children: <Widget>[
               widget.user.editInfo['about'] != null
                   ? Text(
-                "${widget.user.editInfo['about']}",
-                style: TextStyle(
-                    color: Colors.black,
-                    fontSize: 16,
-                    fontWeight: FontWeight.w500),
-                textAlign: TextAlign.start,
-              )
+                      "${widget.user.editInfo['about']}",
+                      style: TextStyle(color: Colors.black, fontSize: 16, fontWeight: FontWeight.w500),
+                      textAlign: TextAlign.start,
+                    )
                   : Container(),
-              for(int i = 0; i < temp.length; i++)
+              for (int i = 0; i < temp.length; i++)
                 Container(
                   padding: EdgeInsets.only(top: 10, bottom: 10),
                   child: Row(
@@ -304,8 +285,7 @@ class _SwipeWidget extends State<SwipeWidget> {
                         margin: EdgeInsets.only(right: 5),
                         decoration: BoxDecoration(
                             borderRadius: BorderRadius.circular(5),
-                            border:
-                            Border.all(color: primaryColor),
+                            border: Border.all(color: primaryColor),
                             color: primaryColor),
                         child: Center(
                           child: Icon(
@@ -315,180 +295,150 @@ class _SwipeWidget extends State<SwipeWidget> {
                           ),
                         ),
                       ),
-                      Text(
-                          temp[i].title
-                      )
+                      Text(temp[i].title)
                     ],
-
                   ),
                 )
             ],
           ),
-        )
-    );
+        ));
   }
 
   ignoreview() {
     List<Question_model> temp = [];
-    for(int i = 0; i < questions.length; i++){
-      if(myanswer.length > i && useranswer.length > i){
-        if(myanswer[i].answer == useranswer[i].answer && useranswer[i].answer == false){
+    for (int i = 0; i < questions.length; i++) {
+      if (myanswer.length > i && useranswer.length > i) {
+        if (myanswer[i].answer == useranswer[i].answer && useranswer[i].answer == false) {
           temp.add(questions[i]);
         }
       }
     }
     return Container(
-      padding: EdgeInsets.all(30),
-      child: SingleChildScrollView(
-        child: Column(
-          mainAxisAlignment: MainAxisAlignment.start,
-          crossAxisAlignment: CrossAxisAlignment.start,
-          children: <Widget>[
-            widget.user.editInfo['about'] != null
-                ? Text(
-              "${widget.user.editInfo['about']}",
-              style: TextStyle(
-                  color: Colors.black,
-                  fontSize: 16,
-                  fontWeight: FontWeight.w500),
-              textAlign: TextAlign.start,
-            )
-                : Container(),
-            for(int i = 0; i < temp.length; i++)
-              Container(
-                padding: EdgeInsets.only(top: 10, bottom: 10),
-                child: Row(
-                  children: <Widget>[
-                    Container(
-                      height: 30,
-                      width: 30,
-                      margin: EdgeInsets.only(right: 5),
-                      decoration: BoxDecoration(
-                          borderRadius: BorderRadius.circular(5),
-                          border:
-                          Border.all(color: Colors.grey),
-                          color: Colors.grey),
-                      child: Center(
-                        child: Icon(
-                          Icons.clear,
-                          color: Colors.white,
-                          size: 30,
+        padding: EdgeInsets.all(30),
+        child: SingleChildScrollView(
+          child: Column(
+            mainAxisAlignment: MainAxisAlignment.start,
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: <Widget>[
+              widget.user.editInfo['about'] != null
+                  ? Text(
+                      "${widget.user.editInfo['about']}",
+                      style: TextStyle(color: Colors.black, fontSize: 16, fontWeight: FontWeight.w500),
+                      textAlign: TextAlign.start,
+                    )
+                  : Container(),
+              for (int i = 0; i < temp.length; i++)
+                Container(
+                  padding: EdgeInsets.only(top: 10, bottom: 10),
+                  child: Row(
+                    children: <Widget>[
+                      Container(
+                        height: 30,
+                        width: 30,
+                        margin: EdgeInsets.only(right: 5),
+                        decoration: BoxDecoration(
+                            borderRadius: BorderRadius.circular(5),
+                            border: Border.all(color: Colors.grey),
+                            color: Colors.grey),
+                        child: Center(
+                          child: Icon(
+                            Icons.clear,
+                            color: Colors.white,
+                            size: 30,
+                          ),
                         ),
                       ),
-                    ),
-                    Text(
-                        temp[i].title
-                    )
-                  ],
-
-                ),
-              )
-          ],
-        ),
-      )
-    );
+                      Text(temp[i].title)
+                    ],
+                  ),
+                )
+            ],
+          ),
+        ));
   }
 
   void getanswerlist() {
-
-    Firestore.instance
-        .collection('/Users/${widget.currentUser.id}/Questions').getDocuments().then((data) {
-
+    FirebaseFirestore.instance.collection('/Users/${widget.currentUser.id}/Questions').get().then((data) {
       List<Answer_model> tempanswer = [];
 
-      data.documents.forEach((element) {
+      data.docs.forEach((element) {
         Answer_model temp = Answer_model.fromDocument(element);
         tempanswer.add(temp);
       });
-      print(questions.length );
+      print(questions.length);
       print(tempanswer.length);
-      for(int i = 0; i < questions.length; i++){
+      for (int i = 0; i < questions.length; i++) {
         bool checkTemp = false;
-        for(int j = 0; j < tempanswer.length; j++){
-
-          if(questions[i].id == tempanswer[j].id){
+        for (int j = 0; j < tempanswer.length; j++) {
+          if (questions[i].id == tempanswer[j].id) {
             checkTemp = true;
             myanswer.insert(i, tempanswer[j]);
-
           }
         }
-        if(!checkTemp){
+        if (!checkTemp) {
           Answer_model tmp_model = Answer_model(answer: false, id: questions[i].id);
           myanswer.insert(i, tmp_model);
         }
-        setState(() {
-
-        });
-
+        setState(() {});
       }
     });
 
-
-    Firestore.instance
-        .collection('/Users/${widget.user.id}/Questions').getDocuments().then((data) {
-
+    FirebaseFirestore.instance.collection('/Users/${widget.user.id}/Questions').get().then((data) {
       List<Answer_model> tempanswer = [];
 
-      data.documents.forEach((element) {
+      data.docs.forEach((element) {
         Answer_model temp = Answer_model.fromDocument(element);
         tempanswer.add(temp);
       });
-      print(questions.length );
+      print(questions.length);
       print(tempanswer.length);
-      for(int i = 0; i < questions.length; i++){
+      for (int i = 0; i < questions.length; i++) {
         bool checkTemp = false;
-        for(int j = 0; j < tempanswer.length; j++){
-
-          if(questions[i].id == tempanswer[j].id){
+        for (int j = 0; j < tempanswer.length; j++) {
+          if (questions[i].id == tempanswer[j].id) {
             checkTemp = true;
             useranswer.insert(i, tempanswer[j]);
-
           }
         }
-        if(!checkTemp){
+        if (!checkTemp) {
           Answer_model tmp_model = Answer_model(answer: false, id: questions[i].id);
           useranswer.insert(i, tmp_model);
         }
-        setState(() {
-
-        });
-
+        setState(() {});
       }
     });
   }
 
   void getfollowlist() {
-    Firestore.instance.collection('Users/${widget.user.id}/followers').snapshots().listen((data) {
+    FirebaseFirestore.instance.collection('Users/${widget.user.id}/followers').snapshots().listen((data) {
       followedUser.clear();
-      followedUser.addAll(data.documents.map((f) => f['followers']));
-      if(mounted)setState(() {
-
-      });
+      followedUser.addAll(data.docs.map((f) => f['followers']));
+      if (mounted) setState(() {});
     });
-    Firestore.instance.collection('Users/${widget.user.id}/following').snapshots().listen((data) {
+    FirebaseFirestore.instance.collection('Users/${widget.user.id}/following').snapshots().listen((data) {
       followingUser.clear();
-      followingUser.addAll(data.documents.map((f) => f['following']));
-      if(mounted)setState(() {
-
-      });
+      followingUser.addAll(data.docs.map((f) => f['following']));
+      if (mounted) setState(() {});
     });
   }
 
   void followuser() {
-    Firestore.instance.collection('Users')
-        .document(widget.user.id)
+    FirebaseFirestore.instance
+        .collection('Users')
+        .doc(widget.user.id)
         .collection("followers")
-        .document(widget.currentUser.id)
-        .setData(
+        .doc(widget.currentUser.id)
+        .set(
       {
         'followers': widget.currentUser.id,
       },
     );
-    Firestore.instance.collection('Users')
-        .document(widget.currentUser.id)
+    FirebaseFirestore.instance
+        .collection('Users')
+        .doc(widget.currentUser.id)
         .collection("following")
-        .document(widget.user.id)
-        .setData(
+        .doc(widget.user.id)
+        .set(
       {
         'following': widget.user.id,
       },
@@ -496,16 +446,17 @@ class _SwipeWidget extends State<SwipeWidget> {
   }
 
   void unfollowuser() {
-    Firestore.instance.collection('Users')
-        .document(widget.user.id)
+    FirebaseFirestore.instance
+        .collection('Users')
+        .doc(widget.user.id)
         .collection("followers")
-        .document(widget.currentUser.id)
+        .doc(widget.currentUser.id)
         .delete();
-    Firestore.instance.collection('Users')
-        .document(widget.currentUser.id)
+    FirebaseFirestore.instance
+        .collection('Users')
+        .doc(widget.currentUser.id)
         .collection("following")
-        .document(widget.user.id)
+        .doc(widget.user.id)
         .delete();
   }
-
 }

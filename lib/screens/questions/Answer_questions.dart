@@ -2,12 +2,11 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_grid/elements/CardsCarouselLoaderWidget.dart';
-import 'package:flutter_grid/screens/util/color.dart';
-import 'package:flutter_grid/models/question_model.dart';
 import 'package:flutter_grid/elements/QuestionWidget.dart';
+import 'package:flutter_grid/models/question_model.dart';
+import 'package:flutter_grid/screens/util/color.dart';
 
 class Answer_quetions extends StatefulWidget {
-
   Answer_quetions();
 
   @override
@@ -15,7 +14,6 @@ class Answer_quetions extends StatefulWidget {
 }
 
 class _Answer_quetionsState extends State<Answer_quetions> {
-
   List<Question_model> questions = [];
 
   @override
@@ -44,33 +42,30 @@ class _Answer_quetionsState extends State<Answer_quetions> {
         width: double.infinity,
         height: double.infinity,
         child: Container(
-          child: questions.length != 0? ListView.builder(
-            scrollDirection: Axis.horizontal,
-            itemCount: questions.length,
-            itemBuilder: (context, index){
-              return QuestionWidget(model: questions.elementAt(index),);
-            },
-          ):
-          CardsCarouselLoaderWidget()
-        ),
+            child: questions.length != 0
+                ? ListView.builder(
+                    scrollDirection: Axis.horizontal,
+                    itemCount: questions.length,
+                    itemBuilder: (context, index) {
+                      return QuestionWidget(
+                        model: questions.elementAt(index),
+                      );
+                    },
+                  )
+                : CardsCarouselLoaderWidget()),
       ),
     );
   }
 
-  _getquetions(){
-
-    return Firestore.instance.collection('questions')
-        .snapshots().listen((onData) {
-          if(onData.documents.length > 0){
-            onData.documents.forEach((f) {
-              Question_model tempmodel = Question_model.fromDocument(f);
-              questions.add(tempmodel);
-              setState(() {
-
-              });
-            });
-          }
+  _getquetions() {
+    return FirebaseFirestore.instance.collection('questions').snapshots().listen((onData) {
+      if (onData.docs.length > 0) {
+        onData.docs.forEach((f) {
+          Question_model tempmodel = Question_model.fromDocument(f);
+          questions.add(tempmodel);
+          setState(() {});
+        });
+      }
     });
   }
-
 }

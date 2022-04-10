@@ -6,7 +6,7 @@ import 'package:flutter_grid/models/user_model.dart';
 import 'package:flutter_grid/screens/util/color.dart';
 
 class Filters extends StatefulWidget {
-  final User currentUser;
+  final AppUser currentUser;
   Filters(this.currentUser);
 
   @override
@@ -33,10 +33,10 @@ class _FiltersState extends State<Filters> {
   }
 
   Future updateData() async {
-    Firestore.instance
+    FirebaseFirestore.instance
         .collection("Users")
-        .document(widget.currentUser.id)
-        .setData(changeValues, merge: true);
+        .doc(widget.currentUser.id)
+        .set(changeValues, SetOptions(merge: true));
     // lastVisible = null;
     // print('ewew$lastVisible');
   }

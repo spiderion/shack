@@ -1,4 +1,4 @@
-import 'package:agora_rtc_engine/agora_rtc_engine.dart';
+import 'package:agora_rtc_engine/rtc_engine.dart';
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/cupertino.dart';
@@ -17,7 +17,7 @@ class Incoming extends StatefulWidget {
 }
 
 class _IncomingState extends State<Incoming> with TickerProviderStateMixin {
-  CollectionReference callRef = Firestore.instance.collection("calls");
+  CollectionReference callRef = FirebaseFirestore.instance.collection("calls");
 
   bool ispickup = false;
   AnimationController _controller;
@@ -46,8 +46,8 @@ class _IncomingState extends State<Incoming> with TickerProviderStateMixin {
     ispickup = true;
     super.dispose();
     await callRef
-        .document(widget.callInfo['channel_id'])
-        .updateData({'calling': false});
+        .doc(widget.callInfo['channel_id'])
+        .update({'calling': false});
   }
 
   @override
@@ -83,8 +83,8 @@ class _IncomingState extends State<Incoming> with TickerProviderStateMixin {
                 Container();
               } else
                 try {
-                  if (snapshot.data.documents[0]['calling'])
-                    switch (snapshot.data.documents[0]['response']) {
+                  if (snapshot.data.docs[0]['calling'])
+                    switch (snapshot.data.docs[0]['response']) {
                       //wait for pick the call
                       case "Awaiting":
                         {
@@ -93,7 +93,7 @@ class _IncomingState extends State<Incoming> with TickerProviderStateMixin {
                             crossAxisAlignment: CrossAxisAlignment.center,
                             children: <Widget>[
                               Text(
-                                snapshot.data.documents[0]['callType'] ==
+                                snapshot.data.docs[0]['callType'] ==
                                         "VideoCall"
                                     ? "Incoming Video Call"
                                     : "Incoming Audio Call",
@@ -209,7 +209,7 @@ class _IncomingState extends State<Incoming> with TickerProviderStateMixin {
                                         heroTag: UniqueKey(),
                                         backgroundColor: Colors.green,
                                         child: Icon(
-                                          snapshot.data.documents[0]
+                                          snapshot.data.docs[0]
                                                       ['callType'] ==
                                                   "VideoCall"
                                               ? Icons.video_call
@@ -218,12 +218,12 @@ class _IncomingState extends State<Incoming> with TickerProviderStateMixin {
                                         ),
                                         onPressed: () async {
                                           await handleCameraAndMic(snapshot
-                                              .data.documents[0]['callType']);
+                                              .data.docs[0]['callType']);
                                           ispickup = true;
                                           await callRef
-                                              .document(
+                                              .doc(
                                                   widget.callInfo['channel_id'])
-                                              .updateData(
+                                              .update(
                                                   {'response': "Pickup"});
                                           await FlutterRingtonePlayer.stop();
                                         }),
@@ -234,9 +234,9 @@ class _IncomingState extends State<Incoming> with TickerProviderStateMixin {
                                             color: Colors.white),
                                         onPressed: () async {
                                           await callRef
-                                              .document(
+                                              .doc(
                                                   widget.callInfo['channel_id'])
-                                              .updateData(
+                                              .update(
                                                   {'response': 'Decline'});
                                         })
                                   ],
@@ -252,7 +252,7 @@ class _IncomingState extends State<Incoming> with TickerProviderStateMixin {
                           return CallPage(
                             channelName: widget.callInfo['channel_id'],
                             role: ClientRole.Broadcaster,
-                            callType: snapshot.data.documents[0]['callType'],
+                            callType: snapshot.data.docs[0]['callType'],
                           );
                         }
                         break;

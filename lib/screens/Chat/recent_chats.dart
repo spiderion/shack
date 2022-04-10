@@ -9,7 +9,7 @@ import 'package:intl/intl.dart';
 import 'package:persistent_bottom_nav_bar/persistent-tab-view.dart';
 
 class RecentChats extends StatelessWidget {
-  final db = Firestore.instance;
+  final db = FirebaseFirestore.instance;
   final AppUser currentUser;
   final List<AppUser> matches;
 
@@ -51,7 +51,7 @@ class RecentChats extends StatelessWidget {
                             child: StreamBuilder(
                                 stream: db
                                     .collection("chats")
-                                    .document(chatId(currentUser, index))
+                                    .doc(chatId(currentUser, index))
                                     .collection('messages')
                                     .orderBy('time', descending: true)
                                     .snapshots(),

@@ -1,32 +1,35 @@
+import 'dart:io';
 import 'dart:math';
+
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_storage/firebase_storage.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_grid/models/user_model.dart';
+import 'package:flutter_grid/screens/Calling/dial.dart';
+import 'package:flutter_grid/screens/Calling/utils/settings.dart';
 import 'package:flutter_grid/screens/Chat/largeImage.dart';
 import 'package:flutter_grid/screens/match/Information.dart';
-import 'package:flutter_grid/screens/match/Informations.dart';
 import 'package:flutter_grid/screens/util/CustomSnackbar.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:intl/intl.dart';
 import 'package:permission_handler/permission_handler.dart';
-import 'package:flutter_grid/screens/Calling/utils/settings.dart';
-import 'package:flutter_grid/screens/Calling/dial.dart';
 
 class ChatPage extends StatefulWidget {
   final AppUser sender;
   final String chatId;
   final AppUser second;
+
   ChatPage({this.sender, this.chatId, this.second});
+
   @override
   _ChatPageState createState() => _ChatPageState();
 }
 
 class _ChatPageState extends State<ChatPage> {
   bool isBlocked = false;
-  final db = Firestore.instance;
+  final db = FirebaseFirestore.instance;
   CollectionReference chatReference;
   final TextEditingController _textController = new TextEditingController();
   bool _isWritting = false;
@@ -36,17 +39,17 @@ class _ChatPageState extends State<ChatPage> {
   void initState() {
     print("object    -${widget.chatId}");
     super.initState();
-    chatReference =
-        db.collection("chats").document(widget.chatId).collection('messages');
+    chatReference = db.collection("chats").doc(widget.chatId).collection('messages');
     checkblock();
   }
 
   var blockedBy;
+
   checkblock() {
-    chatReference.document('blocked').snapshots().listen((onData) {
+    chatReference.doc('blocked').snapshots().listen((onData) {
       if (onData.data != null) {
-        blockedBy = onData.data['blockedBy'];
-        if (onData.data['isBlocked']) {
+        blockedBy = (onData.data() as Map<String, dynamic>)['blockedBy'];
+        if ((onData.data() as Map<String, dynamic>)['isBlocked']) {
           isBlocked = true;
         } else {
           isBlocked = false;
@@ -66,14 +69,13 @@ class _ChatPageState extends State<ChatPage> {
           crossAxisAlignment: CrossAxisAlignment.end,
           children: <Widget>[
             Container(
-              child: documentSnapshot.data['image_url'] != ''
+              child: (documentSnapshot.data() as Map<String, dynamic>)['image_url'] != ''
                   ? InkWell(
                       child: Column(
                         crossAxisAlignment: CrossAxisAlignment.end,
                         children: <Widget>[
                           new Container(
-                            margin: EdgeInsets.only(
-                                top: 2.0, bottom: 2.0, right: 15),
+                            margin: EdgeInsets.only(top: 2.0, bottom: 2.0, right: 15),
                             child: Stack(
                               children: <Widget>[
                                 CachedNetworkImage(
@@ -82,28 +84,25 @@ class _ChatPageState extends State<ChatPage> {
                                       radius: 10,
                                     ),
                                   ),
-                                  errorWidget: (context, url, error) =>
-                                      Icon(Icons.error),
-                                  height:
-                                      MediaQuery.of(context).size.height * .65,
+                                  errorWidget: (context, url, error) => Icon(Icons.error),
+                                  height: MediaQuery.of(context).size.height * .65,
                                   width: MediaQuery.of(context).size.width * .9,
-                                  imageUrl: documentSnapshot.data['image_url'],
+                                  imageUrl: (documentSnapshot.data() as Map<String, dynamic>)['image_url'],
                                   fit: BoxFit.fitWidth,
                                 ),
                                 Container(
                                   alignment: Alignment.bottomRight,
-                                  child:
-                                      documentSnapshot.data['isRead'] == false
-                                          ? Icon(
-                                              Icons.done,
-                                              color: _theme.backgroundColor,
-                                              size: 15,
-                                            )
-                                          : Icon(
-                                              Icons.done_all,
-                                              color: _theme.primaryColor,
-                                              size: 15,
-                                            ),
+                                  child: (documentSnapshot.data() as Map<String, dynamic>)['isRead'] == false
+                                      ? Icon(
+                                          Icons.done,
+                                          color: _theme.backgroundColor,
+                                          size: 15,
+                                        )
+                                      : Icon(
+                                          Icons.done_all,
+                                          color: _theme.primaryColor,
+                                          size: 15,
+                                        ),
                                 )
                               ],
                             ),
@@ -115,10 +114,10 @@ class _ChatPageState extends State<ChatPage> {
                           Padding(
                             padding: const EdgeInsets.only(right: 10),
                             child: Text(
-                                documentSnapshot.data["time"] != null
+                                (documentSnapshot.data() as Map<String, dynamic>)["time"] != null
                                     ? DateFormat.yMMMd()
                                         .add_jm()
-                                        .format(documentSnapshot.data["time"]
+                                        .format((documentSnapshot.data() as Map<String, dynamic>)["time"]
                                             .toDate())
                                         .toString()
                                     : "",
@@ -134,18 +133,16 @@ class _ChatPageState extends State<ChatPage> {
                         Navigator.of(context).push(
                           CupertinoPageRoute(
                             builder: (context) => LargeImage(
-                              documentSnapshot.data['image_url'],
+                              (documentSnapshot.data() as Map<String, dynamic>)['image_url'],
                             ),
                           ),
                         );
                       },
                     )
                   : Container(
-                      padding: EdgeInsets.symmetric(
-                          horizontal: 15.0, vertical: 10.0),
+                      padding: EdgeInsets.symmetric(horizontal: 15.0, vertical: 10.0),
                       width: MediaQuery.of(context).size.width * 0.65,
-                      margin: EdgeInsets.only(
-                          top: 8.0, bottom: 8.0, left: 80.0, right: 10),
+                      margin: EdgeInsets.only(top: 8.0, bottom: 8.0, left: 80.0, right: 10),
                       decoration: BoxDecoration(
                           color: _theme.primaryColor.withOpacity(.1),
                           borderRadius: BorderRadius.circular(20)),
@@ -158,7 +155,7 @@ class _ChatPageState extends State<ChatPage> {
                               Expanded(
                                 child: Container(
                                   child: Text(
-                                    documentSnapshot.data['text'],
+                                    (documentSnapshot.data() as Map<String, dynamic>)['text'],
                                     style: TextStyle(
                                       color: Colors.black87,
                                       fontSize: 16.0,
@@ -171,11 +168,10 @@ class _ChatPageState extends State<ChatPage> {
                                 mainAxisAlignment: MainAxisAlignment.end,
                                 children: <Widget>[
                                   Text(
-                                    documentSnapshot.data["time"] != null
+                                    (documentSnapshot.data() as Map<String, dynamic>)["time"] != null
                                         ? DateFormat.MMMd()
                                             .add_jm()
-                                            .format(documentSnapshot
-                                                .data["time"]
+                                            .format((documentSnapshot.data() as Map<String, dynamic>)["time"]
                                                 .toDate())
                                             .toString()
                                         : "",
@@ -188,7 +184,7 @@ class _ChatPageState extends State<ChatPage> {
                                   SizedBox(
                                     width: 5,
                                   ),
-                                  documentSnapshot.data['isRead'] == false
+                                  (documentSnapshot.data() as Map<String, dynamic>)['isRead'] == false
                                       ? Icon(
                                           Icons.done,
                                           color: _theme.backgroundColor,
@@ -254,16 +250,14 @@ class _ChatPageState extends State<ChatPage> {
                         crossAxisAlignment: CrossAxisAlignment.end,
                         children: <Widget>[
                           new Container(
-                            margin: EdgeInsets.only(
-                                top: 2.0, bottom: 2.0, right: 15),
+                            margin: EdgeInsets.only(top: 2.0, bottom: 2.0, right: 15),
                             child: CachedNetworkImage(
                               placeholder: (context, url) => Center(
                                 child: CupertinoActivityIndicator(
                                   radius: 10,
                                 ),
                               ),
-                              errorWidget: (context, url, error) =>
-                                  Icon(Icons.error),
+                              errorWidget: (context, url, error) => Icon(Icons.error),
                               height: MediaQuery.of(context).size.height * .65,
                               width: MediaQuery.of(context).size.width * .9,
                               imageUrl: documentSnapshot.data['image_url'],
@@ -280,8 +274,7 @@ class _ChatPageState extends State<ChatPage> {
                                 documentSnapshot.data["time"] != null
                                     ? DateFormat.yMMMd()
                                         .add_jm()
-                                        .format(documentSnapshot.data["time"]
-                                            .toDate())
+                                        .format(documentSnapshot.data["time"].toDate())
                                         .toString()
                                     : "",
                                 style: TextStyle(
@@ -301,8 +294,7 @@ class _ChatPageState extends State<ChatPage> {
                       },
                     )
                   : Container(
-                      padding: EdgeInsets.symmetric(
-                          horizontal: 15.0, vertical: 10.0),
+                      padding: EdgeInsets.symmetric(horizontal: 15.0, vertical: 10.0),
                       width: MediaQuery.of(context).size.width * 0.65,
                       margin: EdgeInsets.only(top: 8.0, bottom: 8.0, right: 10),
                       decoration: BoxDecoration(
@@ -333,9 +325,7 @@ class _ChatPageState extends State<ChatPage> {
                                     documentSnapshot.data["time"] != null
                                         ? DateFormat.MMMd()
                                             .add_jm()
-                                            .format(documentSnapshot
-                                                .data["time"]
-                                                .toDate())
+                                            .format(documentSnapshot.data["time"].toDate())
                                             .toString()
                                         : "",
                                     style: TextStyle(
@@ -358,8 +348,8 @@ class _ChatPageState extends State<ChatPage> {
   }
 
   List<Widget> generateReceiverLayout(DocumentSnapshot documentSnapshot) {
-    if (!documentSnapshot.data['isRead']) {
-      chatReference.document(documentSnapshot.documentID).updateData({
+    if (!(documentSnapshot.data() as Map<String, dynamic>)['isRead']) {
+      chatReference.doc(documentSnapshot.id).update({
         'isRead': true,
       });
 
@@ -369,23 +359,23 @@ class _ChatPageState extends State<ChatPage> {
   }
 
   generateMessages(AsyncSnapshot<QuerySnapshot> snapshot) {
-    return snapshot.data.documents
+    return snapshot.data.docs
         .map<Widget>((doc) => Container(
               margin: const EdgeInsets.symmetric(vertical: 10.0),
               child: new Row(
                   mainAxisAlignment: MainAxisAlignment.center,
-                  children: doc.data['type'] == "Call"
+                  children: (doc.data() as Map<String, dynamic>)['type'] == "Call"
                       ? [
-                          Text(doc.data["time"] != null
-                              ? "${doc.data['text']} : " +
+                          Text((doc.data() as Map<String, dynamic>)["time"] != null
+                              ? "${(doc.data() as Map<String, dynamic>)['text']} : " +
                                   DateFormat.yMMMd()
                                       .add_jm()
-                                      .format(doc.data["time"].toDate())
+                                      .format((doc.data() as Map<String, dynamic>)["time"].toDate())
                                       .toString() +
-                                  " by ${doc.data['sender_id'] == widget.sender.id ? "You" : "${widget.second.name}"}"
+                                  " by ${(doc.data() as Map<String, dynamic>)['sender_id'] == widget.sender.id ? "You" : "${widget.second.name}"}"
                               : "")
                         ]
-                      : doc.data['sender_id'] != widget.sender.id
+                      : (doc.data() as Map<String, dynamic>)['sender_id'] != widget.sender.id
                           ? generateReceiverLayout(
                               doc,
                             )
@@ -412,14 +402,10 @@ class _ChatPageState extends State<ChatPage> {
           ),
           actions: <Widget>[
             APP_ID.length > 0
-                ? IconButton(
-                    icon: Icon(Icons.call),
-                    onPressed: () => onJoin("AudioCall"))
+                ? IconButton(icon: Icon(Icons.call), onPressed: () => onJoin("AudioCall"))
                 : Container(),
             APP_ID.length > 0
-                ? IconButton(
-                    icon: Icon(Icons.video_call),
-                    onPressed: () => onJoin("VideoCall"))
+                ? IconButton(icon: Icon(Icons.video_call), onPressed: () => onJoin("VideoCall"))
                 : Container(),
             PopupMenuButton(itemBuilder: (ct) {
               return [
@@ -439,21 +425,19 @@ class _ChatPageState extends State<ChatPage> {
                                 'Do you want to ${isBlocked ? 'Unblock' : 'Block'} ${widget.second.name}?'),
                             actions: <Widget>[
                               FlatButton(
-                                onPressed: () =>
-                                    Navigator.of(context).pop(false),
+                                onPressed: () => Navigator.of(context).pop(false),
                                 child: Text('No'),
                               ),
                               FlatButton(
                                 onPressed: () async {
                                   Navigator.pop(ctx);
-                                  if (isBlocked &&
-                                      blockedBy == widget.sender.id) {
-                                    chatReference.document('blocked').setData({
+                                  if (isBlocked && blockedBy == widget.sender.id) {
+                                    chatReference.doc('blocked').set({
                                       'isBlocked': !isBlocked,
                                       'blockedBy': widget.sender.id,
                                     });
                                   } else if (!isBlocked) {
-                                    chatReference.document('blocked').setData({
+                                    chatReference.doc('blocked').set({
                                       'isBlocked': !isBlocked,
                                       'blockedBy': widget.sender.id,
                                     });
@@ -486,20 +470,16 @@ class _ChatPageState extends State<ChatPage> {
                   // image: DecorationImage(
                   //     fit: BoxFit.fitWidth,
                   //     image: AssetImage("asset/chat.jpg")),
-                  borderRadius: BorderRadius.only(
-                      topLeft: Radius.circular(50),
-                      topRight: Radius.circular(50)),
+                  borderRadius:
+                      BorderRadius.only(topLeft: Radius.circular(50), topRight: Radius.circular(50)),
                   color: Colors.white),
               padding: EdgeInsets.all(5),
               child: Column(
                 mainAxisAlignment: MainAxisAlignment.end,
                 children: <Widget>[
                   StreamBuilder<QuerySnapshot>(
-                    stream: chatReference
-                        .orderBy('time', descending: true)
-                        .snapshots(),
-                    builder: (BuildContext context,
-                        AsyncSnapshot<QuerySnapshot> snapshot) {
+                    stream: chatReference.orderBy('time', descending: true).snapshots(),
+                    builder: (BuildContext context, AsyncSnapshot<QuerySnapshot> snapshot) {
                       if (!snapshot.hasData)
                         return Container(
                           height: 15,
@@ -520,11 +500,8 @@ class _ChatPageState extends State<ChatPage> {
                   Divider(height: 1.0),
                   Container(
                     alignment: Alignment.bottomCenter,
-                    decoration:
-                        BoxDecoration(color: Theme.of(context).cardColor),
-                    child: isBlocked
-                        ? Text("Sorry You can't send message!")
-                        : _buildTextComposer(),
+                    decoration: BoxDecoration(color: Theme.of(context).cardColor),
+                    child: isBlocked ? Text("Sorry You can't send message!") : _buildTextComposer(),
                   ),
                 ],
               ),
@@ -545,9 +522,7 @@ class _ChatPageState extends State<ChatPage> {
         ),
       ),
       color: Theme.of(context).primaryColor,
-      onPressed: _isWritting
-          ? () => _sendText(_textController.text.trimRight())
-          : null,
+      onPressed: _isWritting ? () => _sendText(_textController.text.trimRight()) : null,
     );
   }
 
@@ -567,20 +542,16 @@ class _ChatPageState extends State<ChatPage> {
                       color: _theme.backgroundColor,
                     ),
                     onPressed: () async {
-                      var image = await ImagePicker.pickImage(
-                          source: ImageSource.gallery);
+                      XFile imageFile = await ImagePicker().pickImage(source: ImageSource.gallery);
                       int timestamp = new DateTime.now().millisecondsSinceEpoch;
-                      StorageReference storageReference = FirebaseStorage
-                          .instance
+                      final storageReference = FirebaseStorage.instance
                           .ref()
-                          .child('chats/${widget.chatId}/img_' +
-                              timestamp.toString() +
-                              '.jpg');
-                      StorageUploadTask uploadTask =
-                          storageReference.putFile(image);
-                      await uploadTask.onComplete;
-                      String fileUrl = await storageReference.getDownloadURL();
-                      _sendImage(messageText: 'Photo', imageUrl: fileUrl);
+                          .child('chats/${widget.chatId}/img_' + timestamp.toString() + '.jpg');
+                      UploadTask uploadTask = storageReference.putFile(File(imageFile.path));
+                      await uploadTask.whenComplete(() async {
+                        String fileUrl = await storageReference.getDownloadURL();
+                        _sendImage(messageText: 'Photo', imageUrl: fileUrl);
+                      });
                     }),
               ),
               new Flexible(
@@ -658,10 +629,8 @@ class _ChatPageState extends State<ChatPage> {
       await Navigator.push(
         context,
         MaterialPageRoute(
-          builder: (context) => DialCall(
-              channelName: widget.chatId,
-              receiver: widget.second,
-              callType: callType),
+          builder: (context) =>
+              DialCall(channelName: widget.chatId, receiver: widget.second, callType: callType),
         ),
       );
     } else {
@@ -671,8 +640,7 @@ class _ChatPageState extends State<ChatPage> {
 }
 
 Future<void> handleCameraAndMic(callType) async {
-  await PermissionHandler().requestPermissions(callType == "VideoCall"
-      ? [PermissionGroup.camera, PermissionGroup.microphone]
-      : [PermissionGroup.microphone]);
+  await callType == "VideoCall"
+      ? Future.wait([Permission.camera.request(), Permission.microphone.request()])
+      : Permission.microphone.request();
 }
-

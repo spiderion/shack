@@ -213,7 +213,7 @@ class CameraScreenState extends State<CameraScreen>
 
     try {
 //      videoPath = filePath;
-      await _controller.startVideoRecording(filePath);
+      await _controller.startVideoRecording(/*filePath*/);
     } on CameraException catch (e) {
       _showCameraException(e);
       return null;

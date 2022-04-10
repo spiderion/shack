@@ -12,12 +12,12 @@ import 'package:modal_bottom_sheet/modal_bottom_sheet.dart';
 import 'package:swipe_stack/swipe_stack.dart';
 import 'package:swipedetector/swipedetector.dart';
 
-
 class Info extends StatelessWidget {
   final AppUser currentUser;
   final AppUser user;
 
   final GlobalKey<SwipeStackState> swipeKey;
+
   Info(
     this.user,
     this.currentUser,
@@ -37,8 +37,7 @@ class Info extends StatelessWidget {
     return Scaffold(
       backgroundColor: Colors.white,
       body: Container(
-        decoration: BoxDecoration(
-            color: Colors.white),
+        decoration: BoxDecoration(color: Colors.white),
         width: double.infinity,
         height: double.infinity,
         child: Stack(
@@ -52,19 +51,17 @@ class Info extends StatelessWidget {
                 itemBuilder: (BuildContext context, int index2) {
                   return user.imageUrl.length != null
                       ? Hero(
-                    tag: "abc",
-                    child: CachedNetworkImage(
-                      imageUrl: user.imageUrl[index2],
-                      fit: BoxFit.cover,
-                      useOldImageOnUrlChange: true,
-                      placeholder: (context, url) =>
-                          CupertinoActivityIndicator(
-                            radius: 20,
+                          tag: "abc",
+                          child: CachedNetworkImage(
+                            imageUrl: user.imageUrl[index2],
+                            fit: BoxFit.cover,
+                            useOldImageOnUrlChange: true,
+                            placeholder: (context, url) => CupertinoActivityIndicator(
+                              radius: 20,
+                            ),
+                            errorWidget: (context, url, error) => Icon(Icons.error),
                           ),
-                      errorWidget: (context, url, error) =>
-                          Icon(Icons.error),
-                    ),
-                  )
+                        )
                       : Container();
                 },
                 itemCount: user.imageUrl.length,
@@ -72,9 +69,7 @@ class Info extends StatelessWidget {
                     alignment: Alignment.bottomCenter,
                     margin: EdgeInsets.only(bottom: 120),
                     builder: DotSwiperPaginationBuilder(
-                        activeSize: 13,
-                        color: _theme.backgroundColor,
-                        activeColor: _theme.primaryColor)),
+                        activeSize: 13, color: _theme.backgroundColor, activeColor: _theme.primaryColor)),
                 control: new SwiperControl(
                   color: _theme.primaryColor,
                   disableColor: _theme.backgroundColor,
@@ -86,8 +81,8 @@ class Info extends StatelessWidget {
               bottom: 0,
               child: Container(
                   decoration: BoxDecoration(
-                      borderRadius: BorderRadius.only(
-                          topLeft: Radius.circular(25), topRight: Radius.circular(25)),
+                      borderRadius:
+                          BorderRadius.only(topLeft: Radius.circular(25), topRight: Radius.circular(25)),
                       color: Colors.white),
                   height: mediaQueryData.size.height / 2,
                   width: mediaQueryData.size.width,
@@ -98,16 +93,17 @@ class Info extends StatelessWidget {
                         Container(
                           padding: EdgeInsets.only(top: 5),
                           alignment: Alignment.center,
-                          child: Text('On Grid', style: TextStyle(color: _theme.backgroundColor),),
+                          child: Text(
+                            'On Grid',
+                            style: TextStyle(color: _theme.backgroundColor),
+                          ),
                         ),
                         Container(
                           padding: EdgeInsets.only(top: 10),
                           child: Text(
                             "${user.name}, ${user.age}",
                             style: TextStyle(
-                                color: _theme.backgroundColor,
-                                fontSize: 35,
-                                fontWeight: FontWeight.w900),
+                                color: _theme.backgroundColor, fontSize: 35, fontWeight: FontWeight.w900),
                           ),
                         ),
                         Container(
@@ -120,19 +116,19 @@ class Info extends StatelessWidget {
                                 children: <Widget>[
                                   !isMe
                                       ? ListTile(
-                                    dense: true,
-                                    leading: Icon(
-                                      Icons.location_on,
-                                      color: primaryColor,
-                                    ),
-                                    title: Text(
-                                      "${user.editInfo['DistanceVisible'] != null ? user.editInfo['DistanceVisible'] ? 'Less than ${user.distanceBW} KM away' : 'Distance not visible' : 'Less than ${user.distanceBW} KM away'}",
-                                      style: TextStyle(
-                                          color: primaryColor,
-                                          fontSize: 16,
-                                          fontWeight: FontWeight.w500),
-                                    ),
-                                  )
+                                          dense: true,
+                                          leading: Icon(
+                                            Icons.location_on,
+                                            color: primaryColor,
+                                          ),
+                                          title: Text(
+                                            "${user.editInfo['DistanceVisible'] != null ? user.editInfo['DistanceVisible'] ? 'Less than ${user.distanceBW} KM away' : 'Distance not visible' : 'Less than ${user.distanceBW} KM away'}",
+                                            style: TextStyle(
+                                                color: primaryColor,
+                                                fontSize: 16,
+                                                fontWeight: FontWeight.w500),
+                                          ),
+                                        )
                                       : Container(),
                                   Divider(
                                     color: primaryColor,
@@ -143,245 +139,237 @@ class Info extends StatelessWidget {
                             ),
                           ),
                         ),
-                        isMe? Container():
-                            Container(
-                              child: Column(
-                                crossAxisAlignment: CrossAxisAlignment.center,
-                                children: <Widget>[
-                                  SwipeDetector(
-                                    child: Container(
-                                      child: Column(
-                                        children: <Widget>[
-                                          Icon(
-                                            Icons.keyboard_arrow_up,
-                                            color: primaryColor,
-                                            size: 40,
-                                          ),
-                                          Text(
-                                            'Swipe up to view profile',
-                                            style: TextStyle(
-                                                color: primaryColor
+                        isMe
+                            ? Container()
+                            : Container(
+                                child: Column(
+                                  crossAxisAlignment: CrossAxisAlignment.center,
+                                  children: <Widget>[
+                                    SwipeDetector(
+                                      child: Container(
+                                        child: Column(
+                                          children: <Widget>[
+                                            Icon(
+                                              Icons.keyboard_arrow_up,
+                                              color: primaryColor,
+                                              size: 40,
                                             ),
-                                          ),
-                                        ],
+                                            Text(
+                                              'Swipe up to view profile',
+                                              style: TextStyle(color: primaryColor),
+                                            ),
+                                          ],
+                                        ),
                                       ),
-                                    ),
-                                    onSwipeUp: () {
-                                      showMaterialModalBottomSheet(
-                                        expand: false,
-                                        context: context,
-                                        backgroundColor: Colors.transparent,
-                                        builder: (context, scrollController) => Material(
-                                            color: Colors.transparent,
-                                            child:  Container(
-                                              decoration: BoxDecoration(
-                                                  borderRadius:
-                                                  BorderRadius.only(topLeft: Radius.circular(20), topRight: Radius.circular(20)),
-                                                  color: Colors.white
-                                              ),
-                                              child: Stack(
-                                                children: <Widget>[
-                                                  SwipeWidget(user, currentUser),
-                                                  Container(
-                                                    child: Align(
-                                                      alignment: Alignment.bottomRight,
-                                                      child: Container(
-                                                        width: 80,
-                                                        height: 200,
-                                                        padding: const EdgeInsets.only(right: 10, left: 15, top: 15, bottom: 15),
-                                                        decoration: BoxDecoration(
-                                                            borderRadius: BorderRadius.only(
-                                                                topLeft: Radius.circular(20),
-                                                                bottomLeft: Radius.circular(20)),
-                                                            boxShadow: [
-                                                              BoxShadow(
-                                                                color: Colors.grey,
-                                                                blurRadius: 5.0,
-                                                              )
-                                                            ],
-                                                            color: Colors.white),
-                                                        child: Align(
-                                                          alignment: Alignment.bottomCenter,
-                                                          child: Column(
-                                                            mainAxisAlignment: MainAxisAlignment.center,
-                                                            crossAxisAlignment: CrossAxisAlignment.end,
-                                                            children: <Widget>[
-                                                              InkWell(
-                                                                borderRadius: BorderRadius.circular(10),
-                                                                onTap: () {},
-                                                                splashColor: Colors.blue,
-                                                                highlightColor: Colors.blue,
-                                                                child: Container(
-                                                                  height: 50,
-                                                                  width: 50,
-                                                                  decoration: BoxDecoration(
-                                                                      borderRadius:
-                                                                      BorderRadius.circular(10),
-                                                                      border: Border.all(
-                                                                          color: Colors.yellow),
-                                                                      color: Colors.yellow),
-                                                                  child: Center(
-                                                                    child: Icon(
-                                                                      Icons.star,
-                                                                      color: Colors.white,
-                                                                      size: 40,
+                                      onSwipeUp: () {
+                                        showMaterialModalBottomSheet(
+                                          expand: false,
+                                          context: context,
+                                          backgroundColor: Colors.transparent,
+                                          builder: (context) => Material(
+                                              color: Colors.transparent,
+                                              child: Container(
+                                                decoration: BoxDecoration(
+                                                    borderRadius: BorderRadius.only(
+                                                        topLeft: Radius.circular(20),
+                                                        topRight: Radius.circular(20)),
+                                                    color: Colors.white),
+                                                child: Stack(
+                                                  children: <Widget>[
+                                                    SwipeWidget(user, currentUser),
+                                                    Container(
+                                                      child: Align(
+                                                        alignment: Alignment.bottomRight,
+                                                        child: Container(
+                                                          width: 80,
+                                                          height: 200,
+                                                          padding: const EdgeInsets.only(
+                                                              right: 10, left: 15, top: 15, bottom: 15),
+                                                          decoration: BoxDecoration(
+                                                              borderRadius: BorderRadius.only(
+                                                                  topLeft: Radius.circular(20),
+                                                                  bottomLeft: Radius.circular(20)),
+                                                              boxShadow: [
+                                                                BoxShadow(
+                                                                  color: Colors.grey,
+                                                                  blurRadius: 5.0,
+                                                                )
+                                                              ],
+                                                              color: Colors.white),
+                                                          child: Align(
+                                                            alignment: Alignment.bottomCenter,
+                                                            child: Column(
+                                                              mainAxisAlignment: MainAxisAlignment.center,
+                                                              crossAxisAlignment: CrossAxisAlignment.end,
+                                                              children: <Widget>[
+                                                                InkWell(
+                                                                  borderRadius: BorderRadius.circular(10),
+                                                                  onTap: () {},
+                                                                  splashColor: Colors.blue,
+                                                                  highlightColor: Colors.blue,
+                                                                  child: Container(
+                                                                    height: 50,
+                                                                    width: 50,
+                                                                    decoration: BoxDecoration(
+                                                                        borderRadius:
+                                                                            BorderRadius.circular(10),
+                                                                        border:
+                                                                            Border.all(color: Colors.yellow),
+                                                                        color: Colors.yellow),
+                                                                    child: Center(
+                                                                      child: Icon(
+                                                                        Icons.star,
+                                                                        color: Colors.white,
+                                                                        size: 40,
+                                                                      ),
                                                                     ),
                                                                   ),
                                                                 ),
-                                                              ),
-                                                              SizedBox(
-                                                                height: 10,
-                                                              ),
-                                                              InkWell(
-                                                                borderRadius: BorderRadius.circular(10),
-                                                                onTap: () {
-                                                                  Navigator.pop(context);
-                                                                  Navigator.pop(context);
-                                                                  swipeKey.currentState.swipeRight();
-                                                                },
-                                                                splashColor: Colors.blue,
-                                                                highlightColor: Colors.blue,
-                                                                child: Container(
-                                                                  height: 50,
-                                                                  width: 50,
-                                                                  decoration: BoxDecoration(
-                                                                      borderRadius: BorderRadius.circular(10),
-                                                                      border:
-                                                                      Border.all(color: Colors.greenAccent),
-                                                                      color: Colors.greenAccent),
-                                                                  child: Center(
-                                                                    child: Icon(
-                                                                      Icons.check,
-                                                                      color: Colors.white,
-                                                                      size: 40,
+                                                                SizedBox(
+                                                                  height: 10,
+                                                                ),
+                                                                InkWell(
+                                                                  borderRadius: BorderRadius.circular(10),
+                                                                  onTap: () {
+                                                                    Navigator.pop(context);
+                                                                    Navigator.pop(context);
+                                                                    swipeKey.currentState.swipeRight();
+                                                                  },
+                                                                  splashColor: Colors.blue,
+                                                                  highlightColor: Colors.blue,
+                                                                  child: Container(
+                                                                    height: 50,
+                                                                    width: 50,
+                                                                    decoration: BoxDecoration(
+                                                                        borderRadius:
+                                                                            BorderRadius.circular(10),
+                                                                        border: Border.all(
+                                                                            color: Colors.greenAccent),
+                                                                        color: Colors.greenAccent),
+                                                                    child: Center(
+                                                                      child: Icon(
+                                                                        Icons.check,
+                                                                        color: Colors.white,
+                                                                        size: 40,
+                                                                      ),
                                                                     ),
                                                                   ),
                                                                 ),
-                                                              ),
-                                                              SizedBox(
-                                                                height: 10,
-                                                              ),
-                                                              InkWell(
-                                                                borderRadius: BorderRadius.circular(10),
-                                                                onTap: () {
-                                                                  Navigator.pop(context);
-                                                                  Navigator.pop(context);
-                                                                  swipeKey.currentState.swipeLeft();
-                                                                },
-                                                                child: Container(
-                                                                  height: 50,
-                                                                  width: 50,
-                                                                  decoration: BoxDecoration(
-                                                                      borderRadius: BorderRadius.circular(10),
-                                                                      border: Border.all(color: Colors.black54),
-                                                                      color: Colors.black54),
-                                                                  child: Center(
-                                                                    child: Icon(
-                                                                      Icons.clear,
-                                                                      color: Colors.white,
-                                                                      size: 40,
+                                                                SizedBox(
+                                                                  height: 10,
+                                                                ),
+                                                                InkWell(
+                                                                  borderRadius: BorderRadius.circular(10),
+                                                                  onTap: () {
+                                                                    Navigator.pop(context);
+                                                                    Navigator.pop(context);
+                                                                    swipeKey.currentState.swipeLeft();
+                                                                  },
+                                                                  child: Container(
+                                                                    height: 50,
+                                                                    width: 50,
+                                                                    decoration: BoxDecoration(
+                                                                        borderRadius:
+                                                                            BorderRadius.circular(10),
+                                                                        border:
+                                                                            Border.all(color: Colors.black54),
+                                                                        color: Colors.black54),
+                                                                    child: Center(
+                                                                      child: Icon(
+                                                                        Icons.clear,
+                                                                        color: Colors.white,
+                                                                        size: 40,
+                                                                      ),
                                                                     ),
                                                                   ),
                                                                 ),
-                                                              ),
-                                                            ],
+                                                              ],
+                                                            ),
                                                           ),
                                                         ),
                                                       ),
-                                                    ),
-                                                  )
-                                                ],
-                                              ),
-                                              width: mediaQueryData.size.width,
-                                              height: mediaQueryData.size.height * 3 / 4,
-                                            )),
-                                      );
-                                    },
-                                    swipeConfiguration: SwipeConfiguration(
-                                        verticalSwipeMinVelocity: 100.0,
-                                        verticalSwipeMinDisplacement: 50.0,
-                                        verticalSwipeMaxWidthThreshold:100.0,
-                                        horizontalSwipeMaxHeightThreshold: 50.0,
-                                        horizontalSwipeMinDisplacement:50.0,
-                                        horizontalSwipeMinVelocity: 200.0),
-                                  ),
-
-
-                                  GridView.count(
-                                      physics: NeverScrollableScrollPhysics(),
-                                      crossAxisCount: 3,
-                                      shrinkWrap: true,
-                                      crossAxisSpacing: 4,
-                                      padding: EdgeInsets.all(10),
-                                      children: List.generate(3, (index) {
-                                        return Card(
-                                          shape: RoundedRectangleBorder(
-                                            borderRadius: BorderRadius.circular(10),
-                                          ),
-                                          child: ClipRRect(
-                                            borderRadius: BorderRadius.circular(10),
-                                            child: Container(
-                                              decoration: user.imageUrl.length >
-                                                  index
-                                                  ? BoxDecoration(
-                                              )
-                                                  : BoxDecoration(
-                                                  borderRadius: BorderRadius.circular(10),
-                                                  border: Border.all(
-                                                      style: BorderStyle.solid,
-                                                      width: 1,
-                                                      color: Theme.of(context).backgroundColor)),
-                                              child: Stack(
-                                                children: <Widget>[
-                                                  user.imageUrl.length > index
-                                                      ? CachedNetworkImage(
-                                                    height: MediaQuery.of(context)
-                                                        .size
-                                                        .height *
-                                                        .2,
-                                                    fit: BoxFit.cover,
-                                                    imageUrl: user.imageUrl[index],
-                                                    placeholder: (context, url) =>
-                                                        Center(
-                                                          child: CupertinoActivityIndicator(
-                                                            radius: 10,
-                                                          ),
-                                                        ),
-                                                    errorWidget:
-                                                        (context, url, error) => Center(
-                                                      child: Column(
-                                                        mainAxisAlignment:
-                                                        MainAxisAlignment.center,
-                                                        children: <Widget>[
-                                                          Icon(
-                                                            Icons.error,
-                                                            color: Colors.black,
-                                                            size: 25,
-                                                          ),
-                                                          Text(
-                                                            "Enable to load",
-                                                            style: TextStyle(
-                                                              color: Colors.black,
+                                                    )
+                                                  ],
+                                                ),
+                                                width: mediaQueryData.size.width,
+                                                height: mediaQueryData.size.height * 3 / 4,
+                                              )),
+                                        );
+                                      },
+                                      swipeConfiguration: SwipeConfiguration(
+                                          verticalSwipeMinVelocity: 100.0,
+                                          verticalSwipeMinDisplacement: 50.0,
+                                          verticalSwipeMaxWidthThreshold: 100.0,
+                                          horizontalSwipeMaxHeightThreshold: 50.0,
+                                          horizontalSwipeMinDisplacement: 50.0,
+                                          horizontalSwipeMinVelocity: 200.0),
+                                    ),
+                                    GridView.count(
+                                        physics: NeverScrollableScrollPhysics(),
+                                        crossAxisCount: 3,
+                                        shrinkWrap: true,
+                                        crossAxisSpacing: 4,
+                                        padding: EdgeInsets.all(10),
+                                        children: List.generate(3, (index) {
+                                          return Card(
+                                            shape: RoundedRectangleBorder(
+                                              borderRadius: BorderRadius.circular(10),
+                                            ),
+                                            child: ClipRRect(
+                                              borderRadius: BorderRadius.circular(10),
+                                              child: Container(
+                                                decoration: user.imageUrl.length > index
+                                                    ? BoxDecoration()
+                                                    : BoxDecoration(
+                                                        borderRadius: BorderRadius.circular(10),
+                                                        border: Border.all(
+                                                            style: BorderStyle.solid,
+                                                            width: 1,
+                                                            color: Theme.of(context).backgroundColor)),
+                                                child: Stack(
+                                                  children: <Widget>[
+                                                    user.imageUrl.length > index
+                                                        ? CachedNetworkImage(
+                                                            height: MediaQuery.of(context).size.height * .2,
+                                                            fit: BoxFit.cover,
+                                                            imageUrl: user.imageUrl[index],
+                                                            placeholder: (context, url) => Center(
+                                                              child: CupertinoActivityIndicator(
+                                                                radius: 10,
+                                                              ),
+                                                            ),
+                                                            errorWidget: (context, url, error) => Center(
+                                                              child: Column(
+                                                                mainAxisAlignment: MainAxisAlignment.center,
+                                                                children: <Widget>[
+                                                                  Icon(
+                                                                    Icons.error,
+                                                                    color: Colors.black,
+                                                                    size: 25,
+                                                                  ),
+                                                                  Text(
+                                                                    "Enable to load",
+                                                                    style: TextStyle(
+                                                                      color: Colors.black,
+                                                                    ),
+                                                                  )
+                                                                ],
+                                                              ),
                                                             ),
                                                           )
-                                                        ],
-                                                      ),
-                                                    ),
-                                                  )
-                                                      : Container(),
-                                                ],
+                                                        : Container(),
+                                                  ],
+                                                ),
                                               ),
                                             ),
-                                          ),
-                                        );
-                                      })),
-                                ],
-                              ),
-                            )
+                                          );
+                                        })),
+                                  ],
+                                ),
+                              )
                       ],
                     ),
-                  )
-              ),
+                  )),
             ),
             Positioned(
               bottom: mediaQueryData.size.height / 2 - 30,
@@ -395,14 +383,14 @@ class Info extends StatelessWidget {
                     child: Container(
                       padding: EdgeInsets.all(5),
                       decoration: BoxDecoration(
-                          borderRadius: BorderRadius.all(Radius.circular(5)),
-                          color: Colors.white),
-                      child: Image.asset('assets/auth/map_mark.png', fit: BoxFit.fitHeight,),
+                          borderRadius: BorderRadius.all(Radius.circular(5)), color: Colors.white),
+                      child: Image.asset(
+                        'assets/auth/map_mark.png',
+                        fit: BoxFit.fitHeight,
+                      ),
                     ),
-                  )
-              ),
+                  )),
             ),
-
             !isMatched
                 ? Container(
                     child: Align(
@@ -413,8 +401,7 @@ class Info extends StatelessWidget {
                         padding: const EdgeInsets.only(right: 10, left: 15, top: 15, bottom: 15),
                         decoration: BoxDecoration(
                             borderRadius: BorderRadius.only(
-                                topLeft: Radius.circular(20),
-                                bottomLeft: Radius.circular(20)),
+                                topLeft: Radius.circular(20), bottomLeft: Radius.circular(20)),
                             boxShadow: [
                               BoxShadow(
                                 color: Colors.grey,
@@ -437,10 +424,8 @@ class Info extends StatelessWidget {
                                   height: 50,
                                   width: 50,
                                   decoration: BoxDecoration(
-                                      borderRadius:
-                                      BorderRadius.circular(10),
-                                      border: Border.all(
-                                          color: Colors.yellow),
+                                      borderRadius: BorderRadius.circular(10),
+                                      border: Border.all(color: Colors.yellow),
                                       color: Colors.yellow),
                                   child: Center(
                                     child: Icon(
@@ -467,8 +452,7 @@ class Info extends StatelessWidget {
                                   width: 50,
                                   decoration: BoxDecoration(
                                       borderRadius: BorderRadius.circular(10),
-                                      border:
-                                      Border.all(color: Colors.greenAccent),
+                                      border: Border.all(color: Colors.greenAccent),
                                       color: Colors.greenAccent),
                                   child: Center(
                                     child: Icon(
@@ -522,10 +506,7 @@ class Info extends StatelessWidget {
                                   color: primaryColor,
                                 ),
                                 onPressed: () => Navigator.push(
-                                    context,
-                                    CupertinoPageRoute(
-                                        builder: (context) =>
-                                            EditProfile(user))))),
+                                    context, CupertinoPageRoute(builder: (context) => EditProfile(user))))),
                       )
                     : Padding(
                         padding: const EdgeInsets.all(18.0),

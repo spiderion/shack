@@ -1,6 +1,7 @@
 import 'dart:async';
 import 'dart:io';
 import 'dart:math';
+
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
@@ -13,12 +14,14 @@ import 'package:in_app_purchase/store_kit_wrappers.dart';
 import '../Profile/profile.dart';
 import 'package:rflutter_alert/rflutter_alert.dart';
 
+import '../Profile/profile.dart';
 import '../Tab.dart';
 
 class Subscription extends StatefulWidget {
   final bool isPaymentSuccess;
   final AppUser currentUser;
   final Map items;
+
   Subscription(this.currentUser, this.isPaymentSuccess, this.items);
 
   @override
@@ -43,6 +46,7 @@ class _SubscriptionState extends State<Subscription> {
   bool _isLoading = true;
   InAppPurchaseConnection _iap = InAppPurchaseConnection.instance;
   final GlobalKey<ScaffoldState> _scaffoldKey = new GlobalKey<ScaffoldState>();
+
   @override
   void initState() {
     super.initState();
@@ -79,12 +83,12 @@ class _SubscriptionState extends State<Subscription> {
   Future<List<String>> _fetchPackageIds() async {
     List<String> packageId = [];
 
-    await Firestore.instance
+    await FirebaseFirestore.instance
         .collection("Packages")
         .where('status', isEqualTo: true)
-        .getDocuments()
+        .get()
         .then((value) {
-      packageId.addAll(value.documents.map((e) => e['id']));
+      packageId.addAll(value.docs.map((e) => e['id']));
     });
 
     return packageId;
@@ -93,10 +97,7 @@ class _SubscriptionState extends State<Subscription> {
   void _initialize() async {
     isAvailable = await _iap.isAvailable();
     if (isAvailable) {
-      List<Future> futures = [
-        _getProducts(await _fetchPackageIds()),
-        _getpastPurchases()
-      ];
+      List<Future> futures = [_getProducts(await _fetchPackageIds()), _getpastPurchases()];
       await Future.wait(futures);
 
       /// removing all the pending puchases.
@@ -105,9 +106,7 @@ class _SubscriptionState extends State<Subscription> {
         var transactions = await paymentWrapper.transactions();
         transactions.forEach((transaction) async {
           print(transaction.transactionState);
-          await paymentWrapper
-              .finishTransaction(transaction)
-              .catchError((onError) {
+          await paymentWrapper.finishTransaction(transaction).catchError((onError) {
             print('finishTransaction Error $onError');
           });
         });
@@ -130,9 +129,7 @@ class _SubscriptionState extends State<Subscription> {
         (error) {
           _scaffoldKey.currentState.showSnackBar(
             SnackBar(
-              content: error != null
-                  ? Text('$error')
-                  : Text("Oops !! something went wrong. Try Again"),
+              content: error != null ? Text('$error') : Text("Oops !! something went wrong. Try Again"),
             ),
           );
         },
@@ -170,8 +167,7 @@ class _SubscriptionState extends State<Subscription> {
             padding: const EdgeInsets.symmetric(horizontal: 15),
             child: Card(
               elevation: 2,
-              shape: RoundedRectangleBorder(
-                  borderRadius: BorderRadius.circular(20)),
+              shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(20)),
               child: Column(
                 mainAxisAlignment: MainAxisAlignment.spaceAround,
                 children: [
@@ -180,10 +176,7 @@ class _SubscriptionState extends State<Subscription> {
                     title: Text(
                       "Get our premium plans",
                       textAlign: TextAlign.center,
-                      style: TextStyle(
-                          color: primaryColor,
-                          fontSize: 25,
-                          fontWeight: FontWeight.bold),
+                      style: TextStyle(color: primaryColor, fontSize: 25, fontWeight: FontWeight.bold),
                     ),
                   ),
                   ListTile(
@@ -194,8 +187,7 @@ class _SubscriptionState extends State<Subscription> {
                     ),
                     title: Text(
                       "Unlimited swipe.",
-                      style:
-                          TextStyle(fontSize: 16, fontWeight: FontWeight.w400),
+                      style: TextStyle(fontSize: 16, fontWeight: FontWeight.w400),
                     ),
                   ),
                   ListTile(
@@ -218,8 +210,7 @@ class _SubscriptionState extends State<Subscription> {
                     child: Align(
                       alignment: Alignment.bottomCenter,
                       child: Container(
-                        decoration: BoxDecoration(
-                            borderRadius: BorderRadius.circular(10)),
+                        decoration: BoxDecoration(borderRadius: BorderRadius.circular(10)),
                         height: 100,
                         width: MediaQuery.of(context).size.width * .85,
                         child: ClipRRect(
@@ -230,44 +221,36 @@ class _SubscriptionState extends State<Subscription> {
                             autoplay: true,
                             physics: ScrollPhysics(),
                             itemBuilder: (BuildContext context, int index2) {
-                              return Column(
+                              return Column(mainAxisAlignment: MainAxisAlignment.center, children: <Widget>[
+                                Row(
                                   mainAxisAlignment: MainAxisAlignment.center,
+                                  crossAxisAlignment: CrossAxisAlignment.center,
                                   children: <Widget>[
-                                    Row(
-                                      mainAxisAlignment:
-                                          MainAxisAlignment.center,
-                                      crossAxisAlignment:
-                                          CrossAxisAlignment.center,
-                                      children: <Widget>[
-                                        Icon(
-                                          adds[index2]["icon"],
-                                          color: adds[index2]["color"],
-                                        ),
-                                        SizedBox(
-                                          width: 5,
-                                        ),
-                                        Text(
-                                          adds[index2]["title"],
-                                          textAlign: TextAlign.center,
-                                          style: TextStyle(
-                                              fontSize: 20,
-                                              fontWeight: FontWeight.bold),
-                                        ),
-                                      ],
+                                    Icon(
+                                      adds[index2]["icon"],
+                                      color: adds[index2]["color"],
+                                    ),
+                                    SizedBox(
+                                      width: 5,
                                     ),
                                     Text(
-                                      adds[index2]["subtitle"],
+                                      adds[index2]["title"],
                                       textAlign: TextAlign.center,
+                                      style: TextStyle(fontSize: 20, fontWeight: FontWeight.bold),
                                     ),
-                                  ]);
+                                  ],
+                                ),
+                                Text(
+                                  adds[index2]["subtitle"],
+                                  textAlign: TextAlign.center,
+                                ),
+                              ]);
                             },
                             itemCount: adds.length,
                             pagination: new SwiperPagination(
                                 alignment: Alignment.bottomCenter,
                                 builder: DotSwiperPaginationBuilder(
-                                    activeSize: 10,
-                                    color: secondryColor,
-                                    activeColor: primaryColor)),
+                                    activeSize: 10, color: secondryColor, activeColor: primaryColor)),
                             control: new SwiperControl(
                               size: 20,
                               color: primaryColor,
@@ -284,8 +267,7 @@ class _SubscriptionState extends State<Subscription> {
                           height: MediaQuery.of(context).size.width * .8,
                           child: Center(
                             child: CircularProgressIndicator(
-                                valueColor: new AlwaysStoppedAnimation<Color>(
-                                    primaryColor)),
+                                valueColor: new AlwaysStoppedAnimation<Color>(primaryColor)),
                           ),
                         )
                       : products.length > 0
@@ -297,15 +279,10 @@ class _SubscriptionState extends State<Subscription> {
                                   child: Transform.rotate(
                                     angle: -pi / 2,
                                     child: Container(
-                                      width:
-                                          MediaQuery.of(context).size.height *
-                                              .15,
-                                      height:
-                                          MediaQuery.of(context).size.width *
-                                              .8,
-                                      decoration: BoxDecoration(
-                                          border: Border.all(
-                                              width: 2, color: primaryColor)),
+                                      width: MediaQuery.of(context).size.height * .15,
+                                      height: MediaQuery.of(context).size.width * .8,
+                                      decoration:
+                                          BoxDecoration(border: Border.all(width: 2, color: primaryColor)),
                                       child: Center(
                                         child: (CupertinoPicker(
                                             squeeze: 1.4,
@@ -313,14 +290,11 @@ class _SubscriptionState extends State<Subscription> {
                                             magnification: 1.08,
                                             offAxisFraction: -.2,
                                             backgroundColor: Colors.white,
-                                            scrollController:
-                                                FixedExtentScrollController(
-                                                    initialItem: 0),
+                                            scrollController: FixedExtentScrollController(initialItem: 0),
                                             itemExtent: 100,
                                             onSelectedItemChanged: (value) {
                                               setState(() {
-                                                selectedProduct =
-                                                    products[value];
+                                                selectedProduct = products[value];
                                               });
                                             },
                                             children: products.map((product) {
@@ -333,19 +307,13 @@ class _SubscriptionState extends State<Subscription> {
                                                         context: context,
                                                         product: product,
                                                         interval: Platform.isIOS
-                                                            ? getInterval(
-                                                                product)
-                                                            : getIntervalAndroid(
-                                                                product),
-                                                        intervalCount: Platform
-                                                                .isIOS
+                                                            ? getInterval(product)
+                                                            : getIntervalAndroid(product),
+                                                        intervalCount: Platform.isIOS
                                                             ? product
-                                                                .skProduct
-                                                                .subscriptionPeriod
-                                                                .numberOfUnits
+                                                                .skProduct.subscriptionPeriod.numberOfUnits
                                                                 .toString()
-                                                            : product.skuDetail
-                                                                .subscriptionPeriod
+                                                            : product.skuDetail.subscriptionPeriod
                                                                 .split("")[1],
                                                         price: product.price,
                                                       ),
@@ -407,18 +375,13 @@ class _SubscriptionState extends State<Subscription> {
                     child: Center(
                         child: Text(
                       "CONTINUE",
-                      style: TextStyle(
-                          fontSize: 15,
-                          color: textColor,
-                          fontWeight: FontWeight.bold),
+                      style: TextStyle(fontSize: 15, color: textColor, fontWeight: FontWeight.bold),
                     ))),
                 onTap: () async {
                   if (selectedProduct != null)
                     _buyProduct(selectedProduct);
                   else {
-                    CustomSnackbar.snackbar(
-                        "You must choose a subscription to continue.",
-                        _scaffoldKey);
+                    CustomSnackbar.snackbar("You must choose a subscription to continue.", _scaffoldKey);
                   }
                 },
               )),
@@ -440,9 +403,9 @@ class _SubscriptionState extends State<Subscription> {
   }) {
     return AnimatedContainer(
       curve: Curves.easeIn,
-      height: 100, //setting up dimention if product get selected
-      width: selectedProduct !=
-              product //setting up dimention if product get selected
+      height: 100,
+      //setting up dimention if product get selected
+      width: selectedProduct != product //setting up dimention if product get selected
           ? MediaQuery.of(context).size.width * .19
           : MediaQuery.of(context).size.width * .22,
       decoration: selectedProduct == product
@@ -459,24 +422,21 @@ class _SubscriptionState extends State<Subscription> {
           SizedBox(height: MediaQuery.of(context).size.height * .02),
           Text(intervalCount,
               style: TextStyle(
-                  color: selectedProduct !=
-                          product //setting up color if product get selected
+                  color: selectedProduct != product //setting up color if product get selected
                       ? Colors.black
                       : primaryColor,
                   fontSize: 25,
                   fontWeight: FontWeight.bold)),
           Text(interval,
               style: TextStyle(
-                  color: selectedProduct !=
-                          product //setting up color if product get selected
+                  color: selectedProduct != product //setting up color if product get selected
                       ? Colors.black
                       : primaryColor,
                   fontWeight: FontWeight.w600,
                   fontSize: 15)),
           Text(price,
               style: TextStyle(
-                  color: selectedProduct !=
-                          product //setting up product if product get selected
+                  color: selectedProduct != product //setting up product if product get selected
                       ? Colors.black
                       : primaryColor,
                   fontSize: 13,
@@ -524,8 +484,7 @@ class _SubscriptionState extends State<Subscription> {
 
   /// check if user has pruchased
   PurchaseDetails _hasPurchased(String productId) {
-    return purchases.firstWhere((purchase) => purchase.productID == productId,
-        orElse: () => null);
+    return purchases.firstWhere((purchase) => purchase.productID == productId, orElse: () => null);
   }
 
   ///verifying opurhcase of user
@@ -549,9 +508,7 @@ class _SubscriptionState extends State<Subscription> {
     } else if (purchase != null && purchase.status == PurchaseStatus.error) {
       Navigator.pushReplacement(
         context,
-        CupertinoPageRoute(
-            builder: (context) =>
-                Subscription(widget.currentUser, false, widget.items)),
+        CupertinoPageRoute(builder: (context) => Subscription(widget.currentUser, false, widget.items)),
       );
     }
     return;
@@ -564,8 +521,7 @@ class _SubscriptionState extends State<Subscription> {
   }
 
   String getInterval(ProductDetails product) {
-    SKSubscriptionPeriodUnit periodUnit =
-        product.skProduct.subscriptionPeriod.unit;
+    SKSubscriptionPeriodUnit periodUnit = product.skProduct.subscriptionPeriod.unit;
     if (SKSubscriptionPeriodUnit.month == periodUnit) {
       return "Month(s)";
     } else if (SKSubscriptionPeriodUnit.week == periodUnit) {
