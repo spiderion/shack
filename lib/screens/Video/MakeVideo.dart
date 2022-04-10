@@ -13,7 +13,7 @@ import 'package:video_compress/video_compress.dart';
 import 'package:video_player/video_player.dart';
 
 class MakeVideo extends StatefulWidget {
-  final User currentUser;
+  final AppUser currentUser;
 
   MakeVideo(this.currentUser);
 
@@ -151,7 +151,7 @@ class MakeVideoState extends State<MakeVideo> {
       ),
     );
   }
-  Future uploadFile(File image,User currentUser) async {
+  Future uploadFile(File image,AppUser currentUser) async {
     await VideoCompress.deleteAllCache();
     final info = await VideoCompress.compressVideo(
       image.path,

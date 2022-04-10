@@ -15,8 +15,8 @@ import 'package:swipe_stack/swipe_stack.dart';
 List userRemoved = [];
 
 class CardPictures extends StatefulWidget {
-  final List<User> users;
-  final User currentUser;
+  final List<AppUser> users;
+  final AppUser currentUser;
   final int swipedcount;
   final Map items;
 

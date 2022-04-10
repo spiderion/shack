@@ -9,8 +9,8 @@ import 'package:flutter_grid/screens/Tab.dart';
 import 'package:flutter_grid/screens/util/color.dart';
 
 class SwipeWidget extends StatefulWidget {
-  final User currentUser;
-  final User user;
+  final AppUser currentUser;
+  final AppUser user;
 
   SwipeWidget(
     this.user,

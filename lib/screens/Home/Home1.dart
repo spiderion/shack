@@ -9,8 +9,8 @@ import 'package:flutter_swiper/flutter_swiper.dart';
 import 'package:video_player/video_player.dart';
 
 class Home1 extends StatefulWidget {
-  final User currentUser;
-  final List<User> users;
+  final AppUser currentUser;
+  final List<AppUser> users;
   final VideoPlayerController controller;
 
   Home1(this.currentUser, this.users, this.controller);
@@ -21,7 +21,7 @@ class Home1 extends StatefulWidget {
 
 class _Home1State extends State<Home1> {
   TextEditingController searchcontroller = new TextEditingController();
-  List<User> searchuser = [];
+  List<AppUser> searchuser = [];
 
   @override
   void initState() {

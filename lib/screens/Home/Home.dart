@@ -14,8 +14,8 @@ import 'package:swipe_stack/swipe_stack.dart';
 import 'package:video_player/video_player.dart';
 
 class Home extends StatefulWidget {
-  final User currentUser;
-  final List<User> users;
+  final AppUser currentUser;
+  final List<AppUser> users;
   final VideoPlayerController controller;
 
   Home(this.currentUser, this.users, this.controller);
@@ -26,7 +26,7 @@ class Home extends StatefulWidget {
 
 class _HomeState extends State<Home> {
   TextEditingController searchcontroller = new TextEditingController();
-  List<User> searchuser = [];
+  List<AppUser> searchuser = [];
 
 
   GlobalKey<SwipeStackState> swipeKey = GlobalKey<SwipeStackState>();

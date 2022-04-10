@@ -16,9 +16,9 @@ import 'package:flutter_grid/screens/Calling/utils/settings.dart';
 import 'package:flutter_grid/screens/Calling/dial.dart';
 
 class ChatPage extends StatefulWidget {
-  final User sender;
+  final AppUser sender;
   final String chatId;
-  final User second;
+  final AppUser second;
   ChatPage({this.sender, this.chatId, this.second});
   @override
   _ChatPageState createState() => _ChatPageState();

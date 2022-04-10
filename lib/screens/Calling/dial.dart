@@ -7,7 +7,7 @@ import 'package:flutter_grid/models/user_model.dart';
 import 'package:flutter_grid/screens/Calling/call.dart';
 class DialCall extends StatefulWidget {
   final String channelName;
-  final User receiver;
+  final AppUser receiver;
   final String callType;
   const DialCall({@required this.channelName, this.receiver, this.callType});
 

@@ -4,7 +4,7 @@ import 'package:flutter_grid/models/user_model.dart';
 import 'package:flutter_grid/screens/phonesign/otp.dart';
 import 'package:flutter_grid/screens/util/color.dart';
 class UpdateNumber extends StatelessWidget {
-  final User currentUser;
+  final AppUser currentUser;
   UpdateNumber(this.currentUser);
 
   @override

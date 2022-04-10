@@ -6,8 +6,8 @@ import 'package:flutter_grid/screens/Chat/chatPage.dart';
 import 'package:persistent_bottom_nav_bar/persistent-tab-view.dart';
 
 class Matches extends StatelessWidget {
-  final User currentUser;
-  final List<User> matches;
+  final AppUser currentUser;
+  final List<AppUser> matches;
 
   Matches(this.currentUser, this.matches);
 

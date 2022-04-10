@@ -1,7 +1,7 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/cupertino.dart';
 
-class User {
+class AppUser {
   final String id;
   final String name;
   final bool isBlocked;
@@ -21,7 +21,7 @@ class User {
   var distanceBW;
   final bool isRunning;
   final bool isActive;
-  User({
+  AppUser({
     @required this.id,
     @required this.age,
     @required this.address,
@@ -42,9 +42,9 @@ class User {
     this.isActive,
     this.video,
   });
-  factory User.fromDocument(DocumentSnapshot doc) {
+  factory AppUser.fromDocument(DocumentSnapshot doc) {
     // DateTime date = DateTime.parse(doc["user_DOB"]);
-    return User(
+    return AppUser(
         id: doc['userId'],
         isBlocked: doc['isBlocked'] != null ? doc['isBlocked'] : false,
         isRunning: doc['isRunning'] != null ? doc['isRunning'] : false,
@@ -71,9 +71,9 @@ class User {
         })
             : null);
   }
-  factory User.fromimageDocument(DocumentSnapshot doc) {
+  factory AppUser.fromimageDocument(DocumentSnapshot doc) {
     // DateTime date = DateTime.parse(doc["user_DOB"]);
-    return User(
+    return AppUser(
         id: doc['userId'],
         isBlocked: doc['isBlocked'] != null ? doc['isBlocked'] : false,
         phoneNumber: doc['phoneNumber'],

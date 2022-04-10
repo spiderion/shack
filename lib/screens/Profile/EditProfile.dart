@@ -11,7 +11,7 @@ import 'package:image_picker/image_picker.dart';
 import 'package:path_provider/path_provider.dart';
 
 class EditProfile extends StatefulWidget {
-  final User currentUser;
+  final AppUser currentUser;
   EditProfile(this.currentUser);
 
   @override
@@ -195,7 +195,7 @@ class EditProfileState extends State<EditProfile> {
     Navigator.pop(context);
   }
 
-  Future uploadFile(File image, User currentUser, isProfilePicture) async {
+  Future uploadFile(File image, AppUser currentUser, isProfilePicture) async {
     StorageReference storageReference = FirebaseStorage.instance
         .ref()
         .child('users/${currentUser.id}/${image.hashCode}.jpg');

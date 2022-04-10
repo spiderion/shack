@@ -4,9 +4,9 @@ import 'package:flutter_grid/screens/Chat/Matches.dart';
 import 'package:flutter_grid/screens/Chat/recent_chats.dart';
 
 class HomeScreen extends StatefulWidget {
-  final User currentUser;
-  final List<User> matches;
-  final List<User> newmatches;
+  final AppUser currentUser;
+  final List<AppUser> matches;
+  final List<AppUser> newmatches;
   HomeScreen(this.currentUser, this.matches, this.newmatches);
 
   @override

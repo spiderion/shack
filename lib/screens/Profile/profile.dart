@@ -47,7 +47,7 @@ final List adds = [
 ];
 
 class Profile extends StatefulWidget {
-  final User currentUser;
+  final AppUser currentUser;
   final bool isPuchased;
   final Map items;
   final List<PurchaseDetails> purchases;

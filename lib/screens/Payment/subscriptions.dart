@@ -17,7 +17,7 @@ import '../Tab.dart';
 
 class Subscription extends StatefulWidget {
   final bool isPaymentSuccess;
-  final User currentUser;
+  final AppUser currentUser;
   final Map items;
   Subscription(this.currentUser, this.isPaymentSuccess, this.items);
 

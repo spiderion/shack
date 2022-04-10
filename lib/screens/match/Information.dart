@@ -14,8 +14,8 @@ import 'package:swipedetector/swipedetector.dart';
 
 
 class Info extends StatelessWidget {
-  final User currentUser;
-  final User user;
+  final AppUser currentUser;
+  final AppUser user;
 
   final GlobalKey<SwipeStackState> swipeKey;
   Info(

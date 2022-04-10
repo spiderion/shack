@@ -11,8 +11,8 @@ import 'package:swipe_stack/swipe_stack.dart';
 
 
 class Infos extends StatelessWidget {
-  final User currentUser;
-  final User user;
+  final AppUser currentUser;
+  final AppUser user;
 
   final GlobalKey<SwipeStackState> swipeKey;
   Infos(
