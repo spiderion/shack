@@ -112,13 +112,14 @@ class PaymentDetails extends StatelessWidget {
                                                     fontSize: 15,
                                                   ))),
                                               DataCell(Text(
-                                                  index.billingClientPurchase.isAutoRenewing
+                                                  false /*index.billingClientPurchase.isAutoRenewing*/
                                                       ? "Active"
-                                                      : "Cancelled",
+                                                      : "Cancelled check in code",
                                                   style: TextStyle(
-                                                    color: index.billingClientPurchase.isAutoRenewing
-                                                        ? Colors.green
-                                                        : Colors.red,
+                                                    color:
+                                                        false /* index.billingClientPurchase.isAutoRenewing*/
+                                                            ? Colors.green
+                                                            : Colors.red,
                                                     fontSize: 15,
                                                   ))),
                                             ]),

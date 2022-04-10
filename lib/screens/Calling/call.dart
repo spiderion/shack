@@ -73,14 +73,12 @@ class _CallPageState extends State<CallPage> {
 
   /// Add agora event handlers
   void _addAgoraEventHandlers() {
-    _engine.onError = (dynamic code) {
+    _engine.setEventHandler(RtcEngineEventHandler(error: (dynamic code) {
       setState(() {
         final info = 'onError: $code';
         _infoStrings.add(info);
       });
-    };
-
-    _engine.onJoinChannelSuccess = (
+    }, joinChannelSuccess: (
       String channel,
       int uid,
       int elapsed,
@@ -89,33 +87,23 @@ class _CallPageState extends State<CallPage> {
         final info = 'onJoinChannel: $channel, uid: $uid';
         _infoStrings.add(info);
       });
-    };
-
-    _engine.onLeaveChannel = () {
+    }, leaveChannel: (rtc) {
       setState(() {
         _infoStrings.add('onLeaveChannel');
         _users.clear();
       });
-    };
-
-    _engine.onUserJoined = (int uid, int elapsed) {
-      setState(() {
-        final info = 'userJoined: $uid';
-        _infoStrings.add(info);
-        _users.add(uid);
-      });
-    };
-
-    _engine.onUserOffline = (int uid, int reason) {
+    }, userJoined: (int uid, int elapsed) {
+      final info = 'userJoined: $uid';
+      _infoStrings.add(info);
+      _users.add(uid);
+    }, userOffline: (int uid, reason) {
       setState(() {
         final info = 'userOffline: $uid';
         _infoStrings.add(info);
         _users.remove(uid);
       });
       Navigator.pop(context);
-    };
-
-    _engine.onFirstRemoteVideoFrame = (
+    }, firstRemoteVideoFrame: (
       int uid,
       int width,
       int height,
@@ -125,16 +113,16 @@ class _CallPageState extends State<CallPage> {
         final info = 'firstRemoteVideo: $uid ${width}x $height';
         _infoStrings.add(info);
       });
-    };
+    }));
   }
 
   /// Helper function to get list of native views
   List<Widget> _getRenderViews() {
-    final List<AgoraRenderWidget> list = [];
+    final List list = [];
     if (widget.role == ClientRole.Broadcaster) {
-      list.add(AgoraRenderWidget(0, local: true, preview: true));
+      //  list.add(AgoraRenderWidget(0, local: true, preview: true));
     }
-    _users.forEach((int uid) => list.add(AgoraRenderWidget(uid)));
+    // _users.forEach((int uid) => list.add(AgoraRenderWidget(uid)));
     return list;
   }
 

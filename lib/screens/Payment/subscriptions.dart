@@ -10,8 +10,6 @@ import 'package:flutter_grid/screens/util/CustomSnackbar.dart';
 import 'package:flutter_grid/screens/util/color.dart';
 import 'package:flutter_swiper/flutter_swiper.dart';
 import 'package:in_app_purchase/in_app_purchase.dart';
-import 'package:in_app_purchase/store_kit_wrappers.dart';
-import '../Profile/profile.dart';
 import 'package:rflutter_alert/rflutter_alert.dart';
 
 import '../Profile/profile.dart';
@@ -44,7 +42,7 @@ class _SubscriptionState extends State<Subscription> {
   ProductDetails selectedProduct;
   var response;
   bool _isLoading = true;
-  InAppPurchaseConnection _iap = InAppPurchaseConnection.instance;
+  var _iap = null; //InAppPurchaseConnection.instance;
   final GlobalKey<ScaffoldState> _scaffoldKey = new GlobalKey<ScaffoldState>();
 
   @override
@@ -102,7 +100,7 @@ class _SubscriptionState extends State<Subscription> {
 
       /// removing all the pending puchases.
       if (Platform.isIOS) {
-        var paymentWrapper = SKPaymentQueueWrapper();
+        var paymentWrapper = null; // SKPaymentQueueWrapper();
         var transactions = await paymentWrapper.transactions();
         transactions.forEach((transaction) async {
           print(transaction.transactionState);
@@ -310,11 +308,9 @@ class _SubscriptionState extends State<Subscription> {
                                                             ? getInterval(product)
                                                             : getIntervalAndroid(product),
                                                         intervalCount: Platform.isIOS
-                                                            ? product
-                                                                .skProduct.subscriptionPeriod.numberOfUnits
-                                                                .toString()
-                                                            : product.skuDetail.subscriptionPeriod
-                                                                .split("")[1],
+                                                            ? "product.skProduct.subscriptionPeriod.numberOfUnits.toString()"
+                                                            : "product.skuDetail.subscriptionPeriod.split("
+                                                                ")[1]",
                                                         price: product.price,
                                                       ),
                                                     ],
@@ -468,7 +464,7 @@ class _SubscriptionState extends State<Subscription> {
 
   ///get past purchases of user
   Future<void> _getpastPurchases() async {
-    QueryPurchaseDetailsResponse response = await _iap.queryPastPurchases();
+    var response = await _iap?.queryPastPurchases();
     for (PurchaseDetails purchase in response.pastPurchases) {
       if (Platform.isIOS) {
         _iap.completePurchase(purchase);
@@ -521,18 +517,19 @@ class _SubscriptionState extends State<Subscription> {
   }
 
   String getInterval(ProductDetails product) {
-    SKSubscriptionPeriodUnit periodUnit = product.skProduct.subscriptionPeriod.unit;
-    if (SKSubscriptionPeriodUnit.month == periodUnit) {
+    var periodUnit = null; // product.skProduct.subscriptionPeriod.unit;
+    return "check error in app";
+    /*  if (SKSubscriptionPeriodUnit.month == periodUnit) {
       return "Month(s)";
     } else if (SKSubscriptionPeriodUnit.week == periodUnit) {
       return "Week(s)";
     } else {
       return "Year";
-    }
+    }*/
   }
 
   String getIntervalAndroid(ProductDetails product) {
-    String durCode = product.skuDetail.subscriptionPeriod.split("")[2];
+    String durCode = ''; //product.skuDetail.subscriptionPeriod.split("")[2];
     if (durCode == "M") {
       return "Month(s)";
     } else if (durCode == "Y") {

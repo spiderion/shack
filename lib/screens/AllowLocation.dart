@@ -1,8 +1,6 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter/services.dart';
 import 'package:flutter_grid/screens/SignUp.dart';
-import 'package:flutter_grid/screens/util/CustomSnackbar.dart';
 import 'package:geolocator/geolocator.dart';
 
 class AllowLocation extends StatefulWidget {
@@ -15,7 +13,6 @@ class AllowLocation extends StatefulWidget {
 }
 
 class _AllowLocationState extends State<AllowLocation> {
-
   @override
   void initState() {
     super.initState();
@@ -90,8 +87,7 @@ in order to search users around you.
               Container(
                 width: double.infinity,
                 height: 50,
-                margin: EdgeInsets.only(
-                    top: 10, bottom: 10, left: 25, right: 25),
+                margin: EdgeInsets.only(top: 10, bottom: 10, left: 25, right: 25),
                 child: FlatButton(
                     shape: RoundedRectangleBorder(
                       borderRadius: BorderRadius.circular(8.0),
@@ -100,18 +96,17 @@ in order to search users around you.
                     padding: EdgeInsets.all(8),
                     textColor: _theme.primaryColor,
                     onPressed: () async {
-                      var currentLocation = await Geolocator().getCurrentPosition(
-                          desiredAccuracy: LocationAccuracy.best);
-                      List<Placemark> pm = await Geolocator()
-                          .placemarkFromCoordinates(currentLocation.latitude,
-                          currentLocation.longitude);
+                      var currentLocation =
+                          await Geolocator.getCurrentPosition(desiredAccuracy: LocationAccuracy.best);
+                      List pm =
+                          []; //await Geolocator.placemarkFromCoordinates(currentLocation.latitude,currentLocation.longitude);
                       widget.userData.addAll(
                         {
                           'location': {
                             'latitude': currentLocation.latitude,
                             'longitude': currentLocation.longitude,
                             'address':
-                            "${pm[0].locality} ${pm[0].subLocality} ${pm[0].subAdministrativeArea}\n ${pm[0].country} ,${pm[0].postalCode}"
+                                "${pm[0].locality} ${pm[0].subLocality} ${pm[0].subAdministrativeArea}\n ${pm[0].country} ,${pm[0].postalCode}"
                           },
                           'maximum_distance': 20,
                           'age_range': {
@@ -124,23 +119,19 @@ in order to search users around you.
                         'editInfo': {
                           'university': "",
                           'userGender': widget.userData['userGender'],
-                          'showOnProfile':
-                          widget.userData['showOnProfile']
+                          'showOnProfile': widget.userData['showOnProfile']
                         }
                       });
                       widget.userData.remove('showOnProfile');
                       widget.userData.remove('userGender');
                       Navigator.push(
-                          context,
-                          CupertinoPageRoute(
-                              builder: (context) => SignUp(widget.userData)));
+                          context, CupertinoPageRoute(builder: (context) => SignUp(widget.userData)));
                     },
                     child: Container(
                       alignment: Alignment.center,
                       child: Text(
                         'ALLOW LOCATION',
-                        style: TextStyle(
-                            fontWeight: FontWeight.w900, fontSize: 15),
+                        style: TextStyle(fontWeight: FontWeight.w900, fontSize: 15),
                         textAlign: TextAlign.center,
                       ),
                     )),

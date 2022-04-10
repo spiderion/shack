@@ -75,7 +75,7 @@ class _TABState extends State<TAB> with WidgetsBindingObserver {
   bool _hideNavBar;
 
   List<PurchaseDetails> purchases = [];
-  InAppPurchaseConnection _iap = InAppPurchaseConnection.instance;
+  var _iap = null; // InAppPurchaseConnection.instance;
   bool isPuchased = false;
 
   VideoPlayerController videocontroller;
@@ -294,11 +294,11 @@ class _TABState extends State<TAB> with WidgetsBindingObserver {
 
   Future<void> _getpastPurchases() async {
     print('in past purchases');
-    QueryPurchaseDetailsResponse response = await _iap.queryPastPurchases();
+    var response = await _iap?.queryPastPurchases();
     print('response   ${response.pastPurchases}');
     for (PurchaseDetails purchase in response.pastPurchases) {
       if (Platform.isIOS) {
-        await _iap.completePurchase(purchase);
+        await _iap?.completePurchase(purchase);
       }
     }
     setState(() {
@@ -319,7 +319,7 @@ class _TABState extends State<TAB> with WidgetsBindingObserver {
       });
     });
 
-    _firebaseMessaging.configure(
+    /*  _firebaseMessaging.configure(
       onLaunch: (Map<String, dynamic> message) async {
         print('===============onLaunch$message');
         if (message['data']['type'] == 'Call') {
@@ -347,7 +347,7 @@ class _TABState extends State<TAB> with WidgetsBindingObserver {
           }
         }
       },
-    );
+    );*/
   }
 
   _checkcallState(channelId) async {
@@ -588,8 +588,8 @@ class _TABState extends State<TAB> with WidgetsBindingObserver {
 
   Future<void> updatelocation() async {
     var currentLocation = await Geolocator.getCurrentPosition(desiredAccuracy: LocationAccuracy.best);
-    List<Placemark> pm =
-        await Geolocator().placemarkFromCoordinates(currentLocation.latitude, currentLocation.longitude);
+    List pm =
+        []; //await Geolocator().placemarkFromCoordinates(currentLocation.latitude, currentLocation.longitude);
     Map<String, dynamic> userData = {};
     userData.addAll(
       {

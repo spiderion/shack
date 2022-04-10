@@ -222,10 +222,10 @@ class _SettingsState extends State<Settings> {
                                   ),
                                 ),
                                 onTap: () async {
-                                  var currentLocation = await Geolocator
-                                      .getCurrentPosition(desiredAccuracy: LocationAccuracy.best);
-                                  List pm = await Geolocator.placemarkFromCoordinates(
-                                      currentLocation.latitude, currentLocation.longitude);
+                                  var currentLocation = await Geolocator.getCurrentPosition(
+                                      desiredAccuracy: LocationAccuracy.best);
+                                  List pm =
+                                      []; // await Geolocator.placemarkFromCoordinates(currentLocation.latitude, currentLocation.longitude);
                                   var address =
                                       "${pm[0].locality}${pm[0].subLocality} ${pm[0].subAdministrativeArea}\n ${pm[0].country} ,${pm[0].postalCode}";
                                   showCupertinoModalPopup(
