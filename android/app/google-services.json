@@ -1,0 +1,40 @@
+{
+  "project_info": {
+    "project_number": "708496135763",
+    "firebase_url": "https://thegrid-5ebd6.firebaseio.com",
+    "project_id": "thegrid-5ebd6",
+    "storage_bucket": "thegrid-5ebd6.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:708496135763:android:2d866309a0afe3595cd8a6",
+        "android_client_info": {
+          "package_name": "com.tinder.grid"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "708496135763-33ip4t4n9j40gtjp36ffpbhtpejst875.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyAHbs5zJF2E5vYGLG5bq1FoOTMFKCYtF-I"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "708496135763-33ip4t4n9j40gtjp36ffpbhtpejst875.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
