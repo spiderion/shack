@@ -24,6 +24,8 @@ dependencies:
   flutter:
     sdk: flutter
   cupertino_icons: ^1.0.4
+  firebase_core: ^1.14.0
+  firebase_analytics: ^9.1.4
   persistent_bottom_nav_bar: ^4.0.2
   country_code_picker: ^2.0.2
   pin_code_fields: ^7.4.0
