@@ -44,7 +44,7 @@ dependencies:
   flutter_webview_plugin: ^0.4.0
   in_app_purchase: ^3.0.2
   rflutter_alert: ^2.0.4
-  agora_rtc_engine: ^5.0.1
+  agora_rtc_engine: ^4.2.1
   permission_handler: ^9.2.0
   flutter_ringtone_player: ^3.2.0
   shimmer: ^2.0.0
