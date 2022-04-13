@@ -7,7 +7,6 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_grid/models/user_model.dart';
 import 'package:image/image.dart' as i;
-import 'package:image_cropper/image_cropper.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:path_provider/path_provider.dart';
 
@@ -163,7 +162,7 @@ class EditProfileState extends State<EditProfile> {
   Future getImage(ImageSource imageSource, context, currentUser, isProfilePicture) async {
     XFile? image = await ImagePicker().pickImage(source: imageSource);
     if (image != null) {
-      File? croppedFile = await ImageCropper().cropImage(
+     /* File? croppedFile = await ImageCropper().cropImage(
           sourcePath: image.path,
           aspectRatioPresets: [CropAspectRatioPreset.square],
           androidUiSettings: AndroidUiSettings(
@@ -177,7 +176,7 @@ class EditProfileState extends State<EditProfile> {
           ));
       if (croppedFile != null) {
         await uploadFile(await (compressimage(croppedFile)), currentUser, isProfilePicture);
-      }
+      }*/
     }
     Navigator.pop(context);
   }
