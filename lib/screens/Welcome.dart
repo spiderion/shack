@@ -100,7 +100,7 @@ ut labore et dolore magna aliqua.""",
                                   alignment: Alignment.centerLeft,
                                   child: Icon(
                                     Gridapp.phone_squared,
-                                    size: 30
+                                    size: 30,
                                   ),
                                 ),
                                 Container(
@@ -160,9 +160,7 @@ ut labore et dolore magna aliqua.""",
                             color: _theme.backgroundColor,
                             padding: EdgeInsets.all(8),
                             textColor: _theme.primaryColor,
-                            onPressed: () {
-                              print('SIGN UP WITH EMAIL');
-                            },
+                            onPressed: () {},
                             child: Stack(
                               children: <Widget>[
                                 Container(

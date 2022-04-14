@@ -7,7 +7,6 @@ import 'package:firebase_storage/firebase_storage.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_grid/models/user_model.dart';
-import 'package:flutter_grid/screens/Calling/dial.dart';
 import 'package:flutter_grid/screens/Calling/utils/settings.dart';
 import 'package:flutter_grid/screens/Chat/largeImage.dart';
 import 'package:flutter_grid/screens/match/Information.dart';
@@ -15,6 +14,7 @@ import 'package:flutter_grid/screens/util/CustomSnackbar.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:intl/intl.dart';
 import 'package:permission_handler/permission_handler.dart';
+import 'package:template_package/template_package.dart';
 
 class ChatPage extends StatefulWidget {
   final AppUser? sender;
@@ -626,7 +626,8 @@ class _ChatPageState extends State<ChatPage> {
       });
 
       // push video page with given channel name
-   /*   await Navigator.push(
+      Fluttertoast.showToast(msg: 'cant push was disabled');
+      /*  await Navigator.push(
         context,
         MaterialPageRoute(
           builder: (context) =>

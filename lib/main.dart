@@ -13,7 +13,7 @@ import 'package:flutter_grid/themes/theme.dart';
 
 Future main() async {
   WidgetsFlutterBinding.ensureInitialized();
-  await Firebase.initializeApp();
+  Firebase.initializeApp();
   if (Platform.isAndroid) {
     // Overrides the status bar and navigation style.
     SystemChrome.setSystemUIOverlayStyle(const SystemUiOverlayStyle(
