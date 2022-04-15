@@ -8,6 +8,7 @@ import 'package:flutter_grid/models/user_model.dart';
 import 'package:flutter_grid/screens/Tab.dart';
 import 'package:flutter_grid/screens/util/color.dart';
 import 'package:flutter_swiper_null_safety/flutter_swiper_null_safety.dart';
+import 'package:template_package/template_package.dart';
 import 'package:video_player/video_player.dart';
 
 class Home extends StatefulWidget {
@@ -106,10 +107,9 @@ class _HomeState extends State<Home> {
                                                   ),
                                                   errorWidget: (context, url, error) => Icon(Icons.error),
                                                 )
-                                              : Image.asset(
-                                                  'assets/loading.gif',
-                                                  fit: BoxFit.cover,
-                                                ),
+                                              : isInDebugMode
+                                                  ? Text('loading')
+                                                  : Image.asset('assets/loading.gif', fit: BoxFit.cover),
                                         ),
                                       ),
                                       Container(
@@ -301,6 +301,22 @@ class _HomeState extends State<Home> {
                                                           child: VideoPlayer(widget.controller!),
                                                         )),
                                                   )
+                                                : isInDebugMode
+                                                    ? Text('loading')
+                                                    : Container(
+                                                        decoration: BoxDecoration(
+                                                            borderRadius: BorderRadius.circular(10),
+                                                            image: DecorationImage(
+                                                                image: Image.asset(
+                                                                  'assets/loading.gif',
+                                                                  fit: BoxFit.contain,
+                                                                ).image,
+                                                                fit: BoxFit.cover)),
+                                                        width: media.size.width - 60,
+                                                        height: (media.size.width - 60) * 8 / 16,
+                                                      ))
+                                            : isInDebugMode
+                                                ? Text('loading')
                                                 : Container(
                                                     decoration: BoxDecoration(
                                                         borderRadius: BorderRadius.circular(10),
@@ -312,19 +328,7 @@ class _HomeState extends State<Home> {
                                                             fit: BoxFit.cover)),
                                                     width: media.size.width - 60,
                                                     height: (media.size.width - 60) * 8 / 16,
-                                                  ))
-                                            : Container(
-                                                decoration: BoxDecoration(
-                                                    borderRadius: BorderRadius.circular(10),
-                                                    image: DecorationImage(
-                                                        image: Image.asset(
-                                                          'assets/loading.gif',
-                                                          fit: BoxFit.contain,
-                                                        ).image,
-                                                        fit: BoxFit.cover)),
-                                                width: media.size.width - 60,
-                                                height: (media.size.width - 60) * 8 / 16,
-                                              )),
+                                                  )),
                                   ],
                                 ),
                               )))
@@ -338,12 +342,14 @@ class _HomeState extends State<Home> {
                       ),
                       height: 200,
                       width: MediaQuery.of(context).size.width,
-                      child: Image.asset(
-                        'assets/loading.gif',
-                        fit: BoxFit.cover,
-                        width: double.infinity,
-                        height: 200,
-                      ),
+                      child: isInDebugMode
+                          ? Text('loading')
+                          : Image.asset(
+                              'assets/loading.gif',
+                              fit: BoxFit.cover,
+                              width: double.infinity,
+                              height: 200,
+                            ),
                     )
                   : Container(
                       decoration: BoxDecoration(

@@ -43,28 +43,28 @@ class AppUser {
     this.video,
   });
 
-  factory AppUser.fromDocument(DocumentSnapshot doc) {
+  factory AppUser.fromDocument(Map<String, dynamic> json) {
     // DateTime date = DateTime.parse(doc["user_DOB"]);
     return AppUser(
-        id: doc['userId'],
-        isBlocked: doc['isBlocked'] != null ? doc['isBlocked'] : false,
-        isRunning: doc['isRunning'] != null ? doc['isRunning'] : false,
-        isActive: doc['isActive'] != null ? doc['isActive'] : true,
-        video: doc['video'] != null ? doc['video'] : '',
-        phoneNumber: doc['phoneNumber'],
-        name: doc['UserName'],
-        editInfo: doc['editInfo'],
-        ageRange: doc['age_range'],
-        showGender: doc['showGender'],
-        maxDistance: doc['maximum_distance'],
-        sexualOrientation: doc['sexualOrientation']['orientation'] ?? "" as List<dynamic>?,
-        age: ((DateTime.now().difference(DateTime.parse(doc["user_DOB"])).inDays) / 365.2425).truncate(),
-        address: doc['location']['address'],
-        coordinates: doc['location'],
+        id: json['userId'],
+        isBlocked: json['isBlocked'] != null ? json['isBlocked'] : false,
+        isRunning: json['isRunning'] != null ? json['isRunning'] : false,
+        isActive: json['isActive'] != null ? json['isActive'] : true,
+        video: json['video'] != null ? json['video'] : '',
+        phoneNumber: json['phoneNumber'],
+        name: json['UserName'],
+        editInfo: json['editInfo'],
+        ageRange: json['age_range'],
+        showGender: json['showGender'],
+        maxDistance: json['maximum_distance'],
+        sexualOrientation: json['sexualOrientation']['orientation'] ?? "" as List<dynamic>?,
+        age: ((DateTime.now().difference(DateTime.parse(json["user_DOB"])).inDays) / 365.2425).truncate(),
+        address: json['location']['address'],
+        coordinates: json['location'],
         // university: doc['editInfo']['university'],
-        imageUrl: doc['Pictures'] != null
-            ? List.generate(doc['Pictures'].length, (index) {
-                return doc['Pictures'][index];
+        imageUrl: json['Pictures'] != null
+            ? List.generate(json['Pictures'].length, (index) {
+                return json['Pictures'][index];
               })
             : null);
   }

@@ -10,6 +10,7 @@ import 'package:flutter_grid/screens/Settings/Filters.dart';
 import 'package:flutter_grid/screens/util/color.dart';
 import 'package:flutter_swiper_null_safety/flutter_swiper_null_safety.dart';
 import 'package:persistent_bottom_nav_bar/persistent-tab-view.dart';
+import 'package:template_package/template_package.dart';
 
 class Setting extends StatefulWidget {
   final AppUser? currentUser;
@@ -54,7 +55,7 @@ class _SettingState extends State<Setting> {
         changeValues.addAll({'maximum_distance': freeR.round()});
       } else if (widget.isPurchased && getUserMaxDistance() >= paidR) {
         widget.currentUser?.maxDistance = paidR.round();
-        changeValues.addAll({'maximum_distance': paidR.round()}!);
+        changeValues.addAll({'maximum_distance': paidR.round()});
       }
       _showMe = widget.currentUser?.showGender;
       distance = getUserMaxDistance().round();
@@ -92,8 +93,10 @@ class _SettingState extends State<Setting> {
                     ? Container(
                         height: 250,
                         width: MediaQuery.of(context).size.width,
-                        child: Image.asset('assets/loading.gif',
-                            fit: BoxFit.cover, width: double.infinity, height: 200),
+                        child: isInDebugMode
+                            ? Text('loading')
+                            : Image.asset('assets/loading.gif',
+                                fit: BoxFit.cover, width: double.infinity, height: 200),
                       )
                     : Container(
                         height: 400,
