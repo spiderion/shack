@@ -11,6 +11,7 @@ import 'package:image/image.dart' as i;
 import 'package:image_cropper/image_cropper.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:path_provider/path_provider.dart';
+import 'package:template_package/utils/build_mode_detector.dart';
 
 class SelectImage extends StatefulWidget {
   SelectImage();
@@ -114,27 +115,26 @@ class _SelectImageState extends State<SelectImage> {
                           color: _theme.backgroundColor,
                           padding: EdgeInsets.all(8),
                           textColor: _theme.primaryColor,
-                          onPressed: () {
-                            showDialog(
+                          onPressed: () async {
+                            getImage(ImageSource.gallery, context, currentUser);
+                            await showDialog(
                                 barrierDismissible: false,
                                 context: context,
                                 builder: (context) {
-                                  getImage(ImageSource.gallery, context, currentUser);
                                   return Center(
-                                      child: CircularProgressIndicator(
-                                    strokeWidth: 2,
-                                    valueColor: AlwaysStoppedAnimation<Color>(Colors.white),
-                                  ));
+                                      child: isInDebugMode
+                                          ? Text('loading')
+                                          : CircularProgressIndicator(
+                                              strokeWidth: 2,
+                                              valueColor: AlwaysStoppedAnimation<Color>(Colors.white),
+                                            ));
                                 });
                           },
                           child: Container(
-                            alignment: Alignment.center,
-                            child: Text(
-                              'CHOOSE A PHOTO',
-                              style: TextStyle(fontWeight: FontWeight.w900, fontSize: 15),
-                              textAlign: TextAlign.center,
-                            ),
-                          )),
+                              alignment: Alignment.center,
+                              child: Text('CHOOSE A PHOTO',
+                                  style: TextStyle(fontWeight: FontWeight.w900, fontSize: 15),
+                                  textAlign: TextAlign.center))),
                     ),
                     Container(
                       width: double.infinity,
@@ -178,7 +178,7 @@ class _SelectImageState extends State<SelectImage> {
     );
   }
 
-  Future getImage(ImageSource imageSource, context, currentUser) async {
+  Future getImage(ImageSource imageSource, context, AppUser? currentUser) async {
     ThemeData _theme = Theme.of(context);
     var image = await ImagePicker().pickImage(source: imageSource);
     if (image != null) {
@@ -195,49 +195,48 @@ class _SelectImageState extends State<SelectImage> {
             minimumAspectRatio: 1.0,
           ));
       if (croppedFile != null) {
-        await uploadFile(await (compressimage(croppedFile)), currentUser);
+        final compressedIMage = await compressimage(croppedFile);
+        await uploadFile(compressedIMage, currentUser);
       }
     }
     Navigator.pop(context);
   }
 
-  Future uploadFile(File image, AppUser currentUser) async {
+  Future uploadFile(File image, AppUser? currentUser) async {
     Reference storageReference =
-        FirebaseStorage.instance.ref().child('users/${currentUser.id}/${image.hashCode}.jpg');
+        FirebaseStorage.instance.ref().child('users/${currentUser?.id}/${image.hashCode}.jpg');
     UploadTask uploadTask = storageReference.putFile(image);
     // if (uploadTask.isInProgress == true) {}
     uploadTask.whenComplete(() {
       storageReference.getDownloadURL().then((fileURL) async {
         if (mounted)
           setState(() {
-            if (currentUser.imageUrl == null) {
-              currentUser.imageUrl = [];
+            if (currentUser?.imageUrl == null) {
+              currentUser?.imageUrl = [];
             }
-            currentUser.imageUrl!.add(fileURL);
+            currentUser?.imageUrl?.add(fileURL);
           });
         Map<String, dynamic> updateObject = {
-          'userId': currentUser.id,
-          'phoneNumber': currentUser.phoneNumber,
+          'userId': currentUser?.id,
+          'phoneNumber': currentUser?.phoneNumber,
           'timestamp': FieldValue.serverTimestamp(),
           "Pictures": FieldValue.arrayUnion([
             fileURL,
           ])
         };
         try {
-          await FirebaseFirestore.instance.collection("Users").doc(currentUser.id).set(updateObject);
+          await FirebaseFirestore.instance.collection("Users").doc(currentUser?.id).set(updateObject);
           Navigator.push(context, CupertinoPageRoute(builder: (context) => UserName()));
         } catch (err) {}
       });
     });
   }
 
-  Future compressimage(File image) async {
+  Future<File> compressimage(File image) async {
     final tempdir = await getTemporaryDirectory();
     final path = tempdir.path;
     i.Image imagefile = i.decodeImage(image.readAsBytesSync())!;
-    final compressedImagefile = File('$path.jpg')..writeAsBytesSync(i.encodeJpg(imagefile, quality: 80));
-    // setState(() {
-    return compressedImagefile;
-    // });
+    final compressedImageFile = File('$path.jpg')..writeAsBytesSync(i.encodeJpg(imagefile, quality: 80));
+    return compressedImageFile;
   }
 }

@@ -96,6 +96,7 @@ in order to search users around you.
                     padding: EdgeInsets.all(8),
                     textColor: _theme.primaryColor,
                     onPressed: () async {
+                      print('hey');
                       var currentLocation =
                           await Geolocator.getCurrentPosition(desiredAccuracy: LocationAccuracy.best);
                       List pm =
