@@ -44,7 +44,7 @@
 	<key>NSInternalInconsistencyException</key>
 	<string>com.googleusercontent.apps.708496135763-ipr4oqdeqcnssua053nb0rk3v7ptlfeq</string>
 	<key>NSLocationWhenInUseUsageDescription</key>
-	<string>The Grid need your location to make the match appear</string>
+	<string>The Shack need your location to make the match appear</string>
 	<key>NSMotionUsageDescription</key>
 	<string>We trak your location for alert</string>
 	<key>NSPhotoLibraryUsageDescription</key>

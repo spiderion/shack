@@ -1,3 +1,4 @@
+import 'package:cached_network_image/cached_network_image.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/cupertino.dart';
@@ -7,6 +8,7 @@ import 'package:flutter_grid/screens/Settings/Addphoto.dart';
 import 'package:flutter_grid/screens/Settings/EditBio.dart';
 import 'package:flutter_grid/screens/Settings/Filters.dart';
 import 'package:flutter_grid/screens/util/color.dart';
+import 'package:flutter_swiper_null_safety/flutter_swiper_null_safety.dart';
 import 'package:persistent_bottom_nav_bar/persistent-tab-view.dart';
 
 class Setting extends StatefulWidget {
@@ -23,24 +25,16 @@ class Setting extends StatefulWidget {
 class _SettingState extends State<Setting> {
   Map<String, dynamic> changeValues = {};
   RangeValues? ageRange;
-  var _showMe;
+  String? _showMe;
   int? distance;
   final FirebaseAuth _auth = FirebaseAuth.instance;
   bool checkedValue = false;
   bool? isSwitched = true;
 
-  @override
-  void dispose() {
-    super.dispose();
-    if (changeValues.length > 0) {
-      updateData();
-    }
-  }
-
   Future updateData() async {
     FirebaseFirestore.instance
         .collection("Users")
-        .doc(widget.currentUser!.id)
+        .doc(widget.currentUser?.id)
         .set(changeValues, SetOptions(merge: true));
     // lastVisible = null;
     // print('ewew$lastVisible');
@@ -55,20 +49,23 @@ class _SettingState extends State<Setting> {
     freeR = widget.items['free_radius'] != null ? int.parse(widget.items['free_radius']) : 400;
     paidR = widget.items['paid_radius'] != null ? int.parse(widget.items['paid_radius']) : 400;
     setState(() {
-      if (!widget.isPurchased && widget.currentUser!.maxDistance! > freeR) {
-        widget.currentUser!.maxDistance = freeR.round();
+      if (!widget.isPurchased && getUserMaxDistance() > freeR) {
+        widget.currentUser?.maxDistance = freeR.round();
         changeValues.addAll({'maximum_distance': freeR.round()});
-      } else if (widget.isPurchased && widget.currentUser!.maxDistance! >= paidR) {
-        widget.currentUser!.maxDistance = paidR.round();
-        changeValues.addAll({'maximum_distance': paidR.round()});
+      } else if (widget.isPurchased && getUserMaxDistance() >= paidR) {
+        widget.currentUser?.maxDistance = paidR.round();
+        changeValues.addAll({'maximum_distance': paidR.round()}!);
       }
-      _showMe = widget.currentUser!.showGender;
-      distance = widget.currentUser!.maxDistance!.round();
-      ageRange = RangeValues(double.parse(widget.currentUser!.ageRange!['min']),
-          (double.parse(widget.currentUser!.ageRange!['max'])));
-      isSwitched = widget.currentUser!.isActive;
+      _showMe = widget.currentUser?.showGender;
+      distance = getUserMaxDistance().round();
+      final min = double.parse(widget.currentUser?.ageRange?['min'] ?? '18');
+      final max = double.parse(widget.currentUser?.ageRange?['max'] ?? '30');
+      ageRange = RangeValues(min, max);
+      isSwitched = widget.currentUser?.isActive ?? false;
     });
   }
+
+  int getUserMaxDistance() => (widget.currentUser?.maxDistance ?? 0);
 
   @override
   Widget build(BuildContext context) {
@@ -88,40 +85,31 @@ class _SettingState extends State<Setting> {
           child: SingleChildScrollView(
               child: Column(
             children: <Widget>[
-              SizedBox(
-                height: 20,
-              ),
+              SizedBox(height: 20),
               Container(
                 alignment: Alignment.center,
                 child: widget.currentUser == null
                     ? Container(
                         height: 250,
                         width: MediaQuery.of(context).size.width,
-                        child: Image.asset(
-                          'assets/loading.gif',
-                          fit: BoxFit.cover,
-                          width: double.infinity,
-                          height: 200,
-                        ),
+                        child: Image.asset('assets/loading.gif',
+                            fit: BoxFit.cover, width: double.infinity, height: 200),
                       )
                     : Container(
                         height: 400,
                         width: MediaQuery.of(context).size.width - 50,
-                        child:
-                            Container() /*Swiper(
+                        child: Swiper(
                           key: UniqueKey(),
                           physics: ScrollPhysics(),
                           itemBuilder: (BuildContext context, int index2) {
-                            return widget.currentUser.imageUrl.length != null
+                            return widget.currentUser?.imageUrl?.length != null
                                 ? Hero(
                                     tag: "abcd",
                                     child: CachedNetworkImage(
-                                      imageUrl: widget.currentUser.imageUrl[index2],
+                                      imageUrl: widget.currentUser?.imageUrl?[index2],
                                       fit: BoxFit.cover,
                                       useOldImageOnUrlChange: true,
-                                      placeholder: (context, url) => CupertinoActivityIndicator(
-                                        radius: 20,
-                                      ),
+                                      placeholder: (context, url) => CupertinoActivityIndicator(radius: 20),
                                       imageBuilder: (context, imageProvider) => Container(
                                         decoration: BoxDecoration(
                                             borderRadius: BorderRadius.circular(10),
@@ -132,7 +120,7 @@ class _SettingState extends State<Setting> {
                                   )
                                 : Container();
                           },
-                          itemCount: widget.currentUser.imageUrl.length,
+                          itemCount: widget.currentUser?.imageUrl?.length ?? 0,
                           pagination: new SwiperPagination(
                               alignment: Alignment.bottomCenter,
                               builder: DotSwiperPaginationBuilder(
@@ -143,14 +131,13 @@ class _SettingState extends State<Setting> {
                             disableColor: secondryColor,
                           ),
                           loop: false,
-                        )*/
-                        ,
+                        ),
                       ),
               ),
               Container(
                 padding: EdgeInsets.only(top: 10),
                 child: Text(
-                  "${widget.currentUser!.name}, ${widget.currentUser!.age}",
+                  "${widget.currentUser?.name}, ${widget.currentUser?.age}",
                   style: TextStyle(color: primaryColor, fontSize: 35, fontWeight: FontWeight.w900),
                 ),
               ),
@@ -161,7 +148,7 @@ class _SettingState extends State<Setting> {
                   color: primaryColor,
                 ),
                 title: Text(
-                  "${widget.currentUser!.address}",
+                  "${widget.currentUser?.address}",
                   style: TextStyle(color: primaryColor, fontSize: 16, fontWeight: FontWeight.w500),
                 ),
               ),
@@ -340,5 +327,13 @@ class _SettingState extends State<Setting> {
         ),
       ),
     );
+  }
+
+  @override
+  void dispose() {
+    super.dispose();
+    if (changeValues.length > 0) {
+      updateData();
+    }
   }
 }
