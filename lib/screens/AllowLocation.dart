@@ -1,7 +1,9 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_grid/screens/SignUp.dart';
-import 'package:geolocator/geolocator.dart';
+import 'package:permission_handler/permission_handler.dart';
+
+import '../core/location_ebr.dart';
 
 class AllowLocation extends StatefulWidget {
   final Map<String, dynamic> userData;
@@ -96,49 +98,55 @@ in order to search users around you.
                     padding: EdgeInsets.all(8),
                     textColor: _theme.primaryColor,
                     onPressed: () async {
-                      print('hey');
-                      var currentLocation =
-                          await Geolocator.getCurrentPosition(desiredAccuracy: LocationAccuracy.best);
-                      List pm =
-                          []; //await Geolocator.placemarkFromCoordinates(currentLocation.latitude,currentLocation.longitude);
-                      widget.userData.addAll(
-                        {
-                          'location': {
-                            'latitude': currentLocation.latitude,
-                            'longitude': currentLocation.longitude,
-                            'address':
-                                "${pm[0].locality} ${pm[0].subLocality} ${pm[0].subAdministrativeArea}\n ${pm[0].country} ,${pm[0].postalCode}"
-                          },
-                          'maximum_distance': 20,
-                          'age_range': {
-                            'min': "20",
-                            'max': "50",
-                          },
-                        },
-                      );
-                      widget.userData.addAll({
-                        'editInfo': {
-                          'university': "",
-                          'userGender': widget.userData['userGender'],
-                          'showOnProfile': widget.userData['showOnProfile']
+                      if (!(await Permission.location.isGranted)) {
+                        var status = await Permission.locationWhenInUse.request();
+                        if (!status.isGranted) {
+                          return;
                         }
-                      });
-                      widget.userData.remove('showOnProfile');
-                      widget.userData.remove('userGender');
-                      Navigator.push(
-                          context, CupertinoPageRoute(builder: (context) => SignUp(widget.userData)));
+                        await onPermissionsAllowed(context);
+                        return;
+                      }
+                      await onPermissionsAllowed(context);
                     },
                     child: Container(
                       alignment: Alignment.center,
-                      child: Text(
-                        'ALLOW LOCATION',
-                        style: TextStyle(fontWeight: FontWeight.w900, fontSize: 15),
-                        textAlign: TextAlign.center,
-                      ),
+                      child: Text('ALLOW LOCATION',
+                          style: TextStyle(fontWeight: FontWeight.w900, fontSize: 15),
+                          textAlign: TextAlign.center),
                     )),
               ),
             ]),
           ),
         ));
+  }
+
+  Future<void> onPermissionsAllowed(BuildContext context) async {
+    LocationEBR locationEBR = LocationEBR();
+    LocationInfo? locationInfo = await locationEBR.getLocationData();
+    widget.userData.addAll(
+      {
+        'location': {
+          'latitude': locationInfo?.locationData.latitude,
+          'longitude': locationInfo?.locationData.longitude,
+          'address':
+              "${locationInfo?.address.locality} ${locationInfo?.address.subLocality} ${locationInfo?.address.subAdminArea}\n ${locationInfo?.address.countryName} ,${locationInfo?.address.postalCode}"
+        },
+        'maximum_distance': 20,
+        'age_range': {
+          'min': "20",
+          'max': "50",
+        },
+      },
+    );
+    widget.userData.addAll({
+      'editInfo': {
+        'university': "",
+        'userGender': widget.userData['userGender'],
+        'showOnProfile': widget.userData['showOnProfile']
+      }
+    });
+    widget.userData.remove('showOnProfile');
+    widget.userData.remove('userGender');
+    Navigator.push(context, CupertinoPageRoute(builder: (context) => SignUp(widget.userData)));
   }
 }

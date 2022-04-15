@@ -1,28 +1,28 @@
 import 'dart:async';
 import 'dart:io';
 import 'dart:math';
-import 'dart:ui';
 
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:collection/collection.dart' show IterableExtension;
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_grid/core/location_ebr.dart';
 import 'package:flutter_grid/models/answer_model.dart';
 import 'package:flutter_grid/models/question_model.dart';
 import 'package:flutter_grid/models/user_model.dart';
-import 'package:flutter_grid/screens/Home/Home.dart';
 import 'package:flutter_grid/screens/HomeScreen.dart';
 import 'package:flutter_grid/screens/Near/Near.dart';
 import 'package:flutter_grid/screens/Settings/setting.dart';
 import 'package:flutter_grid/screens/Video/MakeVideo.dart';
 import 'package:flutter_grid/screens/match/Home.dart';
 import 'package:flutter_grid/themes/gridapp_icons.dart';
-import 'package:geolocator/geolocator.dart';
 import 'package:in_app_purchase/in_app_purchase.dart';
 import 'package:persistent_bottom_nav_bar/persistent-tab-view.dart';
 import 'package:rflutter_alert/rflutter_alert.dart';
 import 'package:video_player/video_player.dart';
+
+import 'Home/Home.dart';
 
 List likedByList = [];
 List<String?> nearuser = [];
@@ -159,8 +159,8 @@ class _TABState extends State<TAB> with WidgetsBindingObserver {
   }
 
   _getCurrentUser() async {
-    User user = _firebaseAuth.currentUser!;
-    return docRef.doc("${user.uid}").snapshots().listen((data) async {
+    User? user = _firebaseAuth.currentUser;
+    return docRef.doc("${user?.uid}").snapshots().listen((data) async {
       currentUser = AppUser.fromDocument(data);
       videocontroller = VideoPlayerController.network(currentUser!.video!)
         ..initialize().then((_) {
@@ -461,7 +461,6 @@ class _TABState extends State<TAB> with WidgetsBindingObserver {
                       tempuser.coordinates!['latitude'],
                       tempuser.coordinates!['longitude'])
                   .round();
-
               matches.add(tempuser);
               newmatches.add(tempuser);
             }
@@ -474,17 +473,12 @@ class _TABState extends State<TAB> with WidgetsBindingObserver {
 
   List<Widget> _buildScreens() {
     return [
+      // Container(), //todo
       Container(child: Home(currentUser, allusers, videocontroller)),
-      Container(
-        child: HomeScreen(currentUser, matches, newmatches),
-      ),
-      Container(
-        child: Center(child: CardPictures(currentUser, users, swipecount, items)),
-      ),
-      Container(
-        child: MakeVideo(currentUser),
-      ),
-      Container(child: Setting(currentUser, isPuchased, items)),
+      Container(child: HomeScreen(currentUser, matches, newmatches)),
+      Container(child: Center(child: CardPictures(currentUser, users, swipecount, items))),
+      Container(child: MakeVideo(currentUser)),
+      Setting(currentUser, isPuchased, items)
     ];
   }
 
@@ -564,8 +558,7 @@ class _TABState extends State<TAB> with WidgetsBindingObserver {
 
   @override
   void dispose() {
-    WidgetsBinding.instance!.removeObserver(this);
-    print('hello');
+    WidgetsBinding.instance?.removeObserver(this);
     super.dispose();
   }
 
@@ -581,22 +574,21 @@ class _TABState extends State<TAB> with WidgetsBindingObserver {
   Future<void> _setRunning(bool bool) async {
     Map<String, dynamic> userData = {};
     userData.addAll({'isRunning': bool});
-    final user = FirebaseAuth.instance.currentUser!;
-    await FirebaseFirestore.instance.collection("Users").doc(user.uid).update(userData);
+    final user = FirebaseAuth.instance.currentUser;
+    await FirebaseFirestore.instance.collection("Users").doc(user?.uid).update(userData);
   }
 
   Future<void> updatelocation() async {
-    var currentLocation = await Geolocator.getCurrentPosition(desiredAccuracy: LocationAccuracy.best);
-    List pm =
-        []; //await Geolocator().placemarkFromCoordinates(currentLocation.latitude, currentLocation.longitude);
+    LocationEBR locationEBR = LocationEBR();
+    LocationInfo? locationInfo = await locationEBR.getLocationData();
     Map<String, dynamic> userData = {};
     userData.addAll(
       {
         'location': {
-          'latitude': currentLocation.latitude,
-          'longitude': currentLocation.longitude,
+          'latitude': locationInfo?.locationData.latitude,
+          'longitude': locationInfo?.locationData.longitude,
           'address':
-              "${pm[0].locality} ${pm[0].subLocality} ${pm[0].subAdministrativeArea}\n ${pm[0].country} ,${pm[0].postalCode}"
+              "${locationInfo?.address.locality} ${locationInfo?.address.subLocality} ${locationInfo?.address.subAdminArea}\n ${locationInfo?.address.countryName} ,${locationInfo?.address.postalCode}"
         },
       },
     );

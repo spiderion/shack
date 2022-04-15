@@ -6,8 +6,9 @@ import 'package:flutter_grid/models/user_model.dart';
 import 'package:flutter_grid/screens/Settings/UpdateNumber.dart';
 import 'package:flutter_grid/screens/Welcome.dart';
 import 'package:flutter_grid/screens/util/color.dart';
-import 'package:geolocator/geolocator.dart';
 import 'package:persistent_bottom_nav_bar/persistent-tab-view.dart';
+
+import '../../core/location_ebr.dart';
 
 class Settings extends StatefulWidget {
   final AppUser currentUser;
@@ -221,12 +222,10 @@ class _SettingsState extends State<Settings> {
                                   ),
                                 ),
                                 onTap: () async {
-                                  var currentLocation = await Geolocator.getCurrentPosition(
-                                      desiredAccuracy: LocationAccuracy.best);
-                                  List pm =
-                                      []; // await Geolocator.placemarkFromCoordinates(currentLocation.latitude, currentLocation.longitude);
+                                  LocationEBR locationEBR = LocationEBR();
+                                  LocationInfo? locationInfo = await locationEBR.getLocationData();
                                   var address =
-                                      "${pm[0].locality}${pm[0].subLocality} ${pm[0].subAdministrativeArea}\n ${pm[0].country} ,${pm[0].postalCode}";
+                                      "${locationInfo?.address.locality} ${locationInfo?.address.subLocality} ${locationInfo?.address.subAdminArea}\n ${locationInfo?.address.countryName} ,${locationInfo?.address.postalCode}";
                                   showCupertinoModalPopup(
                                       context: context,
                                       builder: (ctx) {
@@ -273,8 +272,8 @@ class _SettingsState extends State<Settings> {
                                                       .doc('${widget.currentUser.id}')
                                                       .update({
                                                     'location': {
-                                                      'latitude': currentLocation.latitude,
-                                                      'longitude': currentLocation.longitude,
+                                                      'latitude': locationInfo?.locationData.latitude,
+                                                      'longitude': locationInfo?.locationData.longitude,
                                                       'address': address
                                                     },
                                                   });

@@ -7,6 +7,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_grid/models/user_model.dart';
 import 'package:flutter_grid/screens/Tab.dart';
 import 'package:flutter_grid/screens/util/color.dart';
+import 'package:flutter_swiper_null_safety/flutter_swiper_null_safety.dart';
 import 'package:video_player/video_player.dart';
 
 class Home extends StatefulWidget {
@@ -26,7 +27,7 @@ class _HomeState extends State<Home> {
 
   GlobalKey swipeKey = GlobalKey();
 
-  // SwiperController _controllers = new SwiperController();
+  SwiperController _controllers = new SwiperController();
   int currentindex = 0;
 
   @override
@@ -143,8 +144,7 @@ class _HomeState extends State<Home> {
                                               children: <Widget>[
                                                 Container(
                                                     alignment: Alignment.center,
-                                                    child: Text(
-                                                        'Swiper') /*Swiper(
+                                                    child: Swiper(
                                                       index: currentindex,
                                                       itemBuilder: (BuildContext context, int indexs) {
                                                         return Container(
@@ -157,7 +157,7 @@ class _HomeState extends State<Home> {
                                                             mainAxisAlignment: MainAxisAlignment.center,
                                                             children: <Widget>[
                                                               Text(
-                                                                questions[indexs].title,
+                                                                questions[indexs].title ?? '',
                                                                 style: TextStyle(
                                                                   color: secondryColor,
                                                                   fontSize: 25,
@@ -168,7 +168,7 @@ class _HomeState extends State<Home> {
                                                                 height: 20,
                                                               ),
                                                               Text(
-                                                                questions[indexs].title,
+                                                                questions[indexs].title ?? 'title',
                                                                 style: TextStyle(
                                                                   color: secondryColor,
                                                                   fontSize: 20,
@@ -181,7 +181,7 @@ class _HomeState extends State<Home> {
                                                               answerlist[indexs] != null
                                                                   ? Text(
                                                                       'Your answer is ' +
-                                                                          (answerlist[indexs].answer
+                                                                          (answerlist[indexs].answer == true
                                                                               ? 'yes'
                                                                               : 'no'),
                                                                       style: TextStyle(
@@ -203,8 +203,7 @@ class _HomeState extends State<Home> {
                                                       onIndexChanged: (inde) {
                                                         currentindex = inde;
                                                       },
-                                                    )*/
-                                                    ),
+                                                    )),
                                                 Container(
                                                   width: media.size.width - 44,
                                                   alignment: Alignment.center,
@@ -244,7 +243,6 @@ class _HomeState extends State<Home> {
                                                       InkWell(
                                                         borderRadius: BorderRadius.circular(5),
                                                         onTap: () {
-                                                          // print(currentindex);
                                                           FirebaseFirestore.instance
                                                               .collection("Users")
                                                               .doc(widget.currentUser!.id)
@@ -356,8 +354,8 @@ class _HomeState extends State<Home> {
                       width: MediaQuery.of(context).size.width,
                       child: Stack(
                         children: <Widget>[
-                          Text("Swiper")
-/*                          Swiper(
+                          Text("Swiper"),
+                          Swiper(
                             key: UniqueKey(),
                             physics: ScrollPhysics(),
                             itemBuilder: (BuildContext context, int index2) {
@@ -382,8 +380,7 @@ class _HomeState extends State<Home> {
                               disableColor: Colors.grey,
                             ),
                             loop: false,
-                          )*/
-                          ,
+                          ),
                           Positioned(
                             top: 30,
                             left: 0,
