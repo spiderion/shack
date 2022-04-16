@@ -73,10 +73,7 @@ class _SettingState extends State<Setting> {
     return Scaffold(
       backgroundColor: Colors.white,
       appBar: AppBar(
-          title: Text(
-            "Settings",
-            style: TextStyle(color: Colors.black),
-          ),
+          title: Text("Settings", style: TextStyle(color: Colors.black)),
           elevation: 0,
           centerTitle: true,
           backgroundColor: Colors.white),
@@ -179,20 +176,13 @@ class _SettingState extends State<Setting> {
                                 border: Border.all(color: primaryColor),
                                 color: primaryColor),
                             child: Center(
-                              child: Icon(
-                                Icons.settings,
-                                color: Colors.white,
-                                size: 40,
-                              ),
+                              child: Icon(Icons.settings, color: Colors.white, size: 40),
                             ),
                           ),
                         ),
                         Container(
                           padding: EdgeInsets.only(top: 5),
-                          child: Text(
-                            'Edit Bio',
-                            style: TextStyle(color: primaryColor, fontSize: 15),
-                          ),
+                          child: Text('Edit Bio', style: TextStyle(color: primaryColor, fontSize: 15)),
                         )
                       ],
                     ),
@@ -214,13 +204,7 @@ class _SettingState extends State<Setting> {
                                 borderRadius: BorderRadius.circular(10),
                                 border: Border.all(color: primaryColor),
                                 color: primaryColor),
-                            child: Center(
-                              child: Icon(
-                                Icons.person_outline,
-                                color: Colors.white,
-                                size: 40,
-                              ),
-                            ),
+                            child: Center(child: Icon(Icons.person_outline, color: Colors.white, size: 40)),
                           ),
                         ),
                         Container(
@@ -303,32 +287,31 @@ class _SettingState extends State<Setting> {
                   ],
                 ),
               ),
-              Container(
-                width: double.infinity,
-                height: 50,
-                margin: EdgeInsets.only(top: 10, bottom: 30),
-                padding: EdgeInsets.only(left: 25, right: 25),
-                child: FlatButton(
-                    shape: RoundedRectangleBorder(
-                      borderRadius: BorderRadius.circular(8.0),
-                    ),
-                    color: primaryColor,
-                    padding: EdgeInsets.all(8),
-                    textColor: secondryColor,
-                    onPressed: () {},
-                    child: Container(
-                      alignment: Alignment.center,
-                      child: Text(
-                        'UPGRADE TO PREMIUM',
-                        style: TextStyle(fontWeight: FontWeight.w900, fontSize: 15),
-                        textAlign: TextAlign.center,
-                      ),
-                    )),
-              ),
+              upgradeButton(),
             ],
           )),
         ),
       ),
+    );
+  }
+
+  Widget upgradeButton() {
+    return Container(
+      width: double.infinity,
+      height: 50,
+      margin: EdgeInsets.only(top: 10, bottom: 30),
+      padding: EdgeInsets.only(left: 25, right: 25),
+      child: FlatButton(
+          shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(8.0)),
+          color: primaryColor,
+          padding: EdgeInsets.all(8),
+          textColor: secondryColor,
+          onPressed: () => Fluttertoast.showToast(msg: 'coming soon'),
+          child: Container(
+            alignment: Alignment.center,
+            child: Text('UPGRADE TO PREMIUM',
+                style: TextStyle(fontWeight: FontWeight.w900, fontSize: 15), textAlign: TextAlign.center),
+          )),
     );
   }
 
