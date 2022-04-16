@@ -307,7 +307,6 @@ rates may apply.""",
                               barrierDismissible: false,
                               context: context,
                             );
-
                             await _verifyPhoneNumber(phoneNumController.text);
                           },
                           child: Container(

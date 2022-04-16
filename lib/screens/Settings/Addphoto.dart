@@ -215,14 +215,11 @@ class AddphotoState extends State<Addphoto> {
     final path = tempdir.path;
     i.Image imagefile = i.decodeImage(image.readAsBytesSync())!;
     final compressedImagefile = File('$path.jpg')..writeAsBytesSync(i.encodeJpg(imagefile, quality: 80));
-    // setState(() {
     return compressedImagefile;
-    // });
   }
 
   @override
   Widget build(BuildContext context) {
-    // Profile _profile = new Profile(widget.currentUser);
     return Scaffold(
       backgroundColor: Colors.white,
       appBar: AppBar(
@@ -265,15 +262,8 @@ class AddphotoState extends State<Addphoto> {
                             child: ClipRRect(
                               borderRadius: BorderRadius.circular(10),
                               child: Container(
-                                decoration: (getImageLength() ?? 0) > index
-                                    ? BoxDecoration(
-                                        borderRadius: BorderRadius.circular(10),
-                                        // image: DecorationImage(
-                                        //     fit: BoxFit.cover,
-                                        //     image: CachedNetworkImageProvider(
-                                        //       widget.currentUser.imageUrl[index],
-                                        //     )),
-                                      )
+                                decoration: (getImageLength()) > index
+                                    ? BoxDecoration(borderRadius: BorderRadius.circular(10))
                                     : BoxDecoration(
                                         borderRadius: BorderRadius.circular(10),
                                         border: Border.all(
@@ -282,7 +272,7 @@ class AddphotoState extends State<Addphoto> {
                                             color: Theme.of(context).backgroundColor)),
                                 child: Stack(
                                   children: <Widget>[
-                                    (getImageLength() ?? 0) > index
+                                    (getImageLength()) > index
                                         ? CachedNetworkImage(
                                             height: MediaQuery.of(context).size.height * .2,
                                             fit: BoxFit.cover,
@@ -312,19 +302,9 @@ class AddphotoState extends State<Addphoto> {
                                             ),
                                           )
                                         : Container(),
-                                    // Center(
-                                    //     child:
-                                    //         widget.currentUser.imageUrl.length >
-                                    //                 index
-                                    //             ? CupertinoActivityIndicator(
-                                    //                 radius: 10,
-                                    //               )
-                                    //             : Container()),
                                     Align(
                                       alignment: Alignment.bottomRight,
                                       child: Container(
-                                          // width: 12,
-                                          // height: 16,
                                           decoration: BoxDecoration(
                                             shape: BoxShape.circle,
                                             color: getImageLength() > index
@@ -356,11 +336,8 @@ class AddphotoState extends State<Addphoto> {
                                                   },
                                                 )
                                               : InkWell(
-                                                  child: Icon(
-                                                    Icons.add_circle_outline,
-                                                    size: 22,
-                                                    color: Colors.white,
-                                                  ),
+                                                  child: Icon(Icons.add_circle_outline,
+                                                      size: 22, color: Colors.white),
                                                   onTap: () => source(context, widget.currentUser, false),
                                                 )),
                                     )
@@ -388,11 +365,9 @@ class AddphotoState extends State<Addphoto> {
                         },
                         child: Container(
                           alignment: Alignment.center,
-                          child: Text(
-                            'UPDATE PHOTOS',
-                            style: TextStyle(fontWeight: FontWeight.w900, fontSize: 15),
-                            textAlign: TextAlign.center,
-                          ),
+                          child: Text('UPDATE PHOTOS',
+                              style: TextStyle(fontWeight: FontWeight.w900, fontSize: 15),
+                              textAlign: TextAlign.center),
                         )),
                   ),
                 ],
