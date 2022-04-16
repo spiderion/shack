@@ -48,7 +48,7 @@ class _SignUpState extends State<SignUp> {
       extendBodyBehindAppBar: true,
       body: Container(
         decoration: BoxDecoration(
-            image: DecorationImage(image: AssetImage("assets/auth/pool.jpg"), fit: BoxFit.cover),
+            image: DecorationImage(image: AssetImage("assets/images/pool.jpg"), fit: BoxFit.cover),
             color: Colors.white),
         width: double.infinity,
         height: double.infinity,

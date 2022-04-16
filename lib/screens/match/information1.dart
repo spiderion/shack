@@ -230,7 +230,7 @@ class Info1 extends StatelessWidget {
                       decoration: BoxDecoration(
                           borderRadius: BorderRadius.all(Radius.circular(5)),
                           color: Colors.white),
-                      child: Image.asset('assets/auth/map_mark.png', fit: BoxFit.fitHeight,),
+                      child: Image.asset('assets/images/map_mark.png', fit: BoxFit.fitHeight,),
                     ),
                   )
               ),

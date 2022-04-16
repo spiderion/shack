@@ -51,7 +51,7 @@ class _VerificationState extends State<Verification> {
                     child: Column(
                       children: <Widget>[
                         Image.asset(
-                          "assets/auth/verified.jpg",
+                          "assets/images/verified.jpg",
                           height: 100,
                         ),
                         Text(
@@ -99,7 +99,7 @@ class _VerificationState extends State<Verification> {
           width: double.infinity,
           height: MediaQuery.of(context).size.height,
           decoration: BoxDecoration(
-              image: DecorationImage(image: AssetImage("assets/auth/splash.jpg"), fit: BoxFit.cover),
+              image: DecorationImage(image: AssetImage("assets/images/splash.jpg"), fit: BoxFit.cover),
               color: Colors.white),
           child: SingleChildScrollView(
             child: Column(
@@ -238,7 +238,7 @@ class _VerificationState extends State<Verification> {
                                             child: Column(
                                               children: <Widget>[
                                                 Image.asset(
-                                                  "assets/auth/verified.jpg",
+                                                  "assets/images/verified.jpg",
                                                   height: 100,
                                                 ),
                                                 Text(

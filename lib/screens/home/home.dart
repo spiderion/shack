@@ -51,7 +51,7 @@ class _HomeState extends State<Home> {
       backgroundColor: Colors.white,
       body: Container(
           decoration: BoxDecoration(
-              image: DecorationImage(image: AssetImage("assets/auth/city.jpg"), fit: BoxFit.cover),
+              image: DecorationImage(image: AssetImage("assets/images/city.jpg"), fit: BoxFit.cover),
               color: Colors.white),
           padding: EdgeInsets.only(top: media.padding.top),
           height: MediaQuery.of(context).size.height,
@@ -123,7 +123,7 @@ class _HomeState extends State<Home> {
                 width: media.size.width,
                 height: 200,
                 decoration: BoxDecoration(
-                    image: DecorationImage(image: AssetImage("assets/auth/lib.jpg"), fit: BoxFit.cover),
+                    image: DecorationImage(image: AssetImage("assets/images/lib.jpg"), fit: BoxFit.cover),
                     borderRadius:
                         BorderRadius.only(bottomLeft: Radius.circular(10), bottomRight: Radius.circular(10))),
               );

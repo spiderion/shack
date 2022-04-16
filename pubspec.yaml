@@ -65,12 +65,12 @@ flutter:
   uses-material-design: true
 
   assets:
-    - assets/auth/
-    - assets/auth/drink.jpg
-    - assets/auth/splash.jpg
-    - assets/auth/pool.jpg
-    - assets/auth/lib.jpg
-    - assets/auth/city.jpg
+    - assets/images/
+    - assets/images/drink.jpg
+    - assets/images/splash.jpg
+    - assets/images/pool.jpg
+    - assets/images/lib.jpg
+    - assets/images/city.jpg
     - assets/logo.png
     - assets/loading.gif
   fonts:

@@ -88,7 +88,7 @@ class _SelectImageState extends State<SelectImage> {
                     height: 180,
                     margin: EdgeInsets.only(top: 80),
                     child: Image.asset(
-                      'assets/auth/user.png',
+                      'assets/images/user.png',
                       fit: BoxFit.fitHeight,
                     ),
                   )

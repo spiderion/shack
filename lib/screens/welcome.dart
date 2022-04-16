@@ -22,7 +22,7 @@ class Welcome extends StatelessWidget {
               children: <Widget>[
                 Container(
                   decoration: BoxDecoration(
-                      image: DecorationImage(image: AssetImage("assets/auth/city.jpg"), fit: BoxFit.cover),
+                      image: DecorationImage(image: AssetImage("assets/images/city.jpg"), fit: BoxFit.cover),
                       color: Colors.white),
                   width: double.infinity,
                   height: double.infinity,

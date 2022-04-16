@@ -43,7 +43,7 @@ class _Home1State extends State<Home1> {
       backgroundColor: Colors.white,
       body: Container(
           decoration: BoxDecoration(
-              image: DecorationImage(image: AssetImage("assets/auth/city.jpg"), fit: BoxFit.cover),
+              image: DecorationImage(image: AssetImage("assets/images/city.jpg"), fit: BoxFit.cover),
               color: Colors.white),
           padding: EdgeInsets.only(top: media.padding.top),
           height: MediaQuery.of(context).size.height,

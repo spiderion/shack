@@ -31,7 +31,7 @@ class _IntroscreenState extends State<Introscreen> {
         centerWidget: Text("Replace this with a custom widget", style: TextStyle(color: Colors.white)),
         colorBegin: Color(0xffFFDAB9),
         colorEnd: Color(0xff40E0D0),
-        backgroundImage: 'assets/auth/city.jpg',
+        backgroundImage: 'assets/images/city.jpg',
         directionColorBegin: Alignment.topLeft,
         directionColorEnd: Alignment.bottomRight,
         onCenterItemPress: () {},
@@ -45,7 +45,7 @@ class _IntroscreenState extends State<Introscreen> {
         description: "Ye indulgence unreserved connection alteration appearance",
         styleDescription:
         TextStyle(color: Color(0xffD02090), fontSize: 20.0, fontStyle: FontStyle.italic, fontFamily: 'Raleway'),
-        backgroundImage: "assets/auth/lib.jpg",
+        backgroundImage: "assets/images/lib.jpg",
         colorBegin: Color(0xffFFFACD),
         colorEnd: Color(0xffFF6347),
         directionColorBegin: Alignment.topRight,
@@ -61,7 +61,7 @@ class _IntroscreenState extends State<Introscreen> {
         "Much evil soon high in hope do view. Out may few northward believing attempted. Yet timed being songs marry one defer men our. Although finished blessing do of",
         styleDescription:
         TextStyle(color: Color(0xffD02090), fontSize: 20.0, fontStyle: FontStyle.italic, fontFamily: 'Raleway'),
-        backgroundImage: "assets/auth/pool.jpg",
+        backgroundImage: "assets/images/pool.jpg",
         colorBegin: Color(0xffFFA500),
         colorEnd: Color(0xff7FFFD4),
         directionColorBegin: Alignment.topCenter,

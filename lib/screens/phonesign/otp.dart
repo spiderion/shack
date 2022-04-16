@@ -72,7 +72,7 @@ class _OTPState extends State<OTP> {
                     child: Column(
                       children: <Widget>[
                         Image.asset(
-                          "assets/auth/verified.jpg",
+                          "assets/images/verified.jpg",
                           height: 100,
                         ),
                         Text(
@@ -171,7 +171,7 @@ class _OTPState extends State<OTP> {
                   child: Column(
                     children: <Widget>[
                       Image.asset(
-                        "assets/auth/verified.jpg",
+                        "assets/images/verified.jpg",
                         height: 60,
                         color: _theme.primaryColor,
                         colorBlendMode: BlendMode.color,
