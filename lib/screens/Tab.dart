@@ -48,13 +48,9 @@ var alertStyle = AlertStyle(
   animationDuration: Duration(milliseconds: 400),
   alertBorder: RoundedRectangleBorder(
     borderRadius: BorderRadius.circular(0.0),
-    side: BorderSide(
-      color: Colors.grey,
-    ),
+    side: BorderSide(color: Colors.grey),
   ),
-  titleStyle: TextStyle(
-    color: Colors.red,
-  ),
+  titleStyle: TextStyle(color: Colors.red),
   alertAlignment: Alignment.topCenter,
 );
 
@@ -153,21 +149,21 @@ class _TABState extends State<TAB> with WidgetsBindingObserver {
     User? user = _firebaseAuth.currentUser;
     QuerySnapshot querySnapshot = await docRef.get();
     for (int i = 0; i < querySnapshot.docs.length; i++) {
-      AppUser temp = AppUser.fromDocument(querySnapshot.docs[i]);
+      AppUser temp = AppUser.fromDocument(querySnapshot.docs[i].data() as Map<String, dynamic>);
       if (temp.id != user!.uid) allusers.add(temp);
     }
   }
 
   _getCurrentUser() async {
     User? user = _firebaseAuth.currentUser;
-    return docRef.doc("${user?.uid}").snapshots().listen((data) async {
-      currentUser = AppUser.fromDocument(data);
+    return docRef.doc("${user?.uid}").snapshots().listen((DocumentSnapshot data) async {
+      currentUser = AppUser.fromDocument(data.data() as Map<String, dynamic>);
       videocontroller = VideoPlayerController.network(currentUser!.video!)
         ..initialize().then((_) {
           // Ensure the first frame is shown after the video is initialized, even before the play button has been pressed.
           setState(() {});
-          videocontroller!.play();
-          videocontroller!.setLooping(true);
+          videocontroller?.play();
+          videocontroller?.setLooping(true);
         });
       if (mounted) setState(() {});
       answerlist = [];
@@ -204,16 +200,16 @@ class _TABState extends State<TAB> with WidgetsBindingObserver {
       }
       docRef.snapshots().listen((QuerySnapshot event) {
         event.docChanges.forEach((element) async {
-          AppUser temp = AppUser.fromDocument(element.doc);
+          AppUser temp = AppUser.fromDocument(element.doc.data() as Map<String, dynamic>);
           if (temp.id != currentUser!.id) {
             var nearlength = nearuser.length;
 
             if (temp.isRunning == true && temp.isActive == true) {
               var distance = calculateDistance(
-                      currentUser!.coordinates!['latitude'],
-                      currentUser!.coordinates!['longitude'],
-                      temp.coordinates!['latitude'],
-                      temp.coordinates!['longitude']) *
+                      currentUser?.coordinates?['latitude'],
+                      currentUser?.coordinates?['longitude'],
+                      temp.coordinates?['latitude'],
+                      temp.coordinates?['longitude']) *
                   1000;
               if (distance.round() < 100) {
                 if (!nearuser.contains(temp.id)) nearuser.add(temp.id);
@@ -227,7 +223,7 @@ class _TABState extends State<TAB> with WidgetsBindingObserver {
               List<AppUser> tempuser = [];
               for (int i = 0; i < nearuser.length; i++) {
                 docRef.doc("${nearuser[i]}").snapshots().listen((data) {
-                  tempuser.add(AppUser.fromDocument(data));
+                  tempuser.add(AppUser.fromDocument(data.data() as Map<String, dynamic>));
                 });
               }
 
@@ -303,7 +299,7 @@ class _TABState extends State<TAB> with WidgetsBindingObserver {
     setState(() {
       purchases = response.pastPurchases;
     });
-    if (response.pastPurchases.length > 0) {
+    if ((response?.pastPurchases?.length ?? 0) > 0) {
       purchases!.forEach((purchase) async {
         print('   ${purchase.productID}');
         await _verifyPuchase(purchase.productID);
@@ -391,13 +387,13 @@ class _TABState extends State<TAB> with WidgetsBindingObserver {
         }
         users.clear();
         userRemoved.clear();
-        for (var doc in data.documents) {
-          AppUser temp = AppUser.fromDocument(doc);
+        for (DocumentSnapshot doc in data.documents) {
+          AppUser temp = AppUser.fromDocument(doc.data() as Map<String, dynamic>);
           var distance = calculateDistance(
-              currentUser!.coordinates!['latitude'],
-              currentUser!.coordinates!['longitude'],
-              temp.coordinates!['latitude'],
-              temp.coordinates!['longitude']);
+              currentUser?.coordinates?['latitude'],
+              currentUser?.coordinates?['longitude'],
+              temp.coordinates?['latitude'],
+              temp.coordinates?['longitude']);
           temp.distanceBW = distance.round();
           if (checkedUser.any(
             (value) => value == temp.id,
@@ -453,7 +449,7 @@ class _TABState extends State<TAB> with WidgetsBindingObserver {
         ondata.docs.forEach((f) async {
           DocumentSnapshot doc = await docRef.doc(f.data()['Matches']).get();
           if (doc.exists) {
-            AppUser tempuser = AppUser.fromDocument(doc);
+            AppUser tempuser = AppUser.fromDocument(doc.data() as Map<String, dynamic>);
             if (tempuser.isActive!) {
               tempuser.distanceBW = calculateDistance(
                       currentUser!.coordinates!['latitude'],

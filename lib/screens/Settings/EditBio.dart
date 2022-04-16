@@ -37,32 +37,23 @@ class EditBioState extends State<EditBio> {
   @override
   void initState() {
     super.initState();
-    aboutCtlr.text = widget.currentUser!.editInfo!['about'];
-    companyCtlr.text = widget.currentUser!.editInfo!['company'];
-    livingCtlr.text = widget.currentUser!.editInfo!['living_in'];
-    universityCtlr.text = widget.currentUser!.editInfo!['university'];
-    jobCtlr.text = widget.currentUser!.editInfo!['job_title'];
+    aboutCtlr.text = widget.currentUser?.editInfo?['about'] ?? '';
+    companyCtlr.text = widget.currentUser?.editInfo?['company'] ?? '';
+    livingCtlr.text = widget.currentUser?.editInfo?['living_in'] ?? '';
+    universityCtlr.text = widget.currentUser?.editInfo?['university'] ?? '';
+    jobCtlr.text = widget.currentUser?.editInfo?['job_title'] ?? '';
     setState(() {
-      showMe = widget.currentUser!.editInfo!['userGender'];
-      visibleAge = widget.currentUser!.editInfo!['showMyAge'] ?? false;
-      visibleDistance = widget.currentUser!.editInfo!['DistanceVisible'] ?? true;
+      showMe = widget.currentUser?.editInfo?['userGender'];
+      visibleAge = widget.currentUser?.editInfo?['showMyAge'] ?? false;
+      visibleDistance = widget.currentUser?.editInfo?['DistanceVisible'] ?? true;
     });
-  }
-
-  @override
-  void dispose() {
-    super.dispose();
-    print(editInfo.length);
-    if (editInfo.length > 0) {
-      updateData();
-    }
   }
 
   Future updateData() async {
     FirebaseFirestore.instance
         .collection("Users")
-        .doc(widget.currentUser!.id)
-        .set({'editInfo': editInfo, 'age': widget.currentUser!.age}, SetOptions(merge: true));
+        .doc(widget.currentUser?.id)
+        .set({'editInfo': editInfo, 'age': widget.currentUser?.age}, SetOptions(merge: true));
   }
 
   Future source(BuildContext context, currentUser, bool isProfilePicture) async {
@@ -71,9 +62,7 @@ class EditBioState extends State<EditBio> {
         builder: (BuildContext context) {
           return CupertinoAlertDialog(
               title: Text(isProfilePicture ? "Update profile picture" : "Add pictures"),
-              content: Text(
-                "Select source",
-              ),
+              content: Text("Select source"),
               insetAnimationCurve: Curves.decelerate,
               actions: currentUser.imageUrl.length < 9
                   ? <Widget>[
@@ -198,7 +187,7 @@ class EditBioState extends State<EditBio> {
         try {
           if (isProfilePicture) {
             //currentUser.imageUrl.removeAt(0);
-            currentUser.imageUrl!.insert(0, fileURL);
+            currentUser.imageUrl?.insert(0, fileURL);
             print("object");
             await FirebaseFirestore.instance
                 .collection("Users")
@@ -209,7 +198,7 @@ class EditBioState extends State<EditBio> {
                 .collection("Users")
                 .doc(currentUser.id)
                 .set(updateObject, SetOptions(merge: true));
-            widget.currentUser!.imageUrl!.add(fileURL);
+            widget.currentUser?.imageUrl?.add(fileURL);
           }
           if (mounted) setState(() {});
         } catch (err) {
@@ -266,7 +255,7 @@ class EditBioState extends State<EditBio> {
                       children: <Widget>[
                         ListTile(
                           title: Text(
-                            "About ${widget.currentUser!.name}",
+                            "About ${widget.currentUser?.name}",
                             style:
                                 TextStyle(fontWeight: FontWeight.w500, fontSize: 16, color: Colors.black87),
                           ),
@@ -483,5 +472,14 @@ class EditBioState extends State<EditBio> {
         ),
       ),
     );
+  }
+
+  @override
+  void dispose() {
+    super.dispose();
+    print(editInfo.length);
+    if (editInfo.length > 0) {
+      updateData();
+    }
   }
 }
