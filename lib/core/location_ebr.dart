@@ -7,10 +7,18 @@ class LocationEBR extends EBR {
 
   Future<LocationInfo?> getLocationData() async {
     try {
-      LocationData currentLocation = await location.getLocation();
-      final coordinates = new Coordinates(currentLocation.latitude!, currentLocation.longitude!);
-      var addresses = (await Geocoder.local.findAddressesFromCoordinates(coordinates)).first;
-      return LocationInfo(currentLocation, addresses);
+      final isEnabled = await location.serviceEnabled();
+      if (isEnabled) {
+        // todo use location
+        late LocationData currentLocation =
+            LocationData.fromMap({'latitude': 1, 'longitude': 1}); // await location.getLocation();
+        final coordinates = new Coordinates(currentLocation.latitude!, currentLocation.longitude!);
+        var addresses = (await Geocoder.local.findAddressesFromCoordinates(coordinates)).first;
+        return LocationInfo(currentLocation, addresses);
+      } else {
+        await location.requestService();
+        return getLocationData();
+      }
     } catch (e) {
       return null;
     }

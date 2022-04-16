@@ -6,10 +6,10 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/painting.dart';
-import 'package:flutter_grid/screens/SelectImage.dart';
-import 'package:flutter_grid/screens/Welcome.dart';
-import 'package:flutter_grid/screens/phonesign/otp.dart';
-import 'package:flutter_grid/screens/util/CustomSnackbar.dart';
+import 'package:shack/screens/select_image.dart';
+import 'package:shack/screens/welcome.dart';
+import 'package:shack/screens/phonesign/otp.dart';
+import 'package:shack/screens/util/custom_snackbar.dart';
 import 'package:pin_code_fields/pin_code_fields.dart';
 
 class Verification extends StatefulWidget {

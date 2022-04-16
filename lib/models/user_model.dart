@@ -69,20 +69,20 @@ class AppUser {
             : null);
   }
 
-  factory AppUser.fromimageDocument(DocumentSnapshot doc) {
+  factory AppUser.fromimageDocument(Map<String, dynamic> json) {
     // DateTime date = DateTime.parse(doc["user_DOB"]);
     return AppUser(
-        id: doc['userId'],
-        isBlocked: doc['isBlocked'] != null ? doc['isBlocked'] : false,
-        phoneNumber: doc['phoneNumber'],
-        name: doc['UserName'],
-        editInfo: doc['editInfo'],
-        ageRange: doc['age_range'],
-        showGender: doc['showGender'],
-        maxDistance: doc['maximum_distance'],
-        imageUrl: doc['Pictures'] != null
-            ? List.generate(doc['Pictures'].length, (index) {
-                return doc['Pictures'][index];
+        id: json['userId'],
+        isBlocked: json['isBlocked'] != null ? json['isBlocked'] : false,
+        phoneNumber: json['phoneNumber'],
+        name: json['UserName'],
+        editInfo: json['editInfo'],
+        ageRange: json['age_range'],
+        showGender: json['showGender'],
+        maxDistance: json['maximum_distance'],
+        imageUrl: json['Pictures'] != null
+            ? List.generate(json['Pictures'].length, (index) {
+                return json['Pictures'][index];
               })
             : null);
   }

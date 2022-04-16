@@ -12,7 +12,7 @@
 
 import 'dart:io';
 
-import 'package:flutter_grid/themes/themeGuide.dart';
+import 'package:shack/themes/themeGuide.dart';
 import 'package:flutter/material.dart';
 
 abstract class CustomeTheme {

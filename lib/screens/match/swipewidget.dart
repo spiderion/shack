@@ -2,11 +2,11 @@ import 'package:cached_network_image/cached_network_image.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_grid/models/answer_model.dart';
-import 'package:flutter_grid/models/question_model.dart';
-import 'package:flutter_grid/models/user_model.dart';
-import 'package:flutter_grid/screens/Tab.dart';
-import 'package:flutter_grid/screens/util/color.dart';
+import 'package:shack/models/answer_model.dart';
+import 'package:shack/models/question_model.dart';
+import 'package:shack/models/user_model.dart';
+import 'package:shack/screens/tab.dart';
+import 'package:shack/screens/util/color.dart';
 
 class SwipeWidget extends StatefulWidget {
   final AppUser currentUser;
@@ -252,7 +252,7 @@ class _SwipeWidget extends State<SwipeWidget> {
   }
 
   answerview() {
-    List<Question_model> temp = [];
+    List<QuestionModel> temp = [];
     for (int i = 0; i < questions.length; i++) {
       if (myanswer.length > i && useranswer.length > i) {
         if (myanswer[i].answer == useranswer[i].answer && useranswer[i].answer == true) {
@@ -305,7 +305,7 @@ class _SwipeWidget extends State<SwipeWidget> {
   }
 
   ignoreview() {
-    List<Question_model> temp = [];
+    List<QuestionModel> temp = [];
     for (int i = 0; i < questions.length; i++) {
       if (myanswer.length > i && useranswer.length > i) {
         if (myanswer[i].answer == useranswer[i].answer && useranswer[i].answer == false) {
