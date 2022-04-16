@@ -36,15 +36,15 @@ class AddphotoState extends State<Addphoto> {
   @override
   void initState() {
     super.initState();
-    aboutCtlr.text = widget.currentUser!.editInfo!['about'];
-    companyCtlr.text = widget.currentUser!.editInfo!['company'];
-    livingCtlr.text = widget.currentUser!.editInfo!['living_in'];
-    universityCtlr.text = widget.currentUser!.editInfo!['university'];
-    jobCtlr.text = widget.currentUser!.editInfo!['job_title'];
+    aboutCtlr.text = widget.currentUser?.editInfo?['about'] ?? '';
+    companyCtlr.text = widget.currentUser?.editInfo?['company'] ?? '';
+    livingCtlr.text = widget.currentUser?.editInfo?['living_in'] ?? '';
+    universityCtlr.text = widget.currentUser?.editInfo?['university'] ?? '';
+    jobCtlr.text = widget.currentUser?.editInfo?['job_title'] ?? '';
     setState(() {
-      showMe = widget.currentUser!.editInfo!['userGender'];
-      visibleAge = widget.currentUser!.editInfo!['showMyAge'] ?? false;
-      visibleDistance = widget.currentUser!.editInfo!['DistanceVisible'] ?? true;
+      showMe = widget.currentUser?.editInfo?['userGender'] ?? '';
+      visibleAge = widget.currentUser?.editInfo?['showMyAge'] ?? false;
+      visibleDistance = widget.currentUser?.editInfo?['DistanceVisible'] ?? true;
     });
   }
 
@@ -60,8 +60,8 @@ class AddphotoState extends State<Addphoto> {
   Future updateData() async {
     FirebaseFirestore.instance
         .collection("Users")
-        .doc(widget.currentUser!.id)
-        .set({'editInfo': editInfo, 'age': widget.currentUser!.age}, SetOptions(merge: true));
+        .doc(widget.currentUser?.id)
+        .set({'editInfo': editInfo, 'age': widget.currentUser?.age}, SetOptions(merge: true));
   }
 
   Future source(BuildContext context, currentUser, bool isProfilePicture) async {
@@ -70,11 +70,9 @@ class AddphotoState extends State<Addphoto> {
         builder: (BuildContext context) {
           return CupertinoAlertDialog(
               title: Text(isProfilePicture ? "Update profile picture" : "Add pictures"),
-              content: Text(
-                "Select source",
-              ),
+              content: Text("Select source"),
               insetAnimationCurve: Curves.decelerate,
-              actions: currentUser.imageUrl.length < 9
+              actions: getImageLength() < 9
                   ? <Widget>[
                       Padding(
                         padding: const EdgeInsets.all(20.0),
@@ -82,10 +80,7 @@ class AddphotoState extends State<Addphoto> {
                           child: Row(
                             mainAxisAlignment: MainAxisAlignment.center,
                             children: <Widget>[
-                              Icon(
-                                Icons.photo_camera,
-                                size: 28,
-                              ),
+                              Icon(Icons.photo_camera, size: 28),
                               Text(
                                 " Camera",
                                 style: TextStyle(
@@ -114,10 +109,7 @@ class AddphotoState extends State<Addphoto> {
                           child: Row(
                             mainAxisAlignment: MainAxisAlignment.center,
                             children: <Widget>[
-                              Icon(
-                                Icons.photo_library,
-                                size: 28,
-                              ),
+                              Icon(Icons.photo_library, size: 28),
                               Text(
                                 " Gallery",
                                 style: TextStyle(
@@ -197,7 +189,7 @@ class AddphotoState extends State<Addphoto> {
         try {
           if (isProfilePicture) {
             //currentUser.imageUrl.removeAt(0);
-            currentUser.imageUrl!.insert(0, fileURL);
+            currentUser.imageUrl?.insert(0, fileURL);
             print("object");
             await FirebaseFirestore.instance
                 .collection("Users")
@@ -208,7 +200,7 @@ class AddphotoState extends State<Addphoto> {
                 .collection("Users")
                 .doc(currentUser.id)
                 .set(updateObject, SetOptions(merge: true));
-            widget.currentUser!.imageUrl!.add(fileURL);
+            widget.currentUser?.imageUrl?.add(fileURL);
           }
           if (mounted) setState(() {});
         } catch (err) {
@@ -273,7 +265,7 @@ class AddphotoState extends State<Addphoto> {
                             child: ClipRRect(
                               borderRadius: BorderRadius.circular(10),
                               child: Container(
-                                decoration: widget.currentUser!.imageUrl!.length > index
+                                decoration: (getImageLength() ?? 0) > index
                                     ? BoxDecoration(
                                         borderRadius: BorderRadius.circular(10),
                                         // image: DecorationImage(
@@ -290,11 +282,11 @@ class AddphotoState extends State<Addphoto> {
                                             color: Theme.of(context).backgroundColor)),
                                 child: Stack(
                                   children: <Widget>[
-                                    widget.currentUser!.imageUrl!.length > index
+                                    (getImageLength() ?? 0) > index
                                         ? CachedNetworkImage(
                                             height: MediaQuery.of(context).size.height * .2,
                                             fit: BoxFit.cover,
-                                            imageUrl: widget.currentUser!.imageUrl![index],
+                                            imageUrl: widget.currentUser?.imageUrl?[index],
                                             placeholder: (context, url) => Center(
                                               child: CupertinoActivityIndicator(
                                                 radius: 10,
@@ -335,11 +327,11 @@ class AddphotoState extends State<Addphoto> {
                                           // height: 16,
                                           decoration: BoxDecoration(
                                             shape: BoxShape.circle,
-                                            color: widget.currentUser!.imageUrl!.length > index
+                                            color: getImageLength() > index
                                                 ? Colors.white
                                                 : Theme.of(context).primaryColor,
                                           ),
-                                          child: widget.currentUser!.imageUrl!.length > index
+                                          child: getImageLength() > index
                                               ? InkWell(
                                                   child: Icon(
                                                     Icons.cancel,
@@ -347,15 +339,15 @@ class AddphotoState extends State<Addphoto> {
                                                     size: 22,
                                                   ),
                                                   onTap: () async {
-                                                    if (widget.currentUser!.imageUrl!.length > 1) {
+                                                    if (getImageLength() > 1) {
                                                       setState(() {
-                                                        widget.currentUser!.imageUrl!.removeAt(index);
+                                                        widget.currentUser?.imageUrl?.removeAt(index);
                                                       });
                                                       var temp = [];
-                                                      temp.add(widget.currentUser!.imageUrl);
+                                                      temp.add(widget.currentUser?.imageUrl);
                                                       await FirebaseFirestore.instance
                                                           .collection("Users")
-                                                          .doc("${widget.currentUser!.id}")
+                                                          .doc("${widget.currentUser?.id}")
                                                           .set(
                                                               {"Pictures": temp[0]}, SetOptions(merge: true));
                                                     } else {
@@ -411,4 +403,6 @@ class AddphotoState extends State<Addphoto> {
       ),
     );
   }
+
+  int getImageLength() => widget.currentUser?.imageUrl?.length ?? 0;
 }

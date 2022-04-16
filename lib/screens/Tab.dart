@@ -48,13 +48,9 @@ var alertStyle = AlertStyle(
   animationDuration: Duration(milliseconds: 400),
   alertBorder: RoundedRectangleBorder(
     borderRadius: BorderRadius.circular(0.0),
-    side: BorderSide(
-      color: Colors.grey,
-    ),
+    side: BorderSide(color: Colors.grey),
   ),
-  titleStyle: TextStyle(
-    color: Colors.red,
-  ),
+  titleStyle: TextStyle(color: Colors.red),
   alertAlignment: Alignment.topCenter,
 );
 
@@ -210,10 +206,10 @@ class _TABState extends State<TAB> with WidgetsBindingObserver {
 
             if (temp.isRunning == true && temp.isActive == true) {
               var distance = calculateDistance(
-                      currentUser!.coordinates!['latitude'],
-                      currentUser!.coordinates!['longitude'],
-                      temp.coordinates!['latitude'],
-                      temp.coordinates!['longitude']) *
+                      currentUser?.coordinates?['latitude'],
+                      currentUser?.coordinates?['longitude'],
+                      temp.coordinates?['latitude'],
+                      temp.coordinates?['longitude']) *
                   1000;
               if (distance.round() < 100) {
                 if (!nearuser.contains(temp.id)) nearuser.add(temp.id);
@@ -303,7 +299,7 @@ class _TABState extends State<TAB> with WidgetsBindingObserver {
     setState(() {
       purchases = response.pastPurchases;
     });
-    if (response.pastPurchases.length > 0) {
+    if ((response?.pastPurchases?.length ?? 0) > 0) {
       purchases!.forEach((purchase) async {
         print('   ${purchase.productID}');
         await _verifyPuchase(purchase.productID);
