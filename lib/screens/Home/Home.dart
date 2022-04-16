@@ -360,7 +360,6 @@ class _HomeState extends State<Home> {
                       width: MediaQuery.of(context).size.width,
                       child: Stack(
                         children: <Widget>[
-                          Text("Swiper"),
                           Swiper(
                             key: UniqueKey(),
                             physics: ScrollPhysics(),
