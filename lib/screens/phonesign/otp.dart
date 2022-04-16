@@ -3,9 +3,9 @@ import 'package:country_code_picker/country_code_picker.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_grid/screens/Welcome.dart';
-import 'package:flutter_grid/screens/phonesign/otp_verification.dart';
-import 'package:flutter_grid/screens/util/CustomSnackbar.dart';
+import 'package:shack/screens/welcome.dart';
+import 'package:shack/screens/phonesign/otp_verification.dart';
+import 'package:shack/screens/util/custom_snackbar.dart';
 
 class OTP extends StatefulWidget {
   final bool updateNumber;

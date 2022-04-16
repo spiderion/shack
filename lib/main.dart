@@ -5,11 +5,11 @@ import 'package:firebase_auth/firebase_auth.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
-import 'package:flutter_grid/screens/SelectImage.dart';
-import 'package:flutter_grid/screens/Splash.dart';
-import 'package:flutter_grid/screens/Tab.dart';
-import 'package:flutter_grid/screens/Welcome.dart';
-import 'package:flutter_grid/themes/theme.dart';
+import 'package:shack/screens/select_image.dart';
+import 'package:shack/screens/splash.dart';
+import 'package:shack/screens/tab.dart';
+import 'package:shack/screens/welcome.dart';
+import 'package:shack/themes/theme.dart';
 
 Future main() async {
   WidgetsFlutterBinding.ensureInitialized();
