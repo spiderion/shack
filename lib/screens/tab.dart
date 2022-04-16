@@ -10,6 +10,7 @@ import 'package:flutter/material.dart';
 import 'package:in_app_purchase/in_app_purchase.dart';
 import 'package:persistent_bottom_nav_bar/persistent-tab-view.dart';
 import 'package:rflutter_alert/rflutter_alert.dart';
+import 'package:shack/core/data/data_paths.dart';
 import 'package:shack/core/location_ebr.dart';
 import 'package:shack/models/answer_model.dart';
 import 'package:shack/models/question_model.dart';
@@ -104,7 +105,7 @@ class _TABState extends State<TAB> with WidgetsBindingObserver {
     }
     _controller = PersistentTabController(initialIndex: 0);
     _hideNavBar = false;
-    _getquetions();
+    _getQuestions();
     _getAccessItems();
     _getCurrentUser();
     _getMatches();
@@ -130,17 +131,18 @@ class _TABState extends State<TAB> with WidgetsBindingObserver {
     });
   }
 
-  _getquetions() {
-    return FirebaseFirestore.instance.collection('questions').snapshots().listen((onData) {
+  _getQuestions() {
+    return FirebaseFirestore.instance
+        .collection(Collections.QUESTIONS)
+        .snapshots()
+        .listen((QuerySnapshot onData) {
       if (onData.docs.length > 0) {
         onData.docs.forEach((f) {
-          QuestionModel tempmodel = QuestionModel.fromDocument(f);
-          questions.add(tempmodel);
+          QuestionModel tempModel = QuestionModel.fromDocument(f.data() as Map<String, dynamic>? ?? {});
+          questions.add(tempModel);
           setState(() {});
         });
       }
-
-      // print('hehehe');
     });
   }
 
@@ -169,7 +171,7 @@ class _TABState extends State<TAB> with WidgetsBindingObserver {
       answerlist = [];
       List<Answer_model> tempanswer = [];
       FirebaseFirestore.instance
-          .collection('/Users/${currentUser!.id}/Questions')
+          .collection('/${Collections.Users}/${currentUser!.id}/${Collections.Questions}')
           .snapshots()
           .listen((QuerySnapshot data) {
         data.docs.forEach((element) {
@@ -265,7 +267,7 @@ class _TABState extends State<TAB> with WidgetsBindingObserver {
 
   _getSwipedcount() {
     FirebaseFirestore.instance
-        .collection('/Users/${currentUser!.id}/CheckedUser')
+        .collection('/${Collections.Users}/${currentUser!.id}/${Collections.CheckedUser}')
         .where(
           'timestamp',
           isGreaterThan: Timestamp.now().toDate().subtract(Duration(days: 1)),
@@ -469,7 +471,6 @@ class _TABState extends State<TAB> with WidgetsBindingObserver {
 
   List<Widget> _buildScreens() {
     return [
-      // Container(), //todo
       Container(child: Home(currentUser, allusers, videocontroller)),
       Container(child: HomeScreen(currentUser, matches, newmatches)),
       Container(child: Center(child: CardPictures(currentUser, users, swipecount, items))),
@@ -533,10 +534,7 @@ class _TABState extends State<TAB> with WidgetsBindingObserver {
           borderRadius: new BorderRadius.only(
               topLeft: const Radius.circular(20.0), topRight: const Radius.circular(20.0)),
           boxShadow: [
-            BoxShadow(
-              color: Colors.grey,
-              blurRadius: 5.0,
-            ),
+            BoxShadow(color: Colors.grey, blurRadius: 5.0),
           ]),
       popAllScreensOnTapOfSelectedTab: true,
       itemAnimationProperties: ItemAnimationProperties(

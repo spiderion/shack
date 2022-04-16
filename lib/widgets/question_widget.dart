@@ -30,13 +30,9 @@ class QuestionWidget extends StatelessWidget {
                 height: double.infinity,
                 width: double.infinity,
                 fit: BoxFit.cover,
-                imageUrl: model!.img!,
-                placeholder: (context, url) => Image.asset(
-                  'assets/loading.gif',
-                  fit: BoxFit.cover,
-                  width: double.infinity,
-                  height: 150,
-                ),
+                imageUrl: model?.img ?? '',
+                placeholder: (context, url) =>
+                    Image.asset('assets/loading.gif', fit: BoxFit.cover, width: double.infinity, height: 150),
                 errorWidget: (context, url, error) => Icon(Icons.error),
               ),
             ),
@@ -46,17 +42,9 @@ class QuestionWidget extends StatelessWidget {
               child: Column(
                 mainAxisAlignment: MainAxisAlignment.start,
                 children: <Widget>[
-                  Text(
-                    model!.title!,
-                    style: TextStyle(color: Colors.black, fontSize: 30),
-                  ),
-                  SizedBox(
-                    height: 20,
-                  ),
-                  Text(
-                    model!.text!,
-                    style: TextStyle(color: Colors.black87, fontSize: 20),
-                  )
+                  Text(model?.title ?? '', style: TextStyle(color: Colors.black, fontSize: 30)),
+                  SizedBox(height: 20),
+                  Text(model?.text ?? '', style: TextStyle(color: Colors.black87, fontSize: 20))
                 ],
               ),
             ),

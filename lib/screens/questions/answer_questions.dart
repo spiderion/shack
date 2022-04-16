@@ -1,9 +1,10 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
-import 'package:shack/elements/cards_carousel_loader_widget.dart';
-import 'package:shack/elements/question_widget.dart';
 import 'package:shack/models/question_model.dart';
 import 'package:shack/screens/util/color.dart';
+
+import '../../widgets/cards_carousel_loader_widget.dart';
+import '../../widgets/question_widget.dart';
 
 class AnswerQuestions extends StatefulWidget {
   AnswerQuestions();
@@ -23,7 +24,7 @@ class _AnswerQuestionsState extends State<AnswerQuestions> {
   @override
   void initState() {
     super.initState();
-    _getquetions();
+    _getQuestions();
   }
 
   @override
@@ -46,9 +47,7 @@ class _AnswerQuestionsState extends State<AnswerQuestions> {
                     scrollDirection: Axis.horizontal,
                     itemCount: questions.length,
                     itemBuilder: (context, index) {
-                      return QuestionWidget(
-                        model: questions.elementAt(index),
-                      );
+                      return QuestionWidget(model: questions.elementAt(index));
                     },
                   )
                 : CardsCarouselLoaderWidget()),
@@ -56,11 +55,12 @@ class _AnswerQuestionsState extends State<AnswerQuestions> {
     );
   }
 
-  _getquetions() {
+  _getQuestions() {
     return FirebaseFirestore.instance.collection('questions').snapshots().listen((onData) {
       if (onData.docs.length > 0) {
-        onData.docs.forEach((f) {
-          QuestionModel tempmodel = QuestionModel.fromDocument(f);
+        onData.docs.forEach((QueryDocumentSnapshot queryDocumentSnapshot) {
+          QuestionModel tempmodel =
+              QuestionModel.fromDocument(queryDocumentSnapshot.data() as Map<String, dynamic>? ?? {});
           questions.add(tempmodel);
           setState(() {});
         });
