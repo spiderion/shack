@@ -18,12 +18,11 @@ import 'package:shack/models/user_model.dart';
 import 'package:shack/screens/Near/near.dart';
 import 'package:shack/screens/Settings/setting.dart';
 import 'package:shack/screens/Video/make_video.dart';
+import 'package:shack/screens/home/home.dart';
 import 'package:shack/screens/home_screen.dart';
 import 'package:shack/screens/match/home.dart';
 import 'package:shack/themes/gridapp_icons.dart';
 import 'package:video_player/video_player.dart';
-
-import 'Home/home.dart';
 
 List likedByList = [];
 List<String?> nearuser = [];
@@ -64,7 +63,7 @@ class _TABState extends State<TAB> with WidgetsBindingObserver {
   List<AppUser> newmatches = [];
   AppUser? currentUser;
   List<AppUser> users = [];
-  List<AppUser> allusers = [];
+  List<AppUser> allUsers = [];
 
   PersistentTabController? _controller;
   bool? _hideNavBar;
@@ -147,12 +146,12 @@ class _TABState extends State<TAB> with WidgetsBindingObserver {
   }
 
   _getAllUsers() async {
-    allusers.clear();
+    allUsers.clear();
     User? user = _firebaseAuth.currentUser;
     QuerySnapshot querySnapshot = await docRef.get();
     for (int i = 0; i < querySnapshot.docs.length; i++) {
       AppUser temp = AppUser.fromDocument(querySnapshot.docs[i].data() as Map<String, dynamic>);
-      if (temp.id != user!.uid) allusers.add(temp);
+      if (temp.id != user!.uid) allUsers.add(temp);
     }
   }
 
@@ -397,11 +396,10 @@ class _TABState extends State<TAB> with WidgetsBindingObserver {
               temp.coordinates?['latitude'],
               temp.coordinates?['longitude']);
           temp.distanceBW = distance.round();
-          if (checkedUser.any(
-            (value) => value == temp.id,
-          )) {
+          if (checkedUser.any((value) => value == temp.id)) {
+            print('checkedUser');
           } else {
-            if (distance <= currentUser!.maxDistance! &&
+            if (distance <= (currentUser?.maxDistance ?? 0) &&
                 temp.id != currentUser!.id &&
                 !temp.isBlocked! &&
                 temp.isActive!) {
@@ -471,7 +469,7 @@ class _TABState extends State<TAB> with WidgetsBindingObserver {
 
   List<Widget> _buildScreens() {
     return [
-      Container(child: Home(currentUser, allusers, videocontroller)),
+      Container(child: Home(currentUser, allUsers, videocontroller)),
       Container(child: HomeScreen(currentUser, matches, newmatches)),
       Container(child: Center(child: CardPictures(currentUser, users, swipecount, items))),
       Container(child: MakeVideo(currentUser)),
@@ -581,8 +579,7 @@ class _TABState extends State<TAB> with WidgetsBindingObserver {
         'location': {
           'latitude': locationInfo?.locationData.latitude,
           'longitude': locationInfo?.locationData.longitude,
-          'address':
-              "${locationInfo?.address.locality} ${locationInfo?.address.subLocality} ${locationInfo?.address.subAdminArea}\n ${locationInfo?.address.countryName} ,${locationInfo?.address.postalCode}"
+          'address': locationInfo?.address.addressLine ?? ''
         },
       },
     );

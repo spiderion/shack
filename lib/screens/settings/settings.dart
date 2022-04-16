@@ -2,11 +2,11 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:persistent_bottom_nav_bar/persistent-tab-view.dart';
 import 'package:shack/models/user_model.dart';
 import 'package:shack/screens/Settings/update_number.dart';
-import 'package:shack/screens/welcome.dart';
 import 'package:shack/screens/util/color.dart';
-import 'package:persistent_bottom_nav_bar/persistent-tab-view.dart';
+import 'package:shack/screens/welcome.dart';
 
 import '../../core/location_ebr.dart';
 
@@ -224,8 +224,7 @@ class _SettingsState extends State<Settings> {
                                 onTap: () async {
                                   LocationEBR locationEBR = LocationEBR();
                                   LocationInfo? locationInfo = await locationEBR.getLocationData();
-                                  var address =
-                                      "${locationInfo?.address.locality} ${locationInfo?.address.subLocality} ${locationInfo?.address.subAdminArea}\n ${locationInfo?.address.countryName} ,${locationInfo?.address.postalCode}";
+                                  var address = locationInfo?.address.addressLine ?? '';
                                   showCupertinoModalPopup(
                                       context: context,
                                       builder: (ctx) {

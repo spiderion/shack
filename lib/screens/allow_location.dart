@@ -128,8 +128,7 @@ in order to search users around you.
         'location': {
           'latitude': locationInfo?.locationData.latitude,
           'longitude': locationInfo?.locationData.longitude,
-          'address':
-              "${locationInfo?.address.locality} ${locationInfo?.address.subLocality} ${locationInfo?.address.subAdminArea}\n ${locationInfo?.address.countryName} ,${locationInfo?.address.postalCode}"
+          'address': locationInfo?.address.addressLine ?? ''
         },
         'maximum_distance': 20,
         'age_range': {

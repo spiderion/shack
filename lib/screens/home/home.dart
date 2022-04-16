@@ -1,17 +1,14 @@
-import 'dart:ui';
-
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_swiper_null_safety/flutter_swiper_null_safety.dart';
+import 'package:shack/core/data/data_paths.dart';
 import 'package:shack/models/user_model.dart';
 import 'package:shack/screens/tab.dart';
 import 'package:shack/screens/util/color.dart';
 import 'package:template_package/template_package.dart';
 import 'package:video_player/video_player.dart';
-
-import '../../core/data/data_paths.dart';
 
 class Home extends StatefulWidget {
   final AppUser? currentUser;
@@ -425,7 +422,6 @@ class _HomeState extends State<Home> {
     return InkWell(
       borderRadius: BorderRadius.circular(5),
       onTap: () {
-        print('hello');
         FirebaseFirestore.instance
             .collection(Collections.Users)
             .doc(widget.currentUser!.id)

@@ -4,21 +4,23 @@ import 'package:cached_network_image/cached_network_image.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_swiper_null_safety/flutter_swiper_null_safety.dart';
 import 'package:shack/models/user_model.dart';
 import 'package:shack/screens/Payment/subscriptions.dart';
-import 'package:shack/screens/tab.dart';
 import 'package:shack/screens/match/information.dart';
+import 'package:shack/screens/tab.dart';
 import 'package:shack/screens/util/color.dart';
+import 'package:swipe_stack/swipe_stack.dart';
 
 List userRemoved = [];
 
 class CardPictures extends StatefulWidget {
   final List<AppUser> users;
   final AppUser? currentUser;
-  final int swipedcount;
+  final int swipedCount;
   final Map items;
 
-  CardPictures(this.currentUser, this.users, this.swipedcount, this.items);
+  CardPictures(this.currentUser, this.users, this.swipedCount, this.items);
 
   @override
   _CardPicturesState createState() => _CardPicturesState();
@@ -35,7 +37,7 @@ class _CardPicturesState extends State<CardPictures> with AutomaticKeepAliveClie
   Widget build(BuildContext context) {
     super.build(context);
     int freeSwipe = widget.items['free_swipes'] != null ? int.parse(widget.items['free_swipes']) : 10;
-    bool exceedSwipes = widget.swipedcount >= freeSwipe;
+    bool exceedSwipes = widget.swipedCount >= freeSwipe;
     return Scaffold(
       backgroundColor: primaryColor,
       body: Container(
@@ -83,7 +85,7 @@ class _CardPicturesState extends State<CardPictures> with AutomaticKeepAliveClie
                                     ],
                                   ),
                                 )
-                              : Text('swiper') /*SwipeStack(
+                              : SwipeStack(
                                   key: swipeKey,
                                   children: widget.users.map((index) {
                                     return SwiperItem(builder: (SwiperPosition position, double progress) {
@@ -98,6 +100,7 @@ class _CardPicturesState extends State<CardPictures> with AutomaticKeepAliveClie
                                                   child: Swiper(
                                                     customLayoutOption: CustomLayoutOption(
                                                       startIndex: 0,
+                                                      stateCount: 0,
                                                     ),
                                                     key: UniqueKey(),
                                                     physics: NeverScrollableScrollPhysics(),
@@ -106,7 +109,7 @@ class _CardPicturesState extends State<CardPictures> with AutomaticKeepAliveClie
                                                         height: MediaQuery.of(context).size.height * .78,
                                                         width: MediaQuery.of(context).size.width,
                                                         child: CachedNetworkImage(
-                                                          imageUrl: index.imageUrl[index2] ?? "",
+                                                          imageUrl: index.imageUrl?[index2] ?? "",
                                                           fit: BoxFit.cover,
                                                           useOldImageOnUrlChange: true,
                                                           placeholder: (context, url) =>
@@ -122,7 +125,7 @@ class _CardPicturesState extends State<CardPictures> with AutomaticKeepAliveClie
                                                         // ),
                                                       );
                                                     },
-                                                    itemCount: index.imageUrl.length,
+                                                    itemCount: index.imageUrl?.length ?? 0,
                                                     pagination: new SwiperPagination(
                                                         alignment: Alignment.bottomCenter,
                                                         builder: DotSwiperPaginationBuilder(
@@ -198,7 +201,7 @@ class _CardPicturesState extends State<CardPictures> with AutomaticKeepAliveClie
                                                                     index, widget.currentUser, swipeKey);
                                                               }),
                                                           title: Text(
-                                                            "${index.name}, ${index.editInfo['showMyAge'] != null ? !index.editInfo['showMyAge'] ? index.age : "" : index.age}",
+                                                            "${index.name}, ${index.editInfo?['showMyAge'] != null ? !(index.editInfo?['showMyAge'] == true) ? index.age : "" : index.age ?? 0}",
                                                             style: TextStyle(
                                                                 color: Colors.white,
                                                                 fontSize: 25,
@@ -232,7 +235,7 @@ class _CardPicturesState extends State<CardPictures> with AutomaticKeepAliveClie
                                         FirebaseFirestore.instance.collection("Users");
                                     if (position == SwiperPosition.Left) {
                                       await docRef
-                                          .doc(widget.currentUser.id)
+                                          .doc(widget.currentUser?.id)
                                           .collection("CheckedUser")
                                           .doc(widget.users[index].id)
                                           .set(
@@ -281,7 +284,7 @@ class _CardPicturesState extends State<CardPictures> with AutomaticKeepAliveClie
                                               );
                                             });
                                         await docRef
-                                            .doc(widget.currentUser.id)
+                                            .doc(widget.currentUser?.id)
                                             .collection("Matches")
                                             .doc(widget.users[index].id)
                                             .set(
@@ -289,19 +292,19 @@ class _CardPicturesState extends State<CardPictures> with AutomaticKeepAliveClie
                                             'Matches': widget.users[index].id,
                                             'isRead': false,
                                             'userName': widget.users[index].name,
-                                            'pictureUrl': widget.users[index].imageUrl[0],
+                                            'pictureUrl': widget.users[index].imageUrl?[0],
                                             'timestamp': FieldValue.serverTimestamp()
                                           },
                                         );
                                         await docRef
                                             .doc(widget.users[index].id)
                                             .collection("Matches")
-                                            .doc(widget.currentUser.id)
+                                            .doc(widget.currentUser?.id)
                                             .set(
                                           {
-                                            'Matches': widget.currentUser.id,
-                                            'userName': widget.currentUser.name,
-                                            'pictureUrl': widget.currentUser.imageUrl[0],
+                                            'Matches': widget.currentUser?.id,
+                                            'userName': widget.currentUser?.name,
+                                            'pictureUrl': widget.currentUser?.imageUrl?[0],
                                             'isRead': false,
                                             'timestamp': FieldValue.serverTimestamp()
                                           },
@@ -309,7 +312,7 @@ class _CardPicturesState extends State<CardPictures> with AutomaticKeepAliveClie
                                       }
 
                                       await docRef
-                                          .doc(widget.currentUser.id)
+                                          .doc(widget.currentUser?.id)
                                           .collection("CheckedUser")
                                           .doc(widget.users[index].id)
                                           .set(
@@ -321,10 +324,10 @@ class _CardPicturesState extends State<CardPictures> with AutomaticKeepAliveClie
                                       await docRef
                                           .doc(widget.users[index].id)
                                           .collection("LikedBy")
-                                          .doc(widget.currentUser.id)
+                                          .doc(widget.currentUser?.id)
                                           .set(
                                         {
-                                          'LikedBy': widget.currentUser.id,
+                                          'LikedBy': widget.currentUser?.id,
                                           'timestamp': FieldValue.serverTimestamp()
                                         },
                                       );
@@ -338,8 +341,8 @@ class _CardPicturesState extends State<CardPictures> with AutomaticKeepAliveClie
                                     } else
                                       debugPrint("onSwipe $index $position");
                                   },
-                                  onRewind: (int index, SwiperPosition position) {
-                                    swipeKey.currentContext.dependOnInheritedWidgetOfExactType();
+                                  onRewind: (int index, SwiperPosition? position) {
+                                    swipeKey.currentContext?.dependOnInheritedWidgetOfExactType();
                                     widget.users.insert(index, userRemoved[0]);
                                     setState(() {
                                       userRemoved.clear();
@@ -347,7 +350,7 @@ class _CardPicturesState extends State<CardPictures> with AutomaticKeepAliveClie
                                     debugPrint("onRewind $index $position");
                                     print(widget.users[index].id);
                                   },
-                                )*/,
+                                ),
                     ),
                     Positioned(
                       right: 0,
@@ -452,7 +455,7 @@ class _CardPicturesState extends State<CardPictures> with AutomaticKeepAliveClie
                                 onTap: () {
                                   if (widget.users.length > 0) {
                                     print("object");
-                                   // swipeKey.currentState.swipeLeft();
+                                    // swipeKey.currentState.swipeLeft();
                                   }
                                 },
                                 child: Container(

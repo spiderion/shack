@@ -6,14 +6,14 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_storage/firebase_storage.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:image_picker/image_picker.dart';
+import 'package:intl/intl.dart';
+import 'package:permission_handler/permission_handler.dart';
 import 'package:shack/models/user_model.dart';
 import 'package:shack/screens/Calling/utils/settings.dart';
 import 'package:shack/screens/Chat/largeImage.dart';
 import 'package:shack/screens/match/information.dart';
 import 'package:shack/screens/util/custom_snackbar.dart';
-import 'package:image_picker/image_picker.dart';
-import 'package:intl/intl.dart';
-import 'package:permission_handler/permission_handler.dart';
 import 'package:template_package/template_package.dart';
 
 class ChatPage extends StatefulWidget {
@@ -40,24 +40,22 @@ class _ChatPageState extends State<ChatPage> {
     print("object    -${widget.chatId}");
     super.initState();
     chatReference = db.collection("chats").doc(widget.chatId).collection('messages');
-    checkblock();
+    checkBlock();
   }
 
   var blockedBy;
 
-  checkblock() {
-    chatReference.doc('blocked').snapshots().listen((onData) {
-      if (onData.data != null) {
-        blockedBy = (onData.data() as Map<String, dynamic>)['blockedBy'];
-        if ((onData.data() as Map<String, dynamic>)['isBlocked']) {
+  checkBlock() {
+    chatReference.doc('blocked').snapshots().listen((DocumentSnapshot onData) {
+      if (onData.data() != null) {
+        blockedBy = (onData.data() as Map<String, dynamic>?)?['blockedBy'];
+        if ((onData.data() as Map<String, dynamic>?)?['isBlocked']) {
           isBlocked = true;
         } else {
           isBlocked = false;
         }
-
         if (mounted) setState(() {});
       }
-      // print(onData.data['blockedBy']);
     });
   }
 
@@ -498,10 +496,12 @@ class _ChatPageState extends State<ChatPage> {
                     },
                   ),
                   Divider(height: 1.0),
-                  Container(
-                    alignment: Alignment.bottomCenter,
-                    decoration: BoxDecoration(color: Theme.of(context).cardColor),
-                    child: isBlocked ? Text("Sorry You can't send message!") : _buildTextComposer(),
+                  SafeArea(
+                    child: Container(
+                      alignment: Alignment.bottomCenter,
+                      decoration: BoxDecoration(color: Theme.of(context).cardColor),
+                      child: isBlocked ? Text("Sorry You can't send message!") : _buildTextComposer(),
+                    ),
                   ),
                 ],
               ),
@@ -537,13 +537,11 @@ class _ChatPageState extends State<ChatPage> {
               Container(
                 margin: EdgeInsets.symmetric(horizontal: 4.0),
                 child: IconButton(
-                    icon: Icon(
-                      Icons.photo_camera,
-                      color: _theme.backgroundColor,
-                    ),
+                    icon: Icon(Icons.photo_camera, color: _theme.backgroundColor),
                     onPressed: () async {
-                      XFile imageFile = (await ImagePicker().pickImage(source: ImageSource.gallery))!;
-                      int timestamp = new DateTime.now().millisecondsSinceEpoch;
+                      XFile? imageFile = await ImagePicker().pickImage(source: ImageSource.gallery);
+                      if (imageFile == null) return;
+                      int timestamp = DateTime.now().millisecondsSinceEpoch;
                       final storageReference = FirebaseStorage.instance
                           .ref()
                           .child('chats/${widget.chatId}/img_' + timestamp.toString() + '.jpg');
@@ -565,11 +563,8 @@ class _ChatPageState extends State<ChatPage> {
                       _isWritting = messageText.trim().length > 0;
                     });
                   },
-                  decoration: new InputDecoration.collapsed(
-                      floatingLabelBehavior: FloatingLabelBehavior.auto,
-                      // border: OutlineInputBorder(
-                      //     borderRadius: BorderRadius.circular(18)),
-                      hintText: "Send a message..."),
+                  decoration: InputDecoration.collapsed(
+                      floatingLabelBehavior: FloatingLabelBehavior.auto, hintText: "Send a message..."),
                 ),
               ),
               Container(
