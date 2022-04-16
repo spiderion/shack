@@ -381,10 +381,7 @@ class _HomeState extends State<Home> {
                                 builder: DotSwiperPaginationBuilder(
                                     activeSize: 10, color: Colors.grey, activeColor: Colors.white),
                                 margin: EdgeInsets.only(bottom: 30)),
-                            control: new SwiperControl(
-                              color: Colors.white,
-                              disableColor: Colors.grey,
-                            ),
+                            control: new SwiperControl(color: Colors.white, disableColor: Colors.grey),
                             loop: false,
                           ),
                           Positioned(
@@ -424,11 +421,9 @@ class _HomeState extends State<Home> {
                     children: <Widget>[
                       Container(
                         width: 100,
-                        child: Text(
-                          'THE GRID',
-                          textAlign: TextAlign.center,
-                          style: TextStyle(color: secondryColor, fontWeight: FontWeight.bold),
-                        ),
+                        child: Text('THE GRID',
+                            textAlign: TextAlign.center,
+                            style: TextStyle(color: secondryColor, fontWeight: FontWeight.bold)),
                       ),
                       Expanded(
                           child: Container(

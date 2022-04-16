@@ -36,7 +36,7 @@ class _SelectImageState extends State<SelectImage> {
     final _user = FirebaseAuth.instance.currentUser;
     if (_user != null) {
       docRef.doc("${_user.uid}").snapshots().listen((data) {
-        currentUser = AppUser.fromimageDocument(data);
+        currentUser = AppUser.fromimageDocument(data.data() as Map<String, dynamic>);
       });
     }
   }
