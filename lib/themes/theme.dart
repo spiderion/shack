@@ -43,6 +43,7 @@ abstract class CustomeTheme {
     brightness: Brightness.light,
     primaryColorDark: LightTheme.mPurple,
     buttonTheme: _buttonTheme,
+    elevatedButtonTheme: elevatedButtonThemeData(),
     errorColor: _errorColor,
     backgroundColor: Colors.white,
     inputDecorationTheme: LightTheme.inputDecorationTheme,
@@ -50,6 +51,14 @@ abstract class CustomeTheme {
     appBarTheme: LightTheme.appBarTheme,
     disabledColor: const Color.fromRGBO(200, 200, 200, 1),
   );
+
+  static ElevatedButtonThemeData elevatedButtonThemeData() {
+    return ElevatedButtonThemeData(
+      style: ButtonStyle(
+          shape: MaterialStateProperty.all(RoundedRectangleBorder(borderRadius: BorderRadius.circular(8))),
+          backgroundColor: MaterialStateProperty.all(primaryColor)),
+    );
+  }
 }
 
 abstract class LightTheme {

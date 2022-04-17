@@ -82,7 +82,7 @@ class _MyAppState extends State<MyApp> {
               ? TAB(null, null)
               : isAuth
                   ? SelectImage()
-                  : Welcome(),
+                  : WelcomePage(),
     );
   }
 }

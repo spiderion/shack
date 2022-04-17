@@ -3,9 +3,9 @@ import 'package:country_code_picker/country_code_picker.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-import 'package:shack/screens/welcome.dart';
 import 'package:shack/screens/phonesign/otp_verification.dart';
 import 'package:shack/screens/util/custom_snackbar.dart';
+import 'package:shack/screens/welcome.dart';
 
 class OTP extends StatefulWidget {
   final bool updateNumber;
@@ -22,7 +22,7 @@ class _OTPState extends State<OTP> {
   String? _smsVerificationCode;
   String? countryCode = '+44';
   TextEditingController phoneNumController = new TextEditingController();
-  Welcome _login = new Welcome();
+  WelcomePage _login = new WelcomePage();
 
   @override
   void dispose() {
@@ -200,7 +200,6 @@ class _OTPState extends State<OTP> {
     final ThemeData _theme = Theme.of(context);
     return Scaffold(
       key: _scaffoldKey,
-      backgroundColor: Colors.white,
       appBar: AppBar(
         leading: IconButton(
           icon: Icon(Icons.arrow_back_ios, color: Colors.black),
@@ -220,7 +219,7 @@ class _OTPState extends State<OTP> {
                 title: Text(
                   "Verify Your Number",
                   textAlign: TextAlign.center,
-                  style: TextStyle(fontSize: 27, fontWeight: FontWeight.w900, color: _theme.backgroundColor),
+                  style: TextStyle(fontSize: 27, fontWeight: FontWeight.w900),
                 ),
                 subtitle: Text(
                   r"""Please enter Your mobile Number to
@@ -235,22 +234,16 @@ rates may apply.""",
                   child: ListTile(
                       leading: Container(
                         decoration: BoxDecoration(
-                          border: Border(
-                            bottom: BorderSide(width: 1.0, color: _theme.backgroundColor),
-                          ),
-                        ),
+                            border: Border(
+                                bottom: BorderSide(width: 1.0, color: Theme.of(context).primaryColor))),
                         child: CountryCodePicker(
                           onChanged: (value) {
                             countryCode = value.dialCode;
                           },
-                          // Initial selection and favorite can be one of code ('IT') OR dial_code('+39')
                           initialSelection: 'GB',
                           favorite: [countryCode!, 'GB'],
-                          // optional. Shows only country name and flag
                           showCountryOnly: false,
-                          // optional. Shows only country name and flag when popup is closed.
                           showOnlyCountryWhenClosed: false,
-                          // optional. aligns the flag and the Text left
                           alignLeft: false,
                         ),
                       ),
@@ -258,26 +251,20 @@ rates may apply.""",
                         child: TextFormField(
                           keyboardType: TextInputType.phone,
                           style: TextStyle(fontSize: 20),
-                          cursorColor: _theme.backgroundColor,
+                          cursorColor: Colors.black,
                           controller: phoneNumController,
                           onChanged: (value) {
-                            setState(() {
-                              // if (value.length == 10) {
-                              cont = true;
-                              //  phoneNumController.text = value;
-                              //  } else {
-                              //    cont = false;
-                              //  }
-                            });
+                            cont = true;
+                            setState(() {});
                           },
                           decoration: InputDecoration(
                             hintText: "Enter your number",
                             hintStyle: TextStyle(fontSize: 18),
-                            focusColor: _theme.backgroundColor,
-                            focusedBorder:
-                                UnderlineInputBorder(borderSide: BorderSide(color: _theme.backgroundColor)),
-                            enabledBorder:
-                                UnderlineInputBorder(borderSide: BorderSide(color: _theme.backgroundColor)),
+                            focusColor: Theme.of(context).primaryColor,
+                            focusedBorder: UnderlineInputBorder(
+                                borderSide: BorderSide(color: Theme.of(context).primaryColor)),
+                            enabledBorder: UnderlineInputBorder(
+                                borderSide: BorderSide(color: Theme.of(context).primaryColor)),
                           ),
                         ),
                       ))),
@@ -290,7 +277,7 @@ rates may apply.""",
                           shape: RoundedRectangleBorder(
                             borderRadius: BorderRadius.circular(8.0),
                           ),
-                          color: _theme.backgroundColor,
+                          color: Theme.of(context).primaryColor,
                           padding: EdgeInsets.all(8),
                           textColor: _theme.primaryColor,
                           onPressed: () async {
@@ -322,13 +309,7 @@ rates may apply.""",
                       width: double.infinity,
                       height: 50,
                       margin: EdgeInsets.all(25),
-                      child: FlatButton(
-                          shape: RoundedRectangleBorder(
-                            borderRadius: BorderRadius.circular(8.0),
-                          ),
-                          color: _theme.backgroundColor.withOpacity(0.5),
-                          padding: EdgeInsets.all(8),
-                          textColor: _theme.primaryColor.withOpacity(0.5),
+                      child: ElevatedButton(
                           onPressed: () {
                             print('on pressed newely added');
                           },

@@ -7,7 +7,7 @@ import 'package:shack/screens/select_image.dart';
 import 'package:shack/screens/tab.dart';
 import 'package:shack/themes/gridapp_icons.dart';
 
-class Welcome extends StatelessWidget {
+class WelcomePage extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final ThemeData _theme = Theme.of(context);
@@ -39,9 +39,9 @@ class Welcome extends StatelessWidget {
         crossAxisAlignment: CrossAxisAlignment.center,
         children: <Widget>[
           Container(
-            padding: EdgeInsets.only(top: 10, bottom: 20),
+            padding: EdgeInsets.only(top: 10),
             child: Text(
-              'Continue with phone',
+              'Continue with Phone',
               style: TextStyle(color: Colors.black, fontSize: 24, fontWeight: FontWeight.bold),
               textAlign: TextAlign.start,
             ),
@@ -50,73 +50,22 @@ class Welcome extends StatelessWidget {
             width: double.infinity,
             height: 50,
             margin: EdgeInsets.only(top: 10, bottom: 10),
-            child: getButton(context),
+            child: getButton(context, () {
+              bool updateNumber = false;
+              Navigator.push(context, CupertinoPageRoute(builder: (context) => OTP(updateNumber)));
+            }, 'Sign up with Phone', Gridapp.phone_squared),
           ),
+          divider(),
+          Container(
+              width: double.infinity,
+              height: 50,
+              margin: EdgeInsets.only(top: 10, bottom: 10),
+              child: getButton(context, () {}, 'Sign up with spotify', Icons.music_video)),
           Container(
             width: double.infinity,
             height: 50,
             margin: EdgeInsets.only(top: 10, bottom: 10),
-            child: FlatButton(
-              shape: RoundedRectangleBorder(
-                borderRadius: BorderRadius.circular(8.0),
-              ),
-              color: _theme.backgroundColor,
-              padding: EdgeInsets.all(8),
-              textColor: _theme.primaryColor,
-              onPressed: () {},
-              child: Stack(
-                children: <Widget>[
-                  Container(
-                    padding: EdgeInsets.only(left: 5),
-                    alignment: Alignment.centerLeft,
-                    child: Icon(
-                      Icons.music_video,
-                      size: 30,
-                      color: Colors.white,
-                    ),
-                  ),
-                  Container(
-                    alignment: Alignment.center,
-                    child: Text(
-                      'Sign up with spotify',
-                      style: TextStyle(color: Colors.white, fontWeight: FontWeight.w900, fontSize: 15),
-                      textAlign: TextAlign.center,
-                    ),
-                  )
-                ],
-              ),
-            ),
-          ),
-          Container(
-            width: double.infinity,
-            height: 50,
-            margin: EdgeInsets.only(top: 10, bottom: 10),
-            child: FlatButton(
-              shape: RoundedRectangleBorder(
-                borderRadius: BorderRadius.circular(8.0),
-              ),
-              color: _theme.backgroundColor,
-              padding: EdgeInsets.all(8),
-              textColor: _theme.primaryColor,
-              onPressed: () {},
-              child: Stack(
-                children: <Widget>[
-                  Container(
-                    padding: EdgeInsets.only(left: 5),
-                    alignment: Alignment.centerLeft,
-                    child: Icon(Gridapp.at, size: 30, color: Colors.white),
-                  ),
-                  Container(
-                    alignment: Alignment.center,
-                    child: Text(
-                      'Sign up with email',
-                      style: TextStyle(color: Colors.white, fontWeight: FontWeight.w900, fontSize: 15),
-                      textAlign: TextAlign.center,
-                    ),
-                  )
-                ],
-              ),
-            ),
+            child: getButton(context, () {}, 'Sign up with email', Gridapp.at),
           ),
           Container(
             padding: EdgeInsets.only(top: 10),
@@ -134,28 +83,38 @@ Service and Privacy Policy.""",
     );
   }
 
-  Widget getButton(BuildContext context) {
-    final _theme = Theme.of(context);
-    return FlatButton(
-      shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(8.0)),
-      color: _theme.backgroundColor,
-      padding: EdgeInsets.all(8),
-      textColor: _theme.primaryColor,
-      onPressed: () {
-        bool updateNumber = false;
-        Navigator.push(context, CupertinoPageRoute(builder: (context) => OTP(updateNumber)));
-      },
+  Row divider() {
+    return Row(
+          mainAxisAlignment: MainAxisAlignment.center,
+          children: [
+            Expanded(child: Divider()),
+            Padding(
+              padding: const EdgeInsets.symmetric(horizontal: 8.0),
+              child: Text(
+                'or continue with',
+                style: TextStyle(color: Colors.grey, fontSize: 12),
+              ),
+            ),
+            Expanded(child: Divider())
+          ],
+        );
+  }
+
+  Widget getButton(BuildContext context, Function() onTap, String text, IconData icon) {
+    return ElevatedButton(
+      style: ButtonStyle(),
+      onPressed: onTap,
       child: Stack(
         children: <Widget>[
           Container(
             padding: EdgeInsets.only(left: 5),
             alignment: Alignment.centerLeft,
-            child: Icon(Gridapp.phone_squared, size: 30, color: Colors.white),
+            child: Icon(icon, size: 30, color: Colors.white),
           ),
           Container(
             alignment: Alignment.center,
             child: Text(
-              'Sign up with phone',
+              text,
               style: TextStyle(
                 color: Colors.white,
                 fontWeight: FontWeight.w900,

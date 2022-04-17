@@ -396,7 +396,7 @@ class EditBioState extends State<EditBio> {
                                           await _auth.signOut().whenComplete(() {
                                             Navigator.pushReplacement(
                                               context,
-                                              CupertinoPageRoute(builder: (context) => Welcome()),
+                                              CupertinoPageRoute(builder: (context) => WelcomePage()),
                                             );
                                           });
                                         },

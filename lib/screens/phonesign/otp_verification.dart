@@ -27,7 +27,7 @@ var onTapRecognizer;
 
 class _VerificationState extends State<Verification> {
   final _scaffoldKey = GlobalKey<ScaffoldState>();
-  Welcome _login = new Welcome();
+  WelcomePage _login = new WelcomePage();
 
   Future updateNumber() async {
     User user = FirebaseAuth.instance.currentUser!;

@@ -534,7 +534,7 @@ class _SettingsState extends State<Settings> {
                                   await _auth.signOut().whenComplete(() {
                                     Navigator.pushReplacement(
                                       context,
-                                      CupertinoPageRoute(builder: (context) => Welcome()),
+                                      CupertinoPageRoute(builder: (context) => WelcomePage()),
                                     );
                                   });
                                 },
@@ -580,7 +580,7 @@ class _SettingsState extends State<Settings> {
                                     await _auth.signOut().whenComplete(() {
                                       Navigator.pushReplacement(
                                         context,
-                                        CupertinoPageRoute(builder: (context) => Welcome()),
+                                        CupertinoPageRoute(builder: (context) => WelcomePage()),
                                       );
                                     });
                                   });
