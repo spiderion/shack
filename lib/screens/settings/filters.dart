@@ -3,7 +3,8 @@ import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:shack/models/user_model.dart';
-import 'package:shack/screens/util/color.dart';
+
+import '../../themes/theme.dart';
 
 class Filters extends StatefulWidget {
   final AppUser? currentUser;

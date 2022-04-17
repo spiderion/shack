@@ -6,7 +6,8 @@ import 'package:shack/models/answer_model.dart';
 import 'package:shack/models/question_model.dart';
 import 'package:shack/models/user_model.dart';
 import 'package:shack/screens/tab.dart';
-import 'package:shack/screens/util/color.dart';
+
+import '../../themes/theme.dart';
 
 class SwipeWidget extends StatefulWidget {
   final AppUser currentUser;

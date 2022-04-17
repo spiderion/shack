@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
-import 'package:shack/screens/util/color.dart';
 import 'package:in_app_purchase/in_app_purchase.dart';
+
+import '../../themes/theme.dart';
 
 class PaymentDetails extends StatelessWidget {
   final List<PurchaseDetails> purchases;

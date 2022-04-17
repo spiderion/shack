@@ -8,10 +8,10 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:shack/models/user_model.dart';
 import 'package:shack/screens/util/custom_snackbar.dart';
-import 'package:shack/screens/util/color.dart';
 import 'package:in_app_purchase/in_app_purchase.dart';
 import 'package:rflutter_alert/rflutter_alert.dart';
 
+import '../../themes/theme.dart';
 import '../tab.dart';
 
 class Subscription extends StatefulWidget {

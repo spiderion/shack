@@ -8,9 +8,10 @@ import 'package:persistent_bottom_nav_bar/persistent-tab-view.dart';
 import 'package:shack/models/user_model.dart';
 import 'package:shack/screens/Video/camera_screen.dart';
 import 'package:shack/screens/Video/video_preview.dart';
-import 'package:shack/screens/util/color.dart';
 import 'package:video_compress/video_compress.dart';
 import 'package:video_player/video_player.dart';
+
+import '../../themes/theme.dart';
 
 class MakeVideo extends StatefulWidget {
   final AppUser? currentUser;

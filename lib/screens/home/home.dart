@@ -6,9 +6,10 @@ import 'package:flutter_swiper_null_safety/flutter_swiper_null_safety.dart';
 import 'package:shack/core/data/data_paths.dart';
 import 'package:shack/models/user_model.dart';
 import 'package:shack/screens/tab.dart';
-import 'package:shack/screens/util/color.dart';
 import 'package:template_package/template_package.dart';
 import 'package:video_player/video_player.dart';
+
+import '../../themes/theme.dart';
 
 class Home extends StatefulWidget {
   final AppUser? currentUser;

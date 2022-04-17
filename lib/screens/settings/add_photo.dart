@@ -5,12 +5,13 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_storage/firebase_storage.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-import 'package:shack/models/user_model.dart';
-import 'package:shack/screens/util/color.dart';
 import 'package:image/image.dart' as i;
 import 'package:image_cropper/image_cropper.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:path_provider/path_provider.dart';
+import 'package:shack/models/user_model.dart';
+
+import '../../themes/theme.dart';
 
 class Addphoto extends StatefulWidget {
   final AppUser? currentUser;

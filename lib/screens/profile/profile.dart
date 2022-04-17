@@ -1,13 +1,14 @@
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:in_app_purchase/in_app_purchase.dart';
+import 'package:persistent_bottom_nav_bar/persistent-tab-view.dart';
 import 'package:shack/models/user_model.dart';
 import 'package:shack/screens/Profile/edit_profile.dart';
 import 'package:shack/screens/match/Information.dart';
 import 'package:shack/screens/questions/answer_questions.dart';
-import 'package:shack/screens/util/color.dart';
-import 'package:in_app_purchase/in_app_purchase.dart';
-import 'package:persistent_bottom_nav_bar/persistent-tab-view.dart';
+
+import '../../themes/theme.dart';
 
 final List adds = [
   {

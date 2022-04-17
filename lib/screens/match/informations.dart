@@ -4,7 +4,8 @@ import 'package:shack/models/user_model.dart';
 import 'package:shack/screens/Chat/matches.dart';
 import 'package:shack/screens/Chat/chatPage.dart';
 import 'package:shack/screens/Profile/edit_profile.dart';
-import 'package:shack/screens/util/color.dart';
+
+import '../../themes/theme.dart';
 
 class Infos extends StatelessWidget {
   final AppUser currentUser;

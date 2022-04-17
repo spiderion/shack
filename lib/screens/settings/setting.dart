@@ -3,14 +3,15 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_swiper_null_safety/flutter_swiper_null_safety.dart';
+import 'package:persistent_bottom_nav_bar/persistent-tab-view.dart';
 import 'package:shack/models/user_model.dart';
 import 'package:shack/screens/Settings/add_photo.dart';
 import 'package:shack/screens/Settings/edit_bio.dart';
 import 'package:shack/screens/Settings/filters.dart';
-import 'package:shack/screens/util/color.dart';
-import 'package:flutter_swiper_null_safety/flutter_swiper_null_safety.dart';
-import 'package:persistent_bottom_nav_bar/persistent-tab-view.dart';
 import 'package:template_package/template_package.dart';
+
+import '../../themes/theme.dart';
 
 class Setting extends StatefulWidget {
   final AppUser? currentUser;
@@ -303,7 +304,6 @@ class _SettingState extends State<Setting> {
       padding: EdgeInsets.only(left: 25, right: 25),
       child: FlatButton(
           shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(8.0)),
-          color: primaryColor,
           padding: EdgeInsets.all(8),
           textColor: secondryColor,
           onPressed: () => Fluttertoast.showToast(msg: 'coming soon'),

@@ -12,8 +12,8 @@
 
 import 'dart:io';
 
-import 'package:shack/themes/themeGuide.dart';
 import 'package:flutter/material.dart';
+import 'package:shack/themes/themeGuide.dart';
 
 abstract class CustomeTheme {
   // Error Color common to both Themes
@@ -33,37 +33,23 @@ abstract class CustomeTheme {
   // Contains the information about the light theme
   static ThemeData lightTheme = ThemeData().copyWith(
     highlightColor: const Color.fromRGBO(251, 186, 123, 0.2),
-    splashColor: Color(0xff7ab3fa),
-    accentColor: Colors.white,
+    splashColor: primaryColor,
+    accentColor: primaryColor,
     hintColor: Colors.black26,
-    cursorColor: const Color.fromRGBO(245, 148, 130, 1),
-    primaryColor: Color(0xfffae361),
+    cursorColor: Colors.black,
+    primaryColor: primaryColor,
     primaryColorLight: LightTheme.mRed,
     dialogBackgroundColor: Colors.white,
     brightness: Brightness.light,
     primaryColorDark: LightTheme.mPurple,
     buttonTheme: _buttonTheme,
     errorColor: _errorColor,
-    // textTheme: _textTheme,
-    backgroundColor: Color(0xff7ab3fa),
+    backgroundColor: Colors.white,
     inputDecorationTheme: LightTheme.inputDecorationTheme,
     primaryIconTheme: LightTheme.mIconThemeData,
     appBarTheme: LightTheme.appBarTheme,
     disabledColor: const Color.fromRGBO(200, 200, 200, 1),
   );
-
-  // Contains the information about the dark theme
-  // static ThemeData darkTheme = ThemeData().copyWith(
-  //   brightness: Brightness.dark,
-  //   primaryColor: LightTheme.mPurple,
-  //   primaryColorLight: LightTheme.mYellow,
-  //   primaryColorDark: LightTheme.mRed,
-  //   highlightColor: LightTheme.mLightPurple,
-  //   splashColor: LightTheme.mBlue,
-  //   buttonTheme: _buttonTheme,
-  //   errorColor: _errorColor,
-  //   cursorColor: _cursorColor,
-  // );
 }
 
 abstract class LightTheme {
@@ -73,8 +59,7 @@ abstract class LightTheme {
   static const Color mYellow = Color(0xFFF1AC71);
   static const Color mBlue = Color(0xFF93B4DF);
   static const Color mDisabledColor = Colors.black26;
-  static const IconThemeData mIconThemeData =
-      IconThemeData(color: Colors.black);
+  static const IconThemeData mIconThemeData = IconThemeData(color: Colors.black);
   static const InputDecorationTheme inputDecorationTheme = InputDecorationTheme(
     filled: true,
     fillColor: Color.fromRGBO(240, 240, 240, 1),
@@ -100,3 +85,8 @@ abstract class LightTheme {
     brightness: Platform.isIOS ? Brightness.light : Brightness.dark,
   );
 }
+
+Color primaryColor = Color(0xffF95797);
+Color secondryColor = Colors.white;
+Color darkPrimaryColor = Color(0x22ff3a5a);
+Color textColor = Colors.black;

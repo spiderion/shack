@@ -1,18 +1,18 @@
-import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:shack/models/user_model.dart';
-import 'package:shack/screens/Chat/matches.dart';
 import 'package:shack/screens/Chat/chatPage.dart';
+import 'package:shack/screens/Chat/matches.dart';
 import 'package:shack/screens/Profile/edit_profile.dart';
-import 'package:shack/screens/util/color.dart';
 
+import '../../themes/theme.dart';
 
 class Info1 extends StatelessWidget {
   final AppUser currentUser;
   final AppUser user;
 
   final GlobalKey swipeKey;
+
   Info1(
     this.user,
     this.currentUser,
@@ -32,8 +32,7 @@ class Info1 extends StatelessWidget {
     return Scaffold(
       backgroundColor: Colors.white,
       body: Container(
-        decoration: BoxDecoration(
-            color: Colors.white),
+        decoration: BoxDecoration(color: Colors.white),
         width: double.infinity,
         height: double.infinity,
         child: Stack(
@@ -41,7 +40,8 @@ class Info1 extends StatelessWidget {
             Container(
               height: mediaQueryData.size.height / 2 + 40,
               width: MediaQuery.of(context).size.width,
-              child: Text('Swiper') /*Swiper(
+              child: Text(
+                  'Swiper') /*Swiper(
                 key: UniqueKey(),
                 physics: ScrollPhysics(),
                 itemBuilder: (BuildContext context, int index2) {
@@ -75,14 +75,15 @@ class Info1 extends StatelessWidget {
                   disableColor: _theme.backgroundColor,
                 ),
                 loop: false,
-              )*/,
+              )*/
+              ,
             ),
             Positioned(
               bottom: 0,
               child: Container(
                   decoration: BoxDecoration(
-                      borderRadius: BorderRadius.only(
-                          topLeft: Radius.circular(25), topRight: Radius.circular(25)),
+                      borderRadius:
+                          BorderRadius.only(topLeft: Radius.circular(25), topRight: Radius.circular(25)),
                       color: Colors.white),
                   height: mediaQueryData.size.height / 2,
                   width: mediaQueryData.size.width,
@@ -93,16 +94,17 @@ class Info1 extends StatelessWidget {
                         Container(
                           padding: EdgeInsets.only(top: 5),
                           alignment: Alignment.center,
-                          child: Text('On Grid', style: TextStyle(color: _theme.backgroundColor),),
+                          child: Text(
+                            'On Grid',
+                            style: TextStyle(color: _theme.backgroundColor),
+                          ),
                         ),
                         Container(
                           padding: EdgeInsets.only(top: 10),
                           child: Text(
                             "${user.name}, ${user.age}",
                             style: TextStyle(
-                                color: _theme.backgroundColor,
-                                fontSize: 35,
-                                fontWeight: FontWeight.w900),
+                                color: _theme.backgroundColor, fontSize: 35, fontWeight: FontWeight.w900),
                           ),
                         ),
                         Container(
@@ -118,9 +120,7 @@ class Info1 extends StatelessWidget {
                                     title: Text(
                                       "${user.name}, ${user.editInfo!['showMyAge'] != null ? !user.editInfo!['showMyAge'] ? user.age : "" : user.age}",
                                       style: TextStyle(
-                                          color: Colors.black,
-                                          fontSize: 25,
-                                          fontWeight: FontWeight.bold),
+                                          color: Colors.black, fontSize: 25, fontWeight: FontWeight.bold),
                                     ),
                                     // trailing: FloatingActionButton(
                                     //     backgroundColor: Colors.white,
@@ -134,61 +134,58 @@ class Info1 extends StatelessWidget {
                                   ),
                                   user.editInfo!['job_title'] != null
                                       ? ListTile(
-                                    dense: true,
-                                    leading:
-                                    Icon(Icons.work, color: primaryColor),
-                                    title: Text(
-                                      "${user.editInfo!['job_title']}${user.editInfo!['company'] != null ? ' at ${user.editInfo!['company']}' : ''}",
-                                      style: TextStyle(
-                                          color: secondryColor,
-                                          fontSize: 16,
-                                          fontWeight: FontWeight.w500),
-                                    ),
-                                  )
+                                          dense: true,
+                                          leading: Icon(Icons.work, color: primaryColor),
+                                          title: Text(
+                                            "${user.editInfo!['job_title']}${user.editInfo!['company'] != null ? ' at ${user.editInfo!['company']}' : ''}",
+                                            style: TextStyle(
+                                                color: secondryColor,
+                                                fontSize: 16,
+                                                fontWeight: FontWeight.w500),
+                                          ),
+                                        )
                                       : Container(),
                                   user.editInfo!['university'] != null
                                       ? ListTile(
-                                    dense: true,
-                                    leading:
-                                    Icon(Icons.stars, color: primaryColor),
-                                    title: Text(
-                                      "${user.editInfo!['university']}",
-                                      style: TextStyle(
-                                          color: secondryColor,
-                                          fontSize: 16,
-                                          fontWeight: FontWeight.w500),
-                                    ),
-                                  )
+                                          dense: true,
+                                          leading: Icon(Icons.stars, color: primaryColor),
+                                          title: Text(
+                                            "${user.editInfo!['university']}",
+                                            style: TextStyle(
+                                                color: secondryColor,
+                                                fontSize: 16,
+                                                fontWeight: FontWeight.w500),
+                                          ),
+                                        )
                                       : Container(),
                                   user.editInfo!['living_in'] != null
                                       ? ListTile(
-                                    dense: true,
-                                    leading:
-                                    Icon(Icons.home, color: primaryColor),
-                                    title: Text(
-                                      "Living in ${user.editInfo!['living_in']}",
-                                      style: TextStyle(
-                                          color: secondryColor,
-                                          fontSize: 16,
-                                          fontWeight: FontWeight.w500),
-                                    ),
-                                  )
+                                          dense: true,
+                                          leading: Icon(Icons.home, color: primaryColor),
+                                          title: Text(
+                                            "Living in ${user.editInfo!['living_in']}",
+                                            style: TextStyle(
+                                                color: secondryColor,
+                                                fontSize: 16,
+                                                fontWeight: FontWeight.w500),
+                                          ),
+                                        )
                                       : Container(),
                                   !isMe
                                       ? ListTile(
-                                    dense: true,
-                                    leading: Icon(
-                                      Icons.location_on,
-                                      color: primaryColor,
-                                    ),
-                                    title: Text(
-                                      "${user.editInfo!['DistanceVisible'] != null ? user.editInfo!['DistanceVisible'] ? 'Less than ${user.distanceBW} KM away' : 'Distance not visible' : 'Less than ${user.distanceBW} KM away'}",
-                                      style: TextStyle(
-                                          color: secondryColor,
-                                          fontSize: 16,
-                                          fontWeight: FontWeight.w500),
-                                    ),
-                                  )
+                                          dense: true,
+                                          leading: Icon(
+                                            Icons.location_on,
+                                            color: primaryColor,
+                                          ),
+                                          title: Text(
+                                            "${user.editInfo!['DistanceVisible'] != null ? user.editInfo!['DistanceVisible'] ? 'Less than ${user.distanceBW} KM away' : 'Distance not visible' : 'Less than ${user.distanceBW} KM away'}",
+                                            style: TextStyle(
+                                                color: secondryColor,
+                                                fontSize: 16,
+                                                fontWeight: FontWeight.w500),
+                                          ),
+                                        )
                                       : Container(),
                                   Divider(),
                                 ],
@@ -201,20 +198,17 @@ class Info1 extends StatelessWidget {
                         ),
                         user.editInfo!['about'] != null
                             ? Text(
-                          "${user.editInfo!['about']}",
-                          style: TextStyle(
-                              color: secondryColor,
-                              fontSize: 16,
-                              fontWeight: FontWeight.w500),
-                        )
+                                "${user.editInfo!['about']}",
+                                style: TextStyle(
+                                    color: secondryColor, fontSize: 16, fontWeight: FontWeight.w500),
+                              )
                             : Container(),
                         SizedBox(
                           height: 100,
                         ),
                       ],
                     ),
-                  )
-              ),
+                  )),
             ),
             Positioned(
               bottom: mediaQueryData.size.height / 2 - 30,
@@ -228,12 +222,13 @@ class Info1 extends StatelessWidget {
                     child: Container(
                       padding: EdgeInsets.all(5),
                       decoration: BoxDecoration(
-                          borderRadius: BorderRadius.all(Radius.circular(5)),
-                          color: Colors.white),
-                      child: Image.asset('assets/images/map_mark.png', fit: BoxFit.fitHeight,),
+                          borderRadius: BorderRadius.all(Radius.circular(5)), color: Colors.white),
+                      child: Image.asset(
+                        'assets/images/map_mark.png',
+                        fit: BoxFit.fitHeight,
+                      ),
                     ),
-                  )
-              ),
+                  )),
             ),
             !isMatched
                 ? Padding(
@@ -248,7 +243,7 @@ class Info1 extends StatelessWidget {
                             borderRadius: BorderRadius.circular(10),
                             onTap: () {
                               Navigator.pop(context);
-                            //  swipeKey.currentState.swipeLeft();
+                              //  swipeKey.currentState.swipeLeft();
                             },
                             child: Container(
                               height: 50,
@@ -279,8 +274,7 @@ class Info1 extends StatelessWidget {
                               width: 50,
                               decoration: BoxDecoration(
                                   borderRadius: BorderRadius.circular(10),
-                                  border:
-                                  Border.all(color: Colors.greenAccent),
+                                  border: Border.all(color: Colors.greenAccent),
                                   color: Colors.greenAccent),
                               child: Center(
                                 child: Icon(
@@ -307,10 +301,7 @@ class Info1 extends StatelessWidget {
                                   color: primaryColor,
                                 ),
                                 onPressed: () => Navigator.push(
-                                    context,
-                                    CupertinoPageRoute(
-                                        builder: (context) =>
-                                            EditProfile(user))))),
+                                    context, CupertinoPageRoute(builder: (context) => EditProfile(user))))),
                       )
                     : Padding(
                         padding: const EdgeInsets.all(18.0),

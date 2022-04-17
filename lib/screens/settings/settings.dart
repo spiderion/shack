@@ -5,10 +5,10 @@ import 'package:flutter/material.dart';
 import 'package:persistent_bottom_nav_bar/persistent-tab-view.dart';
 import 'package:shack/models/user_model.dart';
 import 'package:shack/screens/Settings/update_number.dart';
-import 'package:shack/screens/util/color.dart';
 import 'package:shack/screens/welcome.dart';
 
 import '../../core/location_ebr.dart';
+import '../../themes/theme.dart';
 
 class Settings extends StatefulWidget {
   final AppUser currentUser;

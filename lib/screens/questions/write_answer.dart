@@ -2,7 +2,8 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:shack/models/question_model.dart';
 import 'package:shack/screens/questions/song_search.dart';
-import 'package:shack/screens/util/color.dart';
+
+import '../../themes/theme.dart';
 
 class WriteAnswer extends StatefulWidget {
   final QuestionModel? model;

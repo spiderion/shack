@@ -9,8 +9,9 @@ import 'package:shack/models/user_model.dart';
 import 'package:shack/screens/Payment/subscriptions.dart';
 import 'package:shack/screens/match/information.dart';
 import 'package:shack/screens/tab.dart';
-import 'package:shack/screens/util/color.dart';
 import 'package:swipe_stack/swipe_stack.dart';
+
+import '../../themes/theme.dart';
 
 List userRemoved = [];
 

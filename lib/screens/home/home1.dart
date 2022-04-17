@@ -4,8 +4,9 @@ import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:shack/models/user_model.dart';
-import 'package:shack/screens/util/color.dart';
 import 'package:video_player/video_player.dart';
+
+import '../../themes/theme.dart';
 
 class Home1 extends StatefulWidget {
   final AppUser currentUser;
@@ -304,7 +305,8 @@ class _Home1State extends State<Home1> {
                               disableColor: Colors.grey,
                             ),
                             loop: false,
-                          )*/,
+                          )*/
+                          ,
                           Positioned(
                             top: 50,
                             left: 0,

@@ -1,8 +1,8 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:shack/models/question_model.dart';
-import 'package:shack/screens/util/color.dart';
 
+import '../../themes/theme.dart';
 import '../../widgets/cards_carousel_loader_widget.dart';
 import '../../widgets/question_widget.dart';
 

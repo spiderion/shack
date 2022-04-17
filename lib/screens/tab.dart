@@ -230,6 +230,8 @@ class _TABState extends State<TAB> with WidgetsBindingObserver {
                   tempuser.add(AppUser.fromDocument(data.data() as Map<String, dynamic>? ?? {}));
                 });
               }
+              // todo add later
+              return;
               Alert(
                 context: context,
                 style: alertStyle,
@@ -483,31 +485,26 @@ class _TABState extends State<TAB> with WidgetsBindingObserver {
       PersistentBottomNavBarItem(
         icon: Icon(Gridapp.dice_d6),
         title: "Home",
-        activeColorPrimary: _theme.backgroundColor,
         inactiveColorPrimary: Colors.grey,
       ),
       PersistentBottomNavBarItem(
         icon: Icon(Gridapp.chat),
         title: ("Chat"),
-        activeColorPrimary: _theme.backgroundColor,
         inactiveColorPrimary: Colors.grey,
       ),
       PersistentBottomNavBarItem(
         icon: Icon(Gridapp.heart_empty),
         title: ("Match"),
-        activeColorPrimary: _theme.backgroundColor,
         inactiveColorPrimary: Colors.grey,
       ),
       PersistentBottomNavBarItem(
         icon: Icon(Gridapp.videocam),
         title: ("Video"),
-        activeColorPrimary: _theme.backgroundColor,
         inactiveColorPrimary: Colors.grey,
       ),
       PersistentBottomNavBarItem(
         icon: Icon(Icons.settings),
         title: ("Settings"),
-        activeColorPrimary: _theme.backgroundColor,
         inactiveColorPrimary: Colors.grey,
       ),
     ];
