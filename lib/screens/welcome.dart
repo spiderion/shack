@@ -6,6 +6,7 @@ import 'package:shack/screens/phonesign/otp.dart';
 import 'package:shack/screens/select_image.dart';
 import 'package:shack/screens/tab.dart';
 import 'package:shack/themes/gridapp_icons.dart';
+import 'package:template_package/template_package.dart';
 
 class WelcomePage extends StatelessWidget {
   @override
@@ -60,12 +61,16 @@ class WelcomePage extends StatelessWidget {
               width: double.infinity,
               height: 50,
               margin: EdgeInsets.only(top: 10, bottom: 10),
-              child: getButton(context, () {}, 'Sign up with spotify', Icons.music_video)),
+              child: getButton(context, () {
+                Fluttertoast.showToast(msg: 'coming soon');
+              }, 'Sign up with spotify', Icons.music_video)),
           Container(
             width: double.infinity,
             height: 50,
             margin: EdgeInsets.only(top: 10, bottom: 10),
-            child: getButton(context, () {}, 'Sign up with email', Gridapp.at),
+            child: getButton(context, () {
+              Fluttertoast.showToast(msg: 'coming soon');
+            }, 'Sign up with email', Gridapp.at),
           ),
           Container(
             padding: EdgeInsets.only(top: 10),
@@ -85,19 +90,19 @@ Service and Privacy Policy.""",
 
   Row divider() {
     return Row(
-          mainAxisAlignment: MainAxisAlignment.center,
-          children: [
-            Expanded(child: Divider()),
-            Padding(
-              padding: const EdgeInsets.symmetric(horizontal: 8.0),
-              child: Text(
-                'or continue with',
-                style: TextStyle(color: Colors.grey, fontSize: 12),
-              ),
-            ),
-            Expanded(child: Divider())
-          ],
-        );
+      mainAxisAlignment: MainAxisAlignment.center,
+      children: [
+        Expanded(child: Divider()),
+        Padding(
+          padding: const EdgeInsets.symmetric(horizontal: 8.0),
+          child: Text(
+            'or continue with',
+            style: TextStyle(color: Colors.grey, fontSize: 12),
+          ),
+        ),
+        Expanded(child: Divider())
+      ],
+    );
   }
 
   Widget getButton(BuildContext context, Function() onTap, String text, IconData icon) {
@@ -132,31 +137,35 @@ Service and Privacy Policy.""",
     return SafeArea(
       child: Padding(
         padding: const EdgeInsets.only(top: 8.0),
-        child: Row(
-          mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-          crossAxisAlignment: CrossAxisAlignment.center,
-          children: <Widget>[
-            Container(
-              decoration: BoxDecoration(color: Colors.white, borderRadius: BorderRadius.circular(50)),
-              padding: EdgeInsets.symmetric(horizontal: 16, vertical: 5),
-              child: Image.asset('assets/images/app_logo.png', height: 28),
-            ),
-            Container(
-              child: Flexible(
-                child: Text(
-                  'The social dating movement',
-                  style: TextStyle(
-                    color: Colors.white,
-                    fontWeight: FontWeight.w900,
-                  ),
-                  textAlign: TextAlign.center,
-                ),
-              ),
-            )
-          ],
-        ),
+        child: appIntroWidget(),
       ),
     );
+  }
+
+  Row appIntroWidget() {
+    return Row(
+        mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+        crossAxisAlignment: CrossAxisAlignment.center,
+        children: <Widget>[
+          Container(
+            decoration: BoxDecoration(color: Colors.white, borderRadius: BorderRadius.circular(50)),
+            padding: EdgeInsets.symmetric(horizontal: 18, vertical: 6),
+            child: Image.asset('assets/images/app_logo.png', height: 24),
+          ),
+          Container(
+            child: Flexible(
+              child: Text(
+                'The social dating movement',
+                style: TextStyle(
+                  color: Colors.white,
+                  fontWeight: FontWeight.w900,
+                ),
+                textAlign: TextAlign.center,
+              ),
+            ),
+          )
+        ],
+      );
   }
 
   Widget background(MediaQueryData mediaQueryData, ThemeData _theme) {
