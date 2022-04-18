@@ -1,12 +1,12 @@
 import 'package:flutter/material.dart';
 
 class Song {
-  String name;
-  String href;
-  String imageUrl;
-  Set<String> artistNames;
+  late String name;
+  String? href;
+  String? imageUrl;
+  late Set<String?> artistNames;
 
-  Song(String name, String href, String imageUrl, Set<String> artistNames) {
+  Song(String name, String? href, String? imageUrl, Set<String?> artistNames) {
     this.name = name.trim();
     this.href = href;
     this.imageUrl = imageUrl;
@@ -25,7 +25,7 @@ class Song {
           children: <Widget>[
             // Album Picture
             Image.network(
-              imageUrl, 
+              imageUrl!, 
               height: 65, 
               width: 65),
             // Spacer
@@ -62,13 +62,13 @@ class Song {
   String parseArtists() {
     String artists = "";
     if (artistNames.length == 1) {
-      for (String s in artistNames) {
-        return s.trim();
+      for (String? s in artistNames) {
+        return s!.trim();
       }
     }
 
-    for (String s in artistNames) {
-      artists += s.trim();
+    for (String? s in artistNames) {
+      artists += s!.trim();
       artists += "; ";
     }
     return artists.trim();
