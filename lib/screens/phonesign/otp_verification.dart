@@ -8,7 +8,6 @@ import 'package:flutter/material.dart';
 import 'package:flutter/painting.dart';
 import 'package:pin_code_fields/pin_code_fields.dart';
 import 'package:shack/screens/phonesign/otp.dart';
-import 'package:shack/screens/select_image.dart';
 import 'package:shack/screens/util/custom_snackbar.dart';
 import 'package:shack/screens/welcome.dart';
 
@@ -16,8 +15,13 @@ class Verification extends StatefulWidget {
   final bool updateNumber;
   final String phoneNumber;
   final String? smsVerificationCode;
+  final Function() onCompleteSignUp;
 
-  Verification(this.phoneNumber, this.smsVerificationCode, this.updateNumber);
+  Verification(
+      {required this.phoneNumber,
+      required this.smsVerificationCode,
+      required this.updateNumber,
+      required this.onCompleteSignUp});
 
   @override
   _VerificationState createState() => _VerificationState();
@@ -98,9 +102,6 @@ class _VerificationState extends State<Verification> {
       body: Container(
           width: double.infinity,
           height: MediaQuery.of(context).size.height,
-          decoration: BoxDecoration(
-              image: DecorationImage(image: AssetImage("assets/images/splash.jpg"), fit: BoxFit.cover),
-              color: Colors.white),
           child: SingleChildScrollView(
             child: Column(
               mainAxisAlignment: MainAxisAlignment.start,
@@ -256,8 +257,7 @@ class _VerificationState extends State<Verification> {
                                   .then((QuerySnapshot snapshot) async {
                                 if (snapshot.docs.length <= 0) {
                                   await setDataUser(authResult.user!);
-                                  Navigator.push(
-                                      context, CupertinoPageRoute(builder: (context) => SelectImage()));
+                                  widget.onCompleteSignUp();
                                 }
                               });
                             }
@@ -268,11 +268,9 @@ class _VerificationState extends State<Verification> {
                       },
                       child: Container(
                         alignment: Alignment.center,
-                        child: Text(
-                          'SIGN UP',
-                          style: TextStyle(fontWeight: FontWeight.w900, fontSize: 15),
-                          textAlign: TextAlign.center,
-                        ),
+                        child: Text('SIGN UP',
+                            style: TextStyle(fontWeight: FontWeight.w900, fontSize: 15),
+                            textAlign: TextAlign.center),
                       )),
                 ),
               ],

@@ -378,8 +378,6 @@ Service and Privacy Policy.""",
                             man = false;
                             other = true;
                           });
-                          // Navigator.push(
-                          //     context, CupertinoPageRoute(builder: (context) => OTP()));
                         },
                       ),
                     )
