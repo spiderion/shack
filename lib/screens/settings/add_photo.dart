@@ -11,8 +11,6 @@ import 'package:image_picker/image_picker.dart';
 import 'package:path_provider/path_provider.dart';
 import 'package:shack/models/user_model.dart';
 
-import '../../themes/theme.dart';
-
 class Addphoto extends StatefulWidget {
   final AppUser? currentUser;
 
@@ -354,13 +352,7 @@ class AddphotoState extends State<Addphoto> {
                     height: 50,
                     margin: EdgeInsets.only(top: 10, bottom: 30),
                     padding: EdgeInsets.only(left: 25, right: 25),
-                    child: FlatButton(
-                        shape: RoundedRectangleBorder(
-                          borderRadius: BorderRadius.circular(8.0),
-                        ),
-                        color: primaryColor,
-                        padding: EdgeInsets.all(8),
-                        textColor: secondryColor,
+                    child: ElevatedButton(
                         onPressed: () async {
                           await source(context, widget.currentUser, false);
                         },

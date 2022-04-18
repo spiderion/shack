@@ -525,11 +525,11 @@ class _SettingsState extends State<Settings> {
                             title: Text('Logout'),
                             content: Text('Do you want to logout your account?'),
                             actions: <Widget>[
-                              FlatButton(
+                              ElevatedButton(
                                 onPressed: () => Navigator.of(context).pop(false),
                                 child: Text('No'),
                               ),
-                              FlatButton(
+                              ElevatedButton(
                                 onPressed: () async {
                                   await _auth.signOut().whenComplete(() {
                                     Navigator.pushReplacement(
@@ -569,11 +569,11 @@ class _SettingsState extends State<Settings> {
                             title: Text('Delete Account'),
                             content: Text('Do you want to delete your account?'),
                             actions: <Widget>[
-                              FlatButton(
+                              ElevatedButton(
                                 onPressed: () => Navigator.of(context).pop(false),
                                 child: Text('No'),
                               ),
-                              FlatButton(
+                              ElevatedButton(
                                 onPressed: () async {
                                   final user = _auth.currentUser!;
                                   await _deleteUser(user).then((_) async {

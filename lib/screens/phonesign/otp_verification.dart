@@ -6,11 +6,11 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/painting.dart';
-import 'package:shack/screens/select_image.dart';
-import 'package:shack/screens/welcome.dart';
-import 'package:shack/screens/phonesign/otp.dart';
-import 'package:shack/screens/util/custom_snackbar.dart';
 import 'package:pin_code_fields/pin_code_fields.dart';
+import 'package:shack/screens/phonesign/otp.dart';
+import 'package:shack/screens/select_image.dart';
+import 'package:shack/screens/util/custom_snackbar.dart';
+import 'package:shack/screens/welcome.dart';
 
 class Verification extends StatefulWidget {
   final bool updateNumber;
@@ -188,13 +188,7 @@ class _VerificationState extends State<Verification> {
                   width: double.infinity,
                   height: 50,
                   margin: EdgeInsets.all(25),
-                  child: FlatButton(
-                      shape: RoundedRectangleBorder(
-                        borderRadius: BorderRadius.circular(8.0),
-                      ),
-                      color: _theme.backgroundColor,
-                      padding: EdgeInsets.all(8),
-                      textColor: _theme.primaryColor,
+                  child: ElevatedButton(
                       onPressed: () async {
                         showDialog(
                           builder: (context) {
@@ -213,7 +207,10 @@ class _VerificationState extends State<Verification> {
                             verificationId: widget.smsVerificationCode!, smsCode: code);
                         if (widget.updateNumber) {
                           User user = FirebaseAuth.instance.currentUser!;
-                          user.updatePhoneNumber(_phoneAuth as PhoneAuthCredential).then((_) => updateNumber()).catchError((e) {
+                          user
+                              .updatePhoneNumber(_phoneAuth as PhoneAuthCredential)
+                              .then((_) => updateNumber())
+                              .catchError((e) {
                             CustomSnackbar.snackbar("$e", _scaffoldKey);
                           });
                         } else {

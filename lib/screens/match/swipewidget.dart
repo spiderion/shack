@@ -107,13 +107,7 @@ class _SwipeWidget extends State<SwipeWidget> {
               height: 50,
               margin: EdgeInsets.only(top: 10, bottom: 10),
               padding: EdgeInsets.only(left: 25, right: 25),
-              child: FlatButton(
-                  shape: RoundedRectangleBorder(
-                    borderRadius: BorderRadius.circular(8.0),
-                  ),
-                  color: primaryColor,
-                  padding: EdgeInsets.all(8),
-                  textColor: secondryColor,
+              child: ElevatedButton(
                   onPressed: () {
                     if (check_follow) {
                       unfollowuser();

@@ -1,7 +1,7 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-import 'package:shack/screens/sign_up.dart';
 import 'package:permission_handler/permission_handler.dart';
+import 'package:shack/screens/sign_up.dart';
 
 import '../core/location_ebr.dart';
 
@@ -77,26 +77,14 @@ in order to search users around you.
                         ),
                         textAlign: TextAlign.center,
                       )),
-                  Padding(
-                    padding: const EdgeInsets.all(50.0),
-                    // child: FlatButton.icon(
-                    //     onPressed: null,
-                    //     icon: Icon(Icons.arrow_drop_down),
-                    //     label: Text("Show more")),
-                  ),
+                  Padding(padding: const EdgeInsets.all(50.0)),
                 ],
               ),
               Container(
                 width: double.infinity,
                 height: 50,
                 margin: EdgeInsets.only(top: 10, bottom: 10, left: 25, right: 25),
-                child: FlatButton(
-                    shape: RoundedRectangleBorder(
-                      borderRadius: BorderRadius.circular(8.0),
-                    ),
-                    color: _theme.backgroundColor,
-                    padding: EdgeInsets.all(8),
-                    textColor: _theme.primaryColor,
+                child: ElevatedButton(
                     onPressed: () async {
                       if (!(await Permission.location.isGranted)) {
                         var status = await Permission.locationWhenInUse.request();

@@ -422,11 +422,11 @@ class _ChatPageState extends State<ChatPage> {
                             content: Text(
                                 'Do you want to ${isBlocked ? 'Unblock' : 'Block'} ${widget.second!.name}?'),
                             actions: <Widget>[
-                              FlatButton(
+                              ElevatedButton(
                                 onPressed: () => Navigator.of(context).pop(false),
                                 child: Text('No'),
                               ),
-                              FlatButton(
+                              ElevatedButton(
                                 onPressed: () async {
                                   Navigator.pop(ctx);
                                   if (isBlocked && blockedBy == widget.sender!.id) {

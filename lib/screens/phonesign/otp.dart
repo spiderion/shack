@@ -273,13 +273,7 @@ rates may apply.""",
                       width: double.infinity,
                       height: 50,
                       margin: EdgeInsets.all(25),
-                      child: FlatButton(
-                          shape: RoundedRectangleBorder(
-                            borderRadius: BorderRadius.circular(8.0),
-                          ),
-                          color: Theme.of(context).primaryColor,
-                          padding: EdgeInsets.all(8),
-                          textColor: _theme.primaryColor,
+                      child: ElevatedButton(
                           onPressed: () async {
                             showDialog(
                               builder: (context) {

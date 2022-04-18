@@ -1,8 +1,6 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter/services.dart';
 import 'package:shack/screens/allow_location.dart';
-import 'package:shack/screens/sign_up.dart';
 import 'package:shack/screens/util/custom_snackbar.dart';
 
 class ShowGender extends StatefulWidget {
@@ -57,18 +55,14 @@ class _ShowGenderState extends State<ShowGender> {
                           child: Text("MEN",
                               style: TextStyle(
                                   fontSize: 20,
-                                  color: man
-                                      ? _theme.primaryColor
-                                      : _theme.backgroundColor,
+                                  color: man ? _theme.primaryColor : _theme.backgroundColor,
                                   fontWeight: FontWeight.bold))),
                     ),
                     borderSide: BorderSide(
                         width: 1,
                         style: BorderStyle.solid,
-                        color:
-                            man ? _theme.primaryColor : _theme.backgroundColor),
-                    shape: RoundedRectangleBorder(
-                        borderRadius: BorderRadius.circular(25)),
+                        color: man ? _theme.primaryColor : _theme.backgroundColor),
+                    shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(25)),
                     onPressed: () {
                       setState(() {
                         woman = false;
@@ -87,20 +81,15 @@ class _ShowGenderState extends State<ShowGender> {
                             child: Text("WOMEN",
                                 style: TextStyle(
                                     fontSize: 20,
-                                    color: woman
-                                        ? _theme.primaryColor
-                                        : _theme.backgroundColor,
+                                    color: woman ? _theme.primaryColor : _theme.backgroundColor,
                                     fontWeight: FontWeight.bold))),
                       ),
                       borderSide: BorderSide(
-                        color: woman
-                            ? _theme.primaryColor
-                            : _theme.backgroundColor,
+                        color: woman ? _theme.primaryColor : _theme.backgroundColor,
                         width: 1,
                         style: BorderStyle.solid,
                       ),
-                      shape: RoundedRectangleBorder(
-                          borderRadius: BorderRadius.circular(25)),
+                      shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(25)),
                       onPressed: () {
                         setState(() {
                           woman = true;
@@ -122,19 +111,14 @@ class _ShowGenderState extends State<ShowGender> {
                           child: Text("EVERYONE",
                               style: TextStyle(
                                   fontSize: 20,
-                                  color: eyeryone
-                                      ? _theme.primaryColor
-                                      : _theme.backgroundColor,
+                                  color: eyeryone ? _theme.primaryColor : _theme.backgroundColor,
                                   fontWeight: FontWeight.bold))),
                     ),
                     borderSide: BorderSide(
                         width: 1,
                         style: BorderStyle.solid,
-                        color: eyeryone
-                            ? _theme.primaryColor
-                            : _theme.backgroundColor),
-                    shape: RoundedRectangleBorder(
-                        borderRadius: BorderRadius.circular(25)),
+                        color: eyeryone ? _theme.primaryColor : _theme.backgroundColor),
+                    shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(25)),
                     onPressed: () {
                       setState(() {
                         woman = false;
@@ -152,15 +136,8 @@ class _ShowGenderState extends State<ShowGender> {
                 ? Container(
                     width: double.infinity,
                     height: 50,
-                    margin: EdgeInsets.only(
-                        top: 10, bottom: 10, left: 25, right: 25),
-                    child: FlatButton(
-                        shape: RoundedRectangleBorder(
-                          borderRadius: BorderRadius.circular(8.0),
-                        ),
-                        color: _theme.backgroundColor,
-                        padding: EdgeInsets.all(8),
-                        textColor: _theme.primaryColor,
+                    margin: EdgeInsets.only(top: 10, bottom: 10, left: 25, right: 25),
+                    child: ElevatedButton(
                         onPressed: () {
                           if (man) {
                             widget.userData.addAll({'showGender': "man"});
@@ -171,18 +148,14 @@ class _ShowGenderState extends State<ShowGender> {
                           }
 
                           print(widget.userData);
-                          Navigator.push(
-                              context,
-                              CupertinoPageRoute(
-                                  builder: (context) =>
-                                      AllowLocation(widget.userData)));
+                          Navigator.push(context,
+                              CupertinoPageRoute(builder: (context) => AllowLocation(widget.userData)));
                         },
                         child: Container(
                           alignment: Alignment.center,
                           child: Text(
                             'CONTINUE',
-                            style: TextStyle(
-                                fontWeight: FontWeight.w900, fontSize: 15),
+                            style: TextStyle(fontWeight: FontWeight.w900, fontSize: 15),
                             textAlign: TextAlign.center,
                           ),
                         )),
@@ -203,13 +176,10 @@ class _ShowGenderState extends State<ShowGender> {
                                 child: Text(
                               "CONTINUE",
                               style: TextStyle(
-                                  fontSize: 15,
-                                  color: _theme.backgroundColor,
-                                  fontWeight: FontWeight.bold),
+                                  fontSize: 15, color: _theme.backgroundColor, fontWeight: FontWeight.bold),
                             ))),
                         onTap: () {
-                          CustomSnackbar.snackbar(
-                              "Please select one", _scaffoldKey);
+                          CustomSnackbar.snackbar("Please select one", _scaffoldKey);
                         },
                       ),
                     ),

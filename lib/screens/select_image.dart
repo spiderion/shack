@@ -5,12 +5,12 @@ import 'package:firebase_auth/firebase_auth.dart';
 import 'package:firebase_storage/firebase_storage.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-import 'package:shack/models/user_model.dart';
-import 'package:shack/screens/user_name.dart';
 import 'package:image/image.dart' as i;
 import 'package:image_cropper/image_cropper.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:path_provider/path_provider.dart';
+import 'package:shack/models/user_model.dart';
+import 'package:shack/screens/user_name.dart';
 import 'package:template_package/utils/build_mode_detector.dart';
 
 class SelectImage extends StatefulWidget {
@@ -108,13 +108,7 @@ class _SelectImageState extends State<SelectImage> {
                       width: double.infinity,
                       height: 50,
                       margin: EdgeInsets.only(top: 10, bottom: 10),
-                      child: FlatButton(
-                          shape: RoundedRectangleBorder(
-                            borderRadius: BorderRadius.circular(8.0),
-                          ),
-                          color: _theme.backgroundColor,
-                          padding: EdgeInsets.all(8),
-                          textColor: _theme.primaryColor,
+                      child: ElevatedButton(
                           onPressed: () async {
                             getImage(ImageSource.gallery, context, currentUser);
                             await showDialog(
@@ -140,13 +134,7 @@ class _SelectImageState extends State<SelectImage> {
                       width: double.infinity,
                       height: 50,
                       margin: EdgeInsets.only(top: 10, bottom: 10),
-                      child: FlatButton(
-                          shape: RoundedRectangleBorder(
-                            borderRadius: BorderRadius.circular(8.0),
-                          ),
-                          color: _theme.backgroundColor,
-                          padding: EdgeInsets.all(8),
-                          textColor: _theme.primaryColor,
+                      child: ElevatedButton(
                           onPressed: () {
                             showDialog(
                                 context: context,

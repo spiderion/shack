@@ -302,10 +302,7 @@ class _SettingState extends State<Setting> {
       height: 50,
       margin: EdgeInsets.only(top: 10, bottom: 30),
       padding: EdgeInsets.only(left: 25, right: 25),
-      child: FlatButton(
-          shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(8.0)),
-          padding: EdgeInsets.all(8),
-          textColor: secondryColor,
+      child: ElevatedButton(
           onPressed: () => Fluttertoast.showToast(msg: 'coming soon'),
           child: Container(
             alignment: Alignment.center,

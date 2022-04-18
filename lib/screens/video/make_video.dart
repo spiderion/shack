@@ -69,13 +69,7 @@ class MakeVideoState extends State<MakeVideo> {
               SizedBox(
                 height: mediaQueryData.padding.top + 20,
               ),
-              FlatButton(
-                  shape: RoundedRectangleBorder(
-                    borderRadius: BorderRadius.circular(8.0),
-                  ),
-                  color: Theme.of(context).backgroundColor,
-                  padding: EdgeInsets.all(8),
-                  textColor: Theme.of(context).primaryColor,
+              ElevatedButton(
                   onPressed: () {
                     pushNewScreenWithRouteSettings(context,
                         screen: CameraScreen(
@@ -99,13 +93,7 @@ class MakeVideoState extends State<MakeVideo> {
                   ? Column(
                       children: <Widget>[
                         VideoPreview(controller: _controller),
-                        FlatButton(
-                            shape: RoundedRectangleBorder(
-                              borderRadius: BorderRadius.circular(8.0),
-                            ),
-                            color: Theme.of(context).backgroundColor,
-                            padding: EdgeInsets.all(8),
-                            textColor: Theme.of(context).primaryColor,
+                        ElevatedButton(
                             onPressed: () {
                               showDialog(
                                   context: context,

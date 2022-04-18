@@ -38,13 +38,7 @@ class _WriteAnswerState extends State<WriteAnswer> {
           height: double.infinity,
           child: Column(
             children: <Widget>[
-              FlatButton(
-                  shape: RoundedRectangleBorder(
-                    borderRadius: BorderRadius.circular(8.0),
-                  ),
-                  color: Theme.of(context).backgroundColor,
-                  padding: EdgeInsets.all(8),
-                  textColor: Theme.of(context).primaryColor,
+              ElevatedButton(
                   onPressed: () {
                     _initiateSearch();
                   },

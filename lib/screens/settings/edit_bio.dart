@@ -387,11 +387,11 @@ class EditBioState extends State<EditBio> {
                                     title: Text('Logout'),
                                     content: Text('Do you want to logout your account?'),
                                     actions: <Widget>[
-                                      FlatButton(
+                                      ElevatedButton(
                                         onPressed: () => Navigator.of(context).pop(false),
                                         child: Text('No'),
                                       ),
-                                      FlatButton(
+                                      ElevatedButton(
                                         onPressed: () async {
                                           await _auth.signOut().whenComplete(() {
                                             Navigator.pushReplacement(

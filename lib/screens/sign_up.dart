@@ -105,13 +105,7 @@ class _SignUpState extends State<SignUp> {
                       width: double.infinity,
                       height: 50,
                       margin: EdgeInsets.only(top: 10, bottom: 10),
-                      child: FlatButton(
-                          shape: RoundedRectangleBorder(
-                            borderRadius: BorderRadius.circular(8.0),
-                          ),
-                          color: _theme.backgroundColor,
-                          padding: EdgeInsets.all(8),
-                          textColor: _theme.primaryColor,
+                      child: ElevatedButton(
                           onPressed: () {
                             Navigator.push(context, CupertinoPageRoute(builder: (context) => Introscreen()));
                           },
