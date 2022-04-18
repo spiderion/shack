@@ -1,24 +1,19 @@
-import 'package:cloud_firestore/cloud_firestore.dart';
-import 'package:flutter/cupertino.dart';
+class QuestionModel {
+  final String? title;
+  final String? text;
+  final String? img;
+  final String? id;
 
-class Question_model {
-  final String title;
-  final String text;
-  final String img;
-  final String id;
-  Question_model({
-    @required this.id,
-    @required this.title,
-    @required this.text,
-    @required this.img,
+  QuestionModel({
+    required this.id,
+    required this.title,
+    required this.text,
+    required this.img,
   });
-  factory Question_model.fromDocument(DocumentSnapshot doc) {
-    // DateTime date = DateTime.parse(doc["user_DOB"]);
-    return Question_model(
-      id: doc['id'],
-      title: doc['title'],
-      text: doc['text'],
-      img: doc['img'],
-    );
-  }
+
+  QuestionModel.fromDocument(Map<String, dynamic> json)
+      : id = json['id'],
+        title = json['title'],
+        text = json['text'],
+        img = json['img'];
 }
