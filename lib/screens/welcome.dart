@@ -6,7 +6,11 @@ import 'package:shack/screens/phonesign/otp.dart';
 import 'package:shack/screens/select_image.dart';
 import 'package:shack/screens/tab.dart';
 import 'package:shack/themes/gridapp_icons.dart';
+import 'package:shack/widgets/welcome_title_widget.dart';
 import 'package:template_package/template_package.dart';
+
+import '../widgets/welcome_background_widget.dart';
+import '../widgets/welcome_content_container_widget.dart';
 
 class WelcomePage extends StatelessWidget {
   @override
@@ -21,70 +25,64 @@ class WelcomePage extends StatelessWidget {
             color: _theme.backgroundColor,
             child: Stack(
               children: <Widget>[
-                background(mediaQueryData, _theme),
-                titleWidget(_theme),
-                Align(alignment: Alignment.center, child: signUpActions(mediaQueryData, _theme, context))
+                WelcomeBackgroundWidget(),
+                WelcomeTitleWidget(),
+                Align(
+                    alignment: Alignment.center, child: WelcomeContentContainerWidget(child: child(context)))
               ],
             )));
   }
 
-  Widget signUpActions(MediaQueryData mediaQueryData, ThemeData _theme, BuildContext context) {
-    return Container(
-      margin: EdgeInsets.all(20),
-      width: mediaQueryData.size.width,
-      height: mediaQueryData.size.height * 0.6,
-      decoration: BoxDecoration(color: Colors.white, borderRadius: BorderRadius.all(Radius.circular(20.0))),
-      padding: EdgeInsets.all(30),
-      child: Column(
-        mainAxisAlignment: MainAxisAlignment.spaceBetween,
-        crossAxisAlignment: CrossAxisAlignment.center,
-        children: <Widget>[
-          Container(
-            padding: EdgeInsets.only(top: 10),
-            child: Text(
-              'Continue with Phone',
-              style: TextStyle(color: Colors.black, fontSize: 24, fontWeight: FontWeight.bold),
-              textAlign: TextAlign.start,
-            ),
+  Column child(BuildContext context) {
+    return Column(
+      mainAxisAlignment: MainAxisAlignment.spaceBetween,
+      crossAxisAlignment: CrossAxisAlignment.center,
+      children: <Widget>[
+        Container(
+          padding: EdgeInsets.only(top: 10),
+          child: Text(
+            'Continue with Phone',
+            style: TextStyle(color: Colors.black, fontSize: 24, fontWeight: FontWeight.bold),
+            textAlign: TextAlign.start,
           ),
-          Container(
-            width: double.infinity,
-            height: 50,
-            margin: EdgeInsets.only(top: 10, bottom: 10),
-            child: getButton(context, () {
-              bool updateNumber = false;
-              Navigator.push(context, CupertinoPageRoute(builder: (context) => OTP(updateNumber)));
-            }, 'Sign up with Phone', Gridapp.phone_squared),
-          ),
-          divider(),
-          Container(
-              width: double.infinity,
-              height: 50,
-              margin: EdgeInsets.only(top: 10, bottom: 10),
-              child: getButton(context, () {
-                Fluttertoast.showToast(msg: 'coming soon');
-              }, 'Sign up with spotify', Icons.music_video)),
-          Container(
+        ),
+        Container(
+          width: double.infinity,
+          height: 50,
+          margin: EdgeInsets.only(top: 10, bottom: 10),
+          child: getButton(context, () {
+            bool updateNumber = false;
+            Navigator.push(context, CupertinoPageRoute(builder: (context) => OTP(updateNumber)));
+          }, 'Sign up with Phone', Gridapp.phone_squared),
+        ),
+        divider(),
+        Container(
             width: double.infinity,
             height: 50,
             margin: EdgeInsets.only(top: 10, bottom: 10),
             child: getButton(context, () {
               Fluttertoast.showToast(msg: 'coming soon');
-            }, 'Sign up with email', Gridapp.at),
-          ),
-          Container(
-            padding: EdgeInsets.only(top: 10),
-            child: Text(
-              """By proceading you also agree to the Terms of
+            }, 'Sign up with spotify', Icons.music_video)),
+        Container(
+          width: double.infinity,
+          height: 50,
+          margin: EdgeInsets.only(top: 10, bottom: 10),
+          child: getButton(context, () {
+            Fluttertoast.showToast(msg: 'coming soon');
+          }, 'Sign up with email', Gridapp.at),
+        ),
+        Container(
+          padding: EdgeInsets.only(top: 10),
+          child: Text(
+            """By proceading you also agree to the Terms of
 Service and Privacy Policy.""",
-              style: TextStyle(
-                color: Colors.black,
-              ),
-              textAlign: TextAlign.center,
+            style: TextStyle(
+              color: Colors.black,
             ),
+            textAlign: TextAlign.center,
           ),
-        ],
-      ),
+        ),
+      ],
     );
   }
 
@@ -130,48 +128,6 @@ Service and Privacy Policy.""",
           )
         ],
       ),
-    );
-  }
-
-  Widget titleWidget(ThemeData _theme) {
-    return SafeArea(
-      child: Padding(
-        padding: const EdgeInsets.only(top: 8.0),
-        child: appIntroWidget(),
-      ),
-    );
-  }
-
-  Row appIntroWidget() {
-    return Row(
-      mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-      crossAxisAlignment: CrossAxisAlignment.center,
-      children: <Widget>[
-        Container(
-          decoration: BoxDecoration(color: Colors.white, borderRadius: BorderRadius.circular(50)),
-          padding: EdgeInsets.symmetric(horizontal: 18, vertical: 6),
-          child: Image.asset('assets/images/app_logo.png', height: 24),
-        ),
-        Container(
-          child: Flexible(
-            child: Text('The social dating movement',
-                style: TextStyle(
-                  color: Colors.white,
-                  fontWeight: FontWeight.w900,
-                ),
-                textAlign: TextAlign.center),
-          ),
-        )
-      ],
-    );
-  }
-
-  Widget background(MediaQueryData mediaQueryData, ThemeData _theme) {
-    return Container(
-      decoration: BoxDecoration(
-          image: DecorationImage(image: AssetImage("assets/images/splash_screen.jpg"), fit: BoxFit.cover),
-          color: Colors.white),
-      padding: EdgeInsets.only(top: mediaQueryData.padding.top),
     );
   }
 

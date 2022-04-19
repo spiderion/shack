@@ -11,7 +11,7 @@ class UserName extends StatefulWidget {
 }
 
 class _UserNameState extends State<UserName> {
-  Map<String, dynamic> userData = {}; //user personal info
+  Map<String, dynamic> userData = {};
   String username = '';
 
   late DateTime selecteddate;
@@ -28,14 +28,8 @@ class _UserNameState extends State<UserName> {
   final _scaffoldKey = GlobalKey<ScaffoldState>();
   String? code;
 
-  @override
-  void initState() {
-    super.initState();
-  }
-
   Widget build(BuildContext context) {
     final ThemeData _theme = Theme.of(context);
-    MediaQueryData mediaQueryData = MediaQuery.of(context);
     return Scaffold(
       key: _scaffoldKey,
       backgroundColor: Colors.white,
@@ -66,143 +60,17 @@ class _UserNameState extends State<UserName> {
                     ),
                   ),
                   Container(
-                    child: TextField(
-                      controller: namecontroller,
-                      decoration: new InputDecoration(
-                          border: new OutlineInputBorder(
-                            borderRadius: const BorderRadius.all(
-                              const Radius.circular(10.0),
-                            ),
-                          ),
-                          enabledBorder: new OutlineInputBorder(
-                            borderRadius: const BorderRadius.all(
-                              const Radius.circular(10.0),
-                            ),
-                            borderSide: BorderSide(color: _theme.backgroundColor),
-                          ),
-                          filled: true,
-                          hintStyle: new TextStyle(color: Colors.grey[800]),
-                          hintText: "Type your name",
-                          fillColor: Colors.white70),
-                    ),
-                  ),
+                      child: TextField(
+                          controller: namecontroller, decoration: getInputBorder(context, "Type your name"))),
                   Container(
                     padding: EdgeInsets.only(left: 5, top: 15, bottom: 5),
-                    child: Text(
-                      'Age',
-                      style: TextStyle(color: Colors.black, fontSize: 18, fontWeight: FontWeight.bold),
-                    ),
+                    child: Text('Age',
+                        style: TextStyle(color: Colors.black, fontSize: 18, fontWeight: FontWeight.bold)),
                   ),
-                  Container(
-                    child: TextField(
-                      readOnly: true,
-                      controller: agecontroller,
-                      onTap: () => showCupertinoModalPopup(
-                          context: context,
-                          builder: (BuildContext context) {
-                            return Container(
-                                height: MediaQuery.of(context).size.height * .25,
-                                child: GestureDetector(
-                                  child: CupertinoDatePicker(
-                                    backgroundColor: Colors.white,
-                                    initialDateTime: DateTime(2000, 10, 12),
-                                    onDateTimeChanged: (DateTime newdate) {
-                                      setState(() {
-                                        agecontroller.text = newdate.day.toString() +
-                                            '/' +
-                                            newdate.month.toString() +
-                                            '/' +
-                                            newdate.year.toString();
-                                        selecteddate = newdate;
-                                      });
-                                    },
-                                    maximumYear: 2002,
-                                    minimumYear: 1800,
-                                    maximumDate: DateTime(2002, 03, 12),
-                                    mode: CupertinoDatePickerMode.date,
-                                  ),
-                                  onTap: () {
-                                    print(agecontroller.text);
-                                    Navigator.pop(context);
-                                  },
-                                ));
-                          }),
-                      keyboardType: TextInputType.phone,
-                      decoration: new InputDecoration(
-                          border: new OutlineInputBorder(
-                            borderRadius: const BorderRadius.all(
-                              const Radius.circular(10.0),
-                            ),
-                          ),
-                          enabledBorder: new OutlineInputBorder(
-                            borderRadius: const BorderRadius.all(
-                              const Radius.circular(10.0),
-                            ),
-                            borderSide: BorderSide(color: _theme.backgroundColor),
-                          ),
-                          disabledBorder: new OutlineInputBorder(
-                            borderSide: BorderSide(
-                              width: 0,
-                              style: BorderStyle.none,
-                            ),
-                          ),
-                          filled: true,
-                          hintStyle: new TextStyle(color: Colors.grey[800]),
-                          hintText: "Type your age",
-                          fillColor: Colors.white70),
-                    ),
-                  ),
-                  Container(
-                    padding: EdgeInsets.only(left: 5, top: 15, bottom: 5),
-                    child: Text(
-                      'Gender',
-                      style: TextStyle(color: Colors.black, fontSize: 18, fontWeight: FontWeight.bold),
-                    ),
-                  ),
-                  Container(
-                    child: TextField(
-                      readOnly: true,
-                      keyboardType: TextInputType.phone,
-                      onTap: () {
-                        showMyDialog();
-                      },
-                      controller: gendercontroller,
-                      decoration: new InputDecoration(
-                          border: new OutlineInputBorder(
-                            borderRadius: const BorderRadius.all(
-                              const Radius.circular(10.0),
-                            ),
-                          ),
-                          enabledBorder: new OutlineInputBorder(
-                            borderRadius: const BorderRadius.all(
-                              const Radius.circular(10.0),
-                            ),
-                            borderSide: BorderSide(color: _theme.backgroundColor),
-                          ),
-                          disabledBorder: new OutlineInputBorder(
-                            borderSide: BorderSide(
-                              width: 0,
-                              style: BorderStyle.none,
-                            ),
-                          ),
-                          filled: true,
-                          hintStyle: new TextStyle(color: Colors.grey[800]),
-                          hintText: "Input your gender",
-                          fillColor: Colors.white70),
-                    ),
-                  ),
-                  Container(
-                    width: double.infinity,
-                    padding: EdgeInsets.only(top: 20, bottom: 20),
-                    child: Text(
-                      """By proceading you also agree to the Terms of
-Service and Privacy Policy.""",
-                      style: TextStyle(
-                        color: Colors.black,
-                      ),
-                      textAlign: TextAlign.center,
-                    ),
-                  ),
+                  textFieldAge(context, _theme),
+                  gender(),
+                  inputGender(_theme),
+                  infoWidget(),
                   Container(
                     width: double.infinity,
                     height: 50,
@@ -228,7 +96,6 @@ Service and Privacy Policy.""",
                             userGender = {'userGender': "other", 'showOnProfile': select};
                           }
                           userData.addAll(userGender);
-
                           Navigator.push(
                               context, CupertinoPageRoute(builder: (context) => SexualOrientation(userData)));
                         },
@@ -244,6 +111,96 @@ Service and Privacy Policy.""",
                 ],
               ),
             )),
+      ),
+    );
+  }
+
+  InputDecoration getInputBorder(BuildContext context, String hint) {
+    return InputDecoration(
+        border: OutlineInputBorder(
+          borderRadius: const BorderRadius.all(const Radius.circular(10.0)),
+        ),
+        enabledBorder: OutlineInputBorder(
+            borderRadius: const BorderRadius.all(const Radius.circular(10.0)), borderSide: BorderSide.none),
+        focusedBorder: OutlineInputBorder(
+            borderRadius: const BorderRadius.all(const Radius.circular(10.0)),
+            borderSide: BorderSide(color: Theme.of(context).primaryColor)),
+        filled: true,
+        hintStyle: TextStyle(color: Colors.grey[800]),
+        hintText: hint,
+        fillColor: Colors.white70);
+  }
+
+  Container infoWidget() {
+    return Container(
+      width: double.infinity,
+      padding: EdgeInsets.only(top: 20, bottom: 20),
+      child: Text("By proceading you also agree to the Terms of Service and Privacy Policy.",
+          style: TextStyle(color: Colors.black), textAlign: TextAlign.center),
+    );
+  }
+
+  Container inputGender(ThemeData _theme) {
+    return Container(
+      child: TextField(
+        readOnly: true,
+        keyboardType: TextInputType.phone,
+        onTap: () {
+          showMyDialog();
+        },
+        controller: gendercontroller,
+        decoration: getInputBorder(context, "Input your gender"),
+      ),
+    );
+  }
+
+  Container gender() {
+    return Container(
+      padding: EdgeInsets.only(left: 5, top: 15, bottom: 5),
+      child: Text(
+        'Gender',
+        style: TextStyle(color: Colors.black, fontSize: 18, fontWeight: FontWeight.bold),
+      ),
+    );
+  }
+
+  Container textFieldAge(BuildContext context, ThemeData _theme) {
+    return Container(
+      child: TextField(
+        readOnly: true,
+        controller: agecontroller,
+        onTap: () => showCupertinoModalPopup(
+            context: context,
+            builder: (BuildContext context) {
+              return Container(
+                  height: MediaQuery.of(context).size.height * .25,
+                  child: GestureDetector(
+                    child: CupertinoDatePicker(
+                      backgroundColor: Colors.white,
+                      initialDateTime: DateTime(2000, 10, 12),
+                      onDateTimeChanged: (DateTime newdate) {
+                        setState(() {
+                          agecontroller.text = newdate.day.toString() +
+                              '/' +
+                              newdate.month.toString() +
+                              '/' +
+                              newdate.year.toString();
+                          selecteddate = newdate;
+                        });
+                      },
+                      maximumYear: 2002,
+                      minimumYear: 1800,
+                      maximumDate: DateTime(2002, 03, 12),
+                      mode: CupertinoDatePickerMode.date,
+                    ),
+                    onTap: () {
+                      print(agecontroller.text);
+                      Navigator.pop(context);
+                    },
+                  ));
+            }),
+        keyboardType: TextInputType.phone,
+        decoration: getInputBorder(context, "Type your age"),
       ),
     );
   }
@@ -337,8 +294,6 @@ Service and Privacy Policy.""",
                               man = false;
                               other = false;
                             });
-                            // Navigator.push(
-                            //     context, CupertinoPageRoute(builder: (context) => OTP()));
                           },
                         ),
                       ),

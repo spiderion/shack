@@ -41,7 +41,7 @@ abstract class CustomeTheme {
     primaryColorLight: LightTheme.mRed,
     dialogBackgroundColor: Colors.white,
     brightness: Brightness.light,
-    primaryColorDark: LightTheme.mPurple,
+    primaryColorDark: primaryColor,
     buttonTheme: _buttonTheme,
     elevatedButtonTheme: elevatedButtonThemeData(),
     errorColor: _errorColor,
