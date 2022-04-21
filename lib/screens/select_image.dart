@@ -10,9 +10,9 @@ import 'package:image_cropper/image_cropper.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:path_provider/path_provider.dart';
 import 'package:shack/models/user_model.dart';
-import 'package:shack/screens/user_name.dart';
+import 'package:shack/screens/user_info/user_name.dart';
+import 'package:shack/widgets/loader.dart';
 import 'package:shack/widgets/welcome_title_widget.dart';
-import 'package:template_package/utils/build_mode_detector.dart';
 
 import '../widgets/welcome_background_widget.dart';
 import '../widgets/welcome_content_container_widget.dart';
@@ -142,11 +142,7 @@ class _SelectImageState extends State<SelectImage> {
                 barrierDismissible: false,
                 context: context,
                 builder: (context) {
-                  return Center(
-                      child: isInDebugMode
-                          ? Text('loading')
-                          : CircularProgressIndicator(
-                              strokeWidth: 2, valueColor: AlwaysStoppedAnimation<Color>(Colors.white)));
+                  return LoaderWidget();
                 });
           },
           child: Container(

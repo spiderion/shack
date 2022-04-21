@@ -1,7 +1,8 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter/services.dart';
 import 'package:shack/screens/sexual_orientation.dart';
+
+import 'gender.dart';
 
 class UserName extends StatefulWidget {
   UserName();
@@ -13,17 +14,28 @@ class UserName extends StatefulWidget {
 class _UserNameState extends State<UserName> {
   Map<String, dynamic> userData = {};
   String username = '';
+  final List<Gender> genderOptions = [
+    Gender(
+      title: 'MAN',
+      isSelected: false,
+      nameKey: 'man',
+    ),
+    Gender(
+      title: 'WOMAN',
+      isSelected: false,
+      nameKey: 'woman',
+    ),
+    Gender(
+      title: 'OTHER',
+      isSelected: false,
+      nameKey: 'other',
+    ),
+  ];
 
   late DateTime selecteddate;
   TextEditingController agecontroller = new TextEditingController();
   TextEditingController gendercontroller = new TextEditingController();
-
   TextEditingController namecontroller = TextEditingController();
-
-  bool man = false;
-  bool woman = false;
-  bool other = false;
-  bool select = false;
 
   final _scaffoldKey = GlobalKey<ScaffoldState>();
   String? code;
@@ -86,15 +98,8 @@ class _UserNameState extends State<UserName> {
                             'age': ((DateTime.now().difference(selecteddate).inDays) / 365.2425).truncate(),
                           });
                           late var userGender;
-                          if (man) {
-                            userGender = {'userGender': "man", 'showOnProfile': select};
-                          }
-                          if (woman) {
-                            userGender = {'userGender': "woman", 'showOnProfile': select};
-                          }
-                          if (other) {
-                            userGender = {'userGender': "other", 'showOnProfile': select};
-                          }
+                          Gender gender = genderOptions.firstWhere((element) => element.isSelected);
+                          userGender = {'userGender': gender.nameKey, 'showOnProfile': gender.isSelected};
                           userData.addAll(userGender);
                           Navigator.push(
                               context, CupertinoPageRoute(builder: (context) => SexualOrientation(userData)));
@@ -157,10 +162,7 @@ class _UserNameState extends State<UserName> {
   Container gender() {
     return Container(
       padding: EdgeInsets.only(left: 5, top: 15, bottom: 5),
-      child: Text(
-        'Gender',
-        style: TextStyle(color: Colors.black, fontSize: 18, fontWeight: FontWeight.bold),
-      ),
+      child: Text('Gender', style: TextStyle(color: Colors.black, fontSize: 18, fontWeight: FontWeight.bold)),
     );
   }
 
@@ -207,150 +209,67 @@ class _UserNameState extends State<UserName> {
 
   Future<void> showMyDialog() async {
     ThemeData _theme = Theme.of(context);
-    return showDialog<void>(
+    return showDialog(
       context: context,
       barrierDismissible: false, // user must tap button!
       builder: (BuildContext context) {
         return StatefulBuilder(
           builder: (context, setStates) {
             return AlertDialog(
+              shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(20)),
               title: Text('Select your gender'),
-              backgroundColor: Colors.white,
               content: SingleChildScrollView(
                 child: ListBody(
-                  children: <Widget>[
-                    DecoratedBox(
-                      decoration: ShapeDecoration(
-                          shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(25)),
-                          color: man ? Colors.grey : Colors.white),
-                      child: OutlineButton(
-                        highlightedBorderColor: _theme.primaryColor,
-                        child: Container(
-                          height: MediaQuery.of(context).size.height * .065,
-                          width: MediaQuery.of(context).size.width * .55,
-                          child: Center(
-                              child: Text("MAN",
-                                  style: TextStyle(
-                                      fontSize: 20,
-                                      color: man ? Colors.white : _theme.backgroundColor,
-                                      fontWeight: FontWeight.bold))),
-                        ),
-                        borderSide: BorderSide(
-                            width: 1,
-                            style: BorderStyle.solid,
-                            color: man ? _theme.backgroundColor : _theme.backgroundColor.withOpacity(0.5)),
-                        shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(25)),
-                        onPressed: () {
-                          setState(() {
-                            gendercontroller.text = "Man";
-                            woman = false;
-                            man = true;
-                            other = false;
-                          });
-                          setStates(() {
-                            gendercontroller.text = "Man";
-                            woman = false;
-                            man = true;
-                            other = false;
-                          });
-                        },
-                      ),
-                    ),
-                    Padding(
-                      padding: const EdgeInsets.all(0),
-                      child: DecoratedBox(
-                        decoration: ShapeDecoration(
-                            shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(25)),
-                            color: woman ? Colors.grey : Colors.white),
-                        child: OutlineButton(
-                          child: Container(
-                            height: MediaQuery.of(context).size.height * .065,
-                            width: MediaQuery.of(context).size.width * .95,
-                            child: Center(
-                                child: Text("WOMAN",
-                                    style: TextStyle(
-                                        fontSize: 20,
-                                        color: woman ? Colors.white : _theme.backgroundColor,
-                                        fontWeight: FontWeight.bold))),
-                          ),
-                          borderSide: BorderSide(
-                            color: woman ? _theme.primaryColor : _theme.backgroundColor,
-                            width: 1,
-                            style: BorderStyle.solid,
-                          ),
-                          shape: RoundedRectangleBorder(
-                            borderRadius: BorderRadius.circular(25),
-                          ),
-                          onPressed: () {
-                            setState(() {
-                              gendercontroller.text = "Woman";
-                              woman = true;
-                              man = false;
-                              other = false;
+                  children: genderOptions
+                      .map((e) => optionButton(_theme, e.title, () {
+                            genderOptions.forEach((element) {
+                              element.isSelected = false;
                             });
-                            setStates(() {
-                              gendercontroller.text = "Woman";
-                              woman = true;
-                              man = false;
-                              other = false;
-                            });
-                          },
-                        ),
-                      ),
-                    ),
-                    DecoratedBox(
-                      decoration: ShapeDecoration(
-                          shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(25)),
-                          color: other ? Colors.grey : Colors.white),
-                      child: OutlineButton(
-                        focusColor: _theme.primaryColor,
-                        highlightedBorderColor: _theme.primaryColor,
-                        child: Container(
-                          height: MediaQuery.of(context).size.height * .065,
-                          width: MediaQuery.of(context).size.width * .75,
-                          child: Center(
-                              child: Text("OTHER",
-                                  style: TextStyle(
-                                      fontSize: 20,
-                                      color: other ? Colors.white : _theme.backgroundColor,
-                                      fontWeight: FontWeight.bold))),
-                        ),
-                        borderSide: BorderSide(
-                            width: 1,
-                            style: BorderStyle.solid,
-                            color: other ? _theme.primaryColor : _theme.backgroundColor),
-                        shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(25)),
-                        onPressed: () {
-                          setState(() {
-                            gendercontroller.text = "Other";
-                            woman = false;
-                            man = false;
-                            other = true;
-                          });
-                          setStates(() {
-                            gendercontroller.text = "Other";
-                            woman = false;
-                            man = false;
-                            other = true;
-                          });
-                        },
-                      ),
-                    )
-                  ],
+                            e.isSelected = true;
+                            gendercontroller.text = e.title;
+                            setStates.call(() {});
+                            setState(() {});
+                          }, e.isSelected))
+                      .toList(),
                 ),
               ),
               actions: <Widget>[
-                ElevatedButton(
-                  child: Text('CONTINUE'),
-                  onPressed: () {
-                    Navigator.of(context).pop();
-                  },
-                ),
+                continueButton(context),
               ],
             );
           },
         );
       },
+    );
+  }
+
+  Widget continueButton(BuildContext context) {
+    return TextButton(
+      child: Text(
+        'CONTINUE',
+        style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
+      ),
+      onPressed: () {
+        Navigator.of(context).pop();
+      },
+    );
+  }
+
+  Widget optionButton(ThemeData _theme, String text, Function() onPressed, bool isSelected) {
+    return OutlinedButton(
+      style: ButtonStyle(
+          side: MaterialStateProperty.all(
+              BorderSide(color: isSelected ? Theme.of(context).primaryColor : Colors.black12))),
+      child: Container(
+        child: Center(
+            child: Text(text,
+                style: TextStyle(
+                  fontSize: 20,
+                  color: Colors.black,
+                  fontWeight: FontWeight.bold,
+                ))),
+      ),
+      onPressed: onPressed,
     );
   }
 }

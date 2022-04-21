@@ -6,7 +6,7 @@ import 'package:flutter_swiper_null_safety/flutter_swiper_null_safety.dart';
 import 'package:shack/core/data/data_paths.dart';
 import 'package:shack/models/user_model.dart';
 import 'package:shack/screens/tab.dart';
-import 'package:template_package/template_package.dart';
+import 'package:shack/widgets/loader.dart';
 import 'package:video_player/video_player.dart';
 
 import '../../themes/theme.dart';
@@ -170,14 +170,7 @@ class _HomeState extends State<Home> {
       ),
       height: 200,
       width: MediaQuery.of(context).size.width,
-      child: isInDebugMode
-          ? Text('loading')
-          : Image.asset(
-              'assets/loading.gif',
-              fit: BoxFit.cover,
-              width: double.infinity,
-              height: 200,
-            ),
+      child: LoaderWidget(),
     );
   }
 
@@ -226,9 +219,7 @@ class _HomeState extends State<Home> {
                                     ),
                                     errorWidget: (context, url, error) => Icon(Icons.error),
                                   )
-                                : isInDebugMode
-                                    ? Text('loading')
-                                    : Image.asset('assets/loading.gif', fit: BoxFit.cover),
+                                : LoaderWidget(),
                           ),
                         ),
                         Container(
@@ -289,34 +280,8 @@ class _HomeState extends State<Home> {
                           child: VideoPlayer(widget.controller!),
                         )),
                   )
-                : isInDebugMode
-                    ? Text('loading')
-                    : Container(
-                        decoration: BoxDecoration(
-                            borderRadius: BorderRadius.circular(10),
-                            image: DecorationImage(
-                                image: Image.asset(
-                                  'assets/loading.gif',
-                                  fit: BoxFit.contain,
-                                ).image,
-                                fit: BoxFit.cover)),
-                        width: media.size.width - 60,
-                        height: (media.size.width - 60) * 8 / 16,
-                      ))
-            : isInDebugMode
-                ? Text('loading')
-                : Container(
-                    decoration: BoxDecoration(
-                        borderRadius: BorderRadius.circular(10),
-                        image: DecorationImage(
-                            image: Image.asset(
-                              'assets/loading.gif',
-                              fit: BoxFit.contain,
-                            ).image,
-                            fit: BoxFit.cover)),
-                    width: media.size.width - 60,
-                    height: (media.size.width - 60) * 8 / 16,
-                  ));
+                : LoaderWidget())
+            : LoaderWidget());
   }
 
   Container noQuestionsWidget(MediaQueryData media) {

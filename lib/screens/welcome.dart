@@ -95,7 +95,7 @@ Service and Privacy Policy.""",
           padding: const EdgeInsets.symmetric(horizontal: 8.0),
           child: Text(
             'or continue with',
-            style: TextStyle(color: Colors.grey, fontSize: 12),
+            style: TextStyle(color: Colors.grey, fontSize: 14),
           ),
         ),
         Expanded(child: Divider())
