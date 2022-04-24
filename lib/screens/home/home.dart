@@ -46,117 +46,76 @@ class _HomeState extends State<Home> {
   @override
   Widget build(BuildContext context) {
     MediaQueryData media = MediaQuery.of(context);
-    final ThemeData _theme = Theme.of(context);
-
     return Scaffold(
-      backgroundColor: Colors.white,
       body: Container(
           decoration: BoxDecoration(
-              image: DecorationImage(image: AssetImage("assets/images/city.jpg"), fit: BoxFit.cover),
+              image: DecorationImage(image: AssetImage("assets/images/splash_screen.jpg"), fit: BoxFit.cover),
               color: Colors.white),
-          padding: EdgeInsets.only(top: media.padding.top),
           height: MediaQuery.of(context).size.height,
-          child: stackBody(media, context)),
+          child: SafeArea(child: body(media))),
     );
   }
 
-  Widget stackBody(MediaQueryData media, BuildContext context) {
-    return Stack(
-      children: <Widget>[
-        Positioned(top: 190, child: list(media)),
+  Widget body(MediaQueryData media) {
+    return Column(
+      crossAxisAlignment: CrossAxisAlignment.center,
+      children: [
+        AppBar(backgroundColor: Colors.transparent, title: Text('hey')),
+        searchTextField(),
         widget.currentUser == null ? loader(context) : swiper(context, media),
-        Positioned(top: 180, child: searchWidget(media))
       ],
     );
   }
 
-  Widget searchWidget(MediaQueryData media) {
-    return Container(
-      width: media.size.width - 60,
-      margin: EdgeInsets.only(left: 30, right: 30),
-      padding: EdgeInsets.all(1),
-      decoration: BoxDecoration(borderRadius: BorderRadius.circular(10), color: primaryColor),
-      child: Row(children: <Widget>[title(), Expanded(child: Container(child: searchTextField()))]),
-    );
-  }
-
   Widget searchTextField() {
-    return TextField(
-      textAlign: TextAlign.start,
-      controller: searchcontroller,
-      decoration: InputDecoration(
-          border: OutlineInputBorder(
-              borderRadius: const BorderRadius.only(
-                  topRight: Radius.circular(10.0), bottomRight: Radius.circular(10.0))),
-          contentPadding: EdgeInsets.only(left: 10, right: 5, top: 5, bottom: 5),
-          hintStyle: TextStyle(color: Colors.grey[800]),
-          hintText: "Search"),
-      onChanged: (text) {
-        search(text);
-      },
+    return Padding(
+      padding: const EdgeInsets.symmetric(horizontal: 12.0),
+      child: Container(
+        padding: EdgeInsets.symmetric(horizontal: 8, vertical: 4),
+        decoration: BoxDecoration(
+          borderRadius: BorderRadius.all(Radius.circular(40)),
+          color: Theme.of(context).backgroundColor,
+        ),
+        child: TextField(
+          textAlign: TextAlign.start,
+          controller: searchcontroller,
+          decoration: InputDecoration(
+              fillColor: Theme.of(context).backgroundColor,
+              hintStyle: TextStyle(color: Colors.grey[800], fontSize: 20),
+              icon: Padding(
+                padding: const EdgeInsets.only(left: 20.0),
+                child: Icon(Icons.search, color: Theme.of(context).primaryColor, size: 32),
+              ),
+              hintText: "Search"),
+          onChanged: search,
+        ),
+      ),
     );
   }
 
-  Widget title() {
-    return Container(
-      width: 100,
-      child: Text('Shack',
-          textAlign: TextAlign.center, style: TextStyle(color: secondryColor, fontWeight: FontWeight.bold)),
-    );
-  }
-
-  Container swiper(BuildContext context, MediaQueryData media) {
+  Widget swiper(BuildContext context, MediaQueryData media) {
     return Container(
       decoration: BoxDecoration(
         borderRadius: BorderRadius.only(bottomLeft: Radius.circular(10), bottomRight: Radius.circular(10)),
       ),
       height: 200,
       width: MediaQuery.of(context).size.width,
-      child: Stack(
+      child: Column(
         children: <Widget>[
-          Swiper(
-            key: UniqueKey(),
-            physics: ScrollPhysics(),
-            itemBuilder: (BuildContext context, int index2) {
-              return Container();
-              // todo removed because didn't make sense for me now
-              return Container(
-                width: media.size.width,
-                height: 200,
-                decoration: BoxDecoration(
-                    image: DecorationImage(image: AssetImage("assets/images/lib.jpg"), fit: BoxFit.cover),
-                    borderRadius:
-                        BorderRadius.only(bottomLeft: Radius.circular(10), bottomRight: Radius.circular(10))),
-              );
-            },
-            itemCount: 1,
-            pagination: new SwiperPagination(
-                alignment: Alignment.bottomCenter,
-                builder:
-                    DotSwiperPaginationBuilder(activeSize: 10, color: Colors.grey, activeColor: Colors.white),
-                margin: EdgeInsets.only(bottom: 30)),
-            control: new SwiperControl(color: Colors.white, disableColor: Colors.grey),
-            loop: false,
-          ),
-          Positioned(
-            top: 30,
-            left: 0,
-            right: 0,
-            child: Column(
-              children: <Widget>[
-                Text(
-                  widget.currentUser?.name ?? '',
-                  style: TextStyle(color: Colors.white, fontWeight: FontWeight.w900, fontSize: 39),
-                  textAlign: TextAlign.center,
-                ),
-                SizedBox(height: 10),
-                Text(
-                  widget.currentUser!.address!,
-                  style: TextStyle(color: Colors.white, fontSize: 20),
-                  textAlign: TextAlign.center,
-                )
-              ],
-            ),
+          Column(
+            children: <Widget>[
+              Text(
+                widget.currentUser?.name ?? '',
+                style: TextStyle(color: Colors.white, fontWeight: FontWeight.w900, fontSize: 39),
+                textAlign: TextAlign.center,
+              ),
+              SizedBox(height: 10),
+              Text(
+                widget.currentUser!.address!,
+                style: TextStyle(color: Colors.white, fontSize: 20),
+                textAlign: TextAlign.center,
+              )
+            ],
           )
         ],
       ),

@@ -21,7 +21,6 @@ import 'package:shack/screens/Video/make_video.dart';
 import 'package:shack/screens/home/home.dart';
 import 'package:shack/screens/home_screen.dart';
 import 'package:shack/screens/match/home.dart';
-import 'package:shack/themes/gridapp_icons.dart';
 import 'package:video_player/video_player.dart';
 
 List likedByList = [];
@@ -480,34 +479,52 @@ class _TABState extends State<TAB> with WidgetsBindingObserver {
   }
 
   List<PersistentBottomNavBarItem> _navBarsItems() {
-    ThemeData _theme = Theme.of(context);
+    final size = 34.0;
     return [
       PersistentBottomNavBarItem(
-        icon: Icon(Gridapp.dice_d6),
-        title: "Home",
-        inactiveColorPrimary: Colors.grey,
-      ),
+          icon: getImage('assets/images/home.png'),
+          iconSize: size,
+          inactiveIcon: getInactiveImage('assets/images/home.png')),
       PersistentBottomNavBarItem(
-        icon: Icon(Gridapp.chat),
-        title: ("Chat"),
-        inactiveColorPrimary: Colors.grey,
-      ),
+          icon: getImage('assets/images/chat.png'),
+          iconSize: size,
+          inactiveIcon: getInactiveImage('assets/images/chat.png')),
       PersistentBottomNavBarItem(
-        icon: Icon(Gridapp.heart_empty),
-        title: ("Match"),
-        inactiveColorPrimary: Colors.grey,
-      ),
+          icon: getImage('assets/images/heart.png'),
+          iconSize: size,
+          inactiveIcon: getInactiveImage('assets/images/heart.png')),
       PersistentBottomNavBarItem(
-        icon: Icon(Gridapp.videocam),
-        title: ("Video"),
-        inactiveColorPrimary: Colors.grey,
-      ),
+          icon: getImage('assets/images/video.png'),
+          iconSize: size,
+          inactiveIcon: getInactiveImage('assets/images/video.png')),
       PersistentBottomNavBarItem(
-        icon: Icon(Icons.settings),
-        title: ("Settings"),
-        inactiveColorPrimary: Colors.grey,
-      ),
+          icon: getImage('assets/images/profile.png'),
+          iconSize: size,
+          inactiveIcon: getInactiveImage('assets/images/profile.png')),
     ];
+  }
+
+  Widget getImage(String asset) {
+    return Stack(
+      clipBehavior: Clip.none,
+      children: [
+        Positioned(
+          top: -4,
+            right: 0, left: 0, child: Container(width: 55, height: 2, color: Theme.of(context).primaryColor)),
+        Container(decoration: BoxDecoration(image: DecorationImage(image: AssetImage(asset)))),
+      ],
+    );
+  }
+
+  Widget getInactiveImage(String asset) {
+    return Container(
+        decoration: BoxDecoration(
+            image: DecorationImage(
+                image: AssetImage(asset),
+                colorFilter: ColorFilter.mode(
+                  Colors.white.withOpacity(0.7),
+                  BlendMode.modulate,
+                ))));
   }
 
   @override
@@ -524,18 +541,12 @@ class _TABState extends State<TAB> with WidgetsBindingObserver {
       stateManagement: true,
       hideNavigationBarWhenKeyboardShows: true,
       hideNavigationBar: _hideNavBar,
-      decoration: NavBarDecoration(
-          colorBehindNavBar: Colors.indigo,
-          borderRadius: new BorderRadius.only(
-              topLeft: const Radius.circular(20.0), topRight: const Radius.circular(20.0)),
-          boxShadow: [
-            BoxShadow(color: Colors.grey, blurRadius: 5.0),
-          ]),
+      decoration: NavBarDecoration(colorBehindNavBar: Colors.indigo, boxShadow: [
+        BoxShadow(color: Colors.grey, blurRadius: 5.0),
+      ]),
       popAllScreensOnTapOfSelectedTab: true,
-      itemAnimationProperties: ItemAnimationProperties(
-        duration: Duration(milliseconds: 400),
-        curve: Curves.ease,
-      ),
+      itemAnimationProperties:
+          ItemAnimationProperties(duration: Duration(milliseconds: 400), curve: Curves.ease),
       screenTransitionAnimation: ScreenTransitionAnimation(
         animateTabTransition: true,
         curve: Curves.ease,
