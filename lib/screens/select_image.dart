@@ -10,8 +10,12 @@ import 'package:image_cropper/image_cropper.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:path_provider/path_provider.dart';
 import 'package:shack/models/user_model.dart';
-import 'package:shack/screens/user_name.dart';
-import 'package:template_package/utils/build_mode_detector.dart';
+import 'package:shack/screens/user_info/user_name.dart';
+import 'package:shack/widgets/loader.dart';
+import 'package:shack/widgets/welcome_title_widget.dart';
+
+import '../widgets/welcome_background_widget.dart';
+import '../widgets/welcome_content_container_widget.dart';
 
 class SelectImage extends StatefulWidget {
   SelectImage();
@@ -42,127 +46,109 @@ class _SelectImageState extends State<SelectImage> {
   }
 
   Widget build(BuildContext context) {
-    final ThemeData _theme = Theme.of(context);
-    MediaQueryData mediaQueryData = MediaQuery.of(context);
     return Scaffold(
       key: _scaffoldKey,
       backgroundColor: Colors.white,
-      appBar: AppBar(
-        leading: IconButton(
-          icon: Icon(Icons.arrow_back_ios, color: Colors.black),
-          onPressed: () => Navigator.of(context).pop(),
-        ),
-        title: Text("Profile"),
-        centerTitle: true,
-      ),
       body: Container(
-        width: double.infinity,
-        height: double.infinity,
-        child: Stack(
-          children: <Widget>[
-            Container(
-              width: double.infinity,
-              child: Column(
-                mainAxisAlignment: MainAxisAlignment.start,
-                crossAxisAlignment: CrossAxisAlignment.center,
-                children: <Widget>[
-                  SizedBox(
-                    height: 20,
-                  ),
-                  ListTile(
-                      title: Text(
-                        "ADD A PROFILE\nPICTURE",
-                        textAlign: TextAlign.center,
-                        style: TextStyle(
-                            fontSize: 30, fontWeight: FontWeight.w900, color: _theme.backgroundColor),
-                      ),
-                      subtitle: Container(
-                        padding: EdgeInsets.only(top: 10),
-                        child: Text(
-                          "Add a photo so your friends can see you",
-                          textAlign: TextAlign.center,
-                          style: TextStyle(fontSize: 15, color: Colors.black),
-                        ),
-                      )),
-                  Container(
-                    height: 180,
-                    margin: EdgeInsets.only(top: 80),
-                    child: Image.asset(
-                      'assets/images/user.png',
-                      fit: BoxFit.fitHeight,
-                    ),
-                  )
-                ],
-              ),
-            ),
-            Positioned(
-              bottom: 0,
-              child: Container(
-                width: mediaQueryData.size.width,
-                padding: EdgeInsets.all(30),
-                child: Column(
-                  mainAxisAlignment: MainAxisAlignment.end,
-                  crossAxisAlignment: CrossAxisAlignment.center,
-                  children: <Widget>[
-                    Container(
-                      width: double.infinity,
-                      height: 50,
-                      margin: EdgeInsets.only(top: 10, bottom: 10),
-                      child: ElevatedButton(
-                          onPressed: () async {
-                            getImage(ImageSource.gallery, context, currentUser);
-                            await showDialog(
-                                barrierDismissible: false,
-                                context: context,
-                                builder: (context) {
-                                  return Center(
-                                      child: isInDebugMode
-                                          ? Text('loading')
-                                          : CircularProgressIndicator(
-                                              strokeWidth: 2,
-                                              valueColor: AlwaysStoppedAnimation<Color>(Colors.white),
-                                            ));
-                                });
-                          },
-                          child: Container(
-                              alignment: Alignment.center,
-                              child: Text('CHOOSE A PHOTO',
-                                  style: TextStyle(fontWeight: FontWeight.w900, fontSize: 15),
-                                  textAlign: TextAlign.center))),
-                    ),
-                    Container(
-                      width: double.infinity,
-                      height: 50,
-                      margin: EdgeInsets.only(top: 10, bottom: 10),
-                      child: ElevatedButton(
-                          onPressed: () {
-                            showDialog(
-                                context: context,
-                                builder: (context) {
-                                  getImage(ImageSource.camera, context, currentUser);
-                                  return Center(
-                                      child: CircularProgressIndicator(
-                                    strokeWidth: 2,
-                                    valueColor: AlwaysStoppedAnimation<Color>(Colors.white),
-                                  ));
-                                });
-                          },
-                          child: Container(
-                            alignment: Alignment.center,
-                            child: Text(
-                              'TAKE A PHOTO',
-                              style: TextStyle(fontWeight: FontWeight.w900, fontSize: 15),
-                              textAlign: TextAlign.center,
-                            ),
-                          )),
-                    ),
-                  ],
-                ),
-              ),
-            )
-          ],
+          width: double.infinity,
+          height: double.infinity,
+          child: Stack(
+            children: <Widget>[
+              WelcomeBackgroundWidget(),
+              WelcomeTitleWidget(),
+              Align(
+                  alignment: Alignment.center, child: WelcomeContentContainerWidget(child: content(context)))
+            ],
+          )),
+    );
+  }
+
+  Widget content(BuildContext context) {
+    MediaQueryData mediaQueryData = MediaQuery.of(context);
+    final ThemeData _theme = Theme.of(context);
+    return Container(
+      width: double.infinity,
+      height: double.infinity,
+      child: Column(
+        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+        children: <Widget>[
+          Container(
+            padding: EdgeInsets.only(top: 10),
+            child: Text("Add a photo so your friends can see you",
+                textAlign: TextAlign.center, style: TextStyle(fontSize: 27, fontWeight: FontWeight.bold)),
+          ),
+          mainImage(),
+          SizedBox(height: 1),
+          choosePhotoButton(context)
+        ],
+      ),
+    );
+  }
+
+  Widget mainImage() {
+    return ClipRRect(
+      borderRadius: BorderRadius.all(Radius.circular(100)),
+      child: Container(
+        height: 180,
+        width: 180,
+        decoration: BoxDecoration(color: Colors.grey[200]),
+        child: Icon(
+          Icons.camera_alt_outlined,
+          size: 50,
+          color: Colors.black54,
         ),
       ),
+    );
+  }
+
+  Widget takePhotoWidget(BuildContext context) {
+    return Container(
+      width: double.infinity,
+      height: 50,
+      margin: EdgeInsets.only(top: 10, bottom: 10),
+      child: ElevatedButton(
+          onPressed: () {
+            showDialog(
+                context: context,
+                builder: (context) {
+                  getImage(ImageSource.camera, context, currentUser);
+                  return Center(
+                      child: CircularProgressIndicator(
+                    strokeWidth: 2,
+                    valueColor: AlwaysStoppedAnimation<Color>(Colors.white),
+                  ));
+                });
+          },
+          child: Container(
+            alignment: Alignment.center,
+            child: Text(
+              'TAKE A PHOTO',
+              style: TextStyle(fontWeight: FontWeight.w900, fontSize: 15),
+              textAlign: TextAlign.center,
+            ),
+          )),
+    );
+  }
+
+  Widget choosePhotoButton(BuildContext context) {
+    return Container(
+      width: double.infinity,
+      height: 50,
+      margin: EdgeInsets.only(top: 10, bottom: 10),
+      child: ElevatedButton(
+          onPressed: () async {
+            getImage(ImageSource.gallery, context, currentUser);
+            await showDialog(
+                barrierDismissible: false,
+                context: context,
+                builder: (context) {
+                  return LoaderWidget();
+                });
+          },
+          child: Container(
+              alignment: Alignment.center,
+              child: Text('CHOOSE A PHOTO',
+                  style: TextStyle(fontWeight: FontWeight.w900, fontSize: 15), textAlign: TextAlign.center))),
     );
   }
 

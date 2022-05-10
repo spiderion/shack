@@ -91,9 +91,9 @@ class _SettingState extends State<Setting> {
                     ? Container(
                         height: 250,
                         width: MediaQuery.of(context).size.width,
-                        child: isInDebugMode
+                        child: /*isInDebugMode
                             ? Text('loading')
-                            : Image.asset('assets/loading.gif',
+                            : */Image.asset('assets/loading.gif',
                                 fit: BoxFit.cover, width: double.infinity, height: 200),
                       )
                     : Container(

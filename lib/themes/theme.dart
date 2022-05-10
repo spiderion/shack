@@ -34,15 +34,27 @@ abstract class CustomeTheme {
   static ThemeData lightTheme = ThemeData().copyWith(
     highlightColor: const Color.fromRGBO(251, 186, 123, 0.2),
     splashColor: primaryColor,
-    accentColor: primaryColor,
     hintColor: Colors.black26,
-    cursorColor: Colors.black,
+    colorScheme: ColorScheme(
+        brightness: Brightness.light,
+        primary: primaryColor,
+        onPrimary: Colors.white,
+        secondary: secondryColor,
+        onSecondary: Colors.black,
+        error: Colors.red,
+        onError: Colors.white,
+        background: Colors.white,
+        onBackground: Colors.black,
+        surface: Colors.white,
+        onSurface: Colors.black),
     primaryColor: primaryColor,
     primaryColorLight: LightTheme.mRed,
     dialogBackgroundColor: Colors.white,
     brightness: Brightness.light,
-    primaryColorDark: LightTheme.mPurple,
+    primaryColorDark: primaryColor,
     buttonTheme: _buttonTheme,
+    outlinedButtonTheme: outlinedButtonThemeData(),
+    textButtonTheme: textButtonThemeData(),
     elevatedButtonTheme: elevatedButtonThemeData(),
     errorColor: _errorColor,
     backgroundColor: Colors.white,
@@ -51,6 +63,22 @@ abstract class CustomeTheme {
     appBarTheme: LightTheme.appBarTheme,
     disabledColor: const Color.fromRGBO(200, 200, 200, 1),
   );
+
+  static OutlinedButtonThemeData outlinedButtonThemeData() {
+    return OutlinedButtonThemeData(
+        style: ButtonStyle(
+            shape: MaterialStateProperty.all(RoundedRectangleBorder(borderRadius: BorderRadius.circular(30))),
+            backgroundColor: MaterialStateProperty.all(secondryColor),
+            foregroundColor: MaterialStateProperty.all(primaryColor)));
+  }
+
+  static TextButtonThemeData textButtonThemeData() {
+    return TextButtonThemeData(
+        style: ButtonStyle(
+            shape: MaterialStateProperty.all(RoundedRectangleBorder(borderRadius: BorderRadius.circular(8))),
+            backgroundColor: MaterialStateProperty.all(secondryColor),
+            foregroundColor: MaterialStateProperty.all(primaryColor)));
+  }
 
   static ElevatedButtonThemeData elevatedButtonThemeData() {
     return ElevatedButtonThemeData(
@@ -63,10 +91,6 @@ abstract class CustomeTheme {
 
 abstract class LightTheme {
   static const Color mRed = Color(0xFFF58474);
-  static const Color mPurple = Color(0xFF2B2E51);
-  static const Color mLightPurple = Color(0xFF5F5186);
-  static const Color mYellow = Color(0xFFF1AC71);
-  static const Color mBlue = Color(0xFF93B4DF);
   static const Color mDisabledColor = Colors.black26;
   static const IconThemeData mIconThemeData = IconThemeData(color: Colors.black);
   static const InputDecorationTheme inputDecorationTheme = InputDecorationTheme(
